@@ -14,7 +14,7 @@ constexpr double e6 = e4 * e2;
 constexpr double ep2 = e2 / (1 - e2); // Second eccentricity squared
 
 
-namespace loc_utils {
+namespace conc {
 
     // Function to determine the UTM zone for a given longitude
     int inline get_utm_zone(double longitude) {

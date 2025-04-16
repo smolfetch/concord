@@ -9,7 +9,7 @@ const double f = 1.0 / 298.257223563;      // Flattening factor
 const double e2 = 2 * f - f * f;           // Square of eccentricity
 
 
-namespace loc_utils {
+namespace conc {
     // Function to convert GPS (lat, lon, alt) to ECEF coordinates
     std::tuple<double, double, double> inline gps_to_ecef(double latitude, double longitude, double altitude) {
         // Convert latitude and longitude to radians
