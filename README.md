@@ -19,7 +19,6 @@ FetchContent_Declare(
   GIT_TAG        main
 )
 FetchContent_MakeAvailable(concord)
-add_library(concord::concord ALIAS concord)
 
 
 target_link_libraries(<lib/bin> PRIVATE concord::concord)
