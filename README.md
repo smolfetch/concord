@@ -13,19 +13,16 @@ A C++ library for working with geodetic coordinates.
 ### CMake
 
 ```cmake
-find_package(concord REQUIRED)
-```
-
-### FetchContent
-
-```cmake
-find_package(FetchContent REQUIRED)
-
 FetchContent_Declare(
   concord
-  GIT_REPOSITORY https://github.com/concord-project/concord.git
+  GIT_REPOSITORY https://github.com/bresilla/concord.git
+  GIT_TAG        main
 )
 FetchContent_MakeAvailable(concord)
+add_library(concord::concord ALIAS concord)
+
+
+target_link_libraries(<lib/bin> PRIVATE concord::concord)
 ```
 
 ---
