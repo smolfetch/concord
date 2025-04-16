@@ -74,7 +74,7 @@
        y1="184.91014"
        x2="395.53863"
        y2="348.19863"
-       gradientTransform="matrix(4.0164624,0,0,4.3494178,-950.13856,-979.81394)"
+       gradientTransform="matrix(4.0048256,0,0,4.3368163,-947.38574,-974.25487)"
        gradientUnits="userSpaceOnUse">
       <stop
          offset="0%"
@@ -121,11 +121,11 @@
      stroke-width="1"
      id="g24"
      transform="translate(-0.76213005,24.388161)"
-     style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029">
+     style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029">
     <!-- Vertical -->
     <g
        id="g12"
-       style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029">
+       style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029">
       <!-- from x=50 to 550 every 50 -->
       <line
          x1="50"
@@ -133,173 +133,174 @@
          x2="50"
          y2="550"
          id="line2"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="100"
          y1="50"
          x2="100"
          y2="550"
          id="line3"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="150"
          y1="50"
          x2="150"
          y2="550"
          id="line4"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="200"
          y1="50"
          x2="200"
          y2="550"
          id="line5"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="250"
          y1="50"
          x2="250"
          y2="550"
          id="line6"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="300"
          y1="50"
          x2="300"
          y2="550"
          id="line7"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="350"
          y1="50"
          x2="350"
          y2="550"
          id="line8"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="400"
          y1="50"
          x2="400"
          y2="550"
          id="line9"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="450"
          y1="50"
          x2="450"
          y2="550"
          id="line10"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="500"
          y1="50"
          x2="500"
          y2="550"
          id="line11"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="550"
          y1="50"
          x2="550"
          y2="550"
          id="line12"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
     </g>
     <!-- Horizontal -->
     <g
        id="g23"
-       style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029">
+       style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029">
       <line
          x1="50"
          y1="50"
          x2="550"
          y2="50"
          id="line13"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="100"
          x2="550"
          y2="100"
          id="line14"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="150"
          x2="550"
          y2="150"
          id="line15"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="200"
          x2="550"
          y2="200"
          id="line16"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="250"
          x2="550"
          y2="250"
          id="line17"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="300"
          x2="550"
          y2="300"
          id="line18"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="350"
          x2="550"
          y2="350"
          id="line19"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="400"
          x2="550"
          y2="400"
          id="line20"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="450"
          x2="550"
          y2="450"
          id="line21"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="500"
          x2="550"
          y2="500"
          id="line22"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
       <line
          x1="50"
          y1="550"
          x2="550"
          y2="550"
          id="line23"
-         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#e0e0e0;stroke-opacity:0.34462029" />
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none;stroke:#262626;stroke-opacity:0.34462029" />
     </g>
   </g>
   <!-- Axes -->
   <!-- Big letter C with gradient fill -->
   <text
-     x="303.74924"
-     y="524.85126"
+     x="302.8692"
+     y="526.0509"
      text-anchor="middle"
      font-family="Arial, Helvetica, sans-serif"
      font-size="592.117px"
      font-weight="bold"
      fill="url(#grad)"
      id="text25"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:552.38px;font-family:'DepartureMono Nerd Font Propo';-inkscape-font-specification:'DepartureMono Nerd Font Propo, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#grad);stroke-width:4.17962">C</text>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:550.78px;font-family:'DepartureMono Nerd Font Propo';-inkscape-font-specification:'DepartureMono Nerd Font Propo, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#grad);stroke-width:4.16751"
+     transform="scale(1.0029057,0.99710272)">C</text>
   <!-- Project name -->
   <path
      style="fill:#7f2aff;fill-rule:evenodd;stroke:#35a2a8;stroke-width:5.86752;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle)"
