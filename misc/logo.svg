@@ -12,6 +12,7 @@
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -23,31 +24,57 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.73461539"
-     inkscape:cx="-101.41361"
-     inkscape:cy="333.50785"
-     inkscape:window-width="3812"
+     inkscape:zoom="1.312112"
+     inkscape:cx="251.12185"
+     inkscape:cy="479.3798"
+     inkscape:window-width="3428"
      inkscape:window-height="2132"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg26" />
   <!-- White background -->
-  <rect
-     width="600"
-     height="650"
-     fill="#FFFFFF"
-     id="rect1" />
   <!-- Gradient definition -->
   <defs
      id="defs2">
+    <marker
+       style="overflow:visible"
+       id="Triangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <linearGradient
+       id="linearGradient1"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
     <linearGradient
        id="grad"
        x1="232.25014"
        y1="184.91014"
        x2="395.53863"
        y2="348.19863"
-       gradientTransform="matrix(4.0164624,0,0,4.3494178,-949.37643,-1004.2021)"
+       gradientTransform="matrix(4.0164624,0,0,4.3494178,-950.13856,-979.81394)"
        gradientUnits="userSpaceOnUse">
       <stop
          offset="0%"
@@ -58,196 +85,214 @@
          stop-color="#2196F3"
          id="stop2" />
     </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1"
+       id="radialGradient4"
+       cx="300"
+       cy="300"
+       fx="300"
+       fy="300"
+       r="250.5"
+       gradientUnits="userSpaceOnUse" />
+    <marker
+       style="overflow:visible"
+       id="Triangle-3"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-6" />
+    </marker>
   </defs>
   <!-- Grid lines -->
   <g
-     stroke="#E0E0E0"
+     stroke="#e0e0e0"
      stroke-width="1"
-     id="g24">
+     id="g24"
+     transform="translate(-0.76213005,24.388161)"
+     style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none">
     <!-- Vertical -->
     <g
-       id="g12">
+       id="g12"
+       style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none">
       <!-- from x=50 to 550 every 50 -->
       <line
          x1="50"
          y1="50"
          x2="50"
          y2="550"
-         id="line2" />
+         id="line2"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="100"
          y1="50"
          x2="100"
          y2="550"
-         id="line3" />
+         id="line3"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="150"
          y1="50"
          x2="150"
          y2="550"
-         id="line4" />
+         id="line4"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="200"
          y1="50"
          x2="200"
          y2="550"
-         id="line5" />
+         id="line5"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="250"
          y1="50"
          x2="250"
          y2="550"
-         id="line6" />
+         id="line6"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="300"
          y1="50"
          x2="300"
          y2="550"
-         id="line7" />
+         id="line7"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="350"
          y1="50"
          x2="350"
          y2="550"
-         id="line8" />
+         id="line8"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="400"
          y1="50"
          x2="400"
          y2="550"
-         id="line9" />
+         id="line9"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="450"
          y1="50"
          x2="450"
          y2="550"
-         id="line10" />
+         id="line10"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="500"
          y1="50"
          x2="500"
          y2="550"
-         id="line11" />
+         id="line11"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="550"
          y1="50"
          x2="550"
          y2="550"
-         id="line12" />
+         id="line12"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
     </g>
     <!-- Horizontal -->
     <g
-       id="g23">
+       id="g23"
+       style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none">
       <line
          x1="50"
          y1="50"
          x2="550"
          y2="50"
-         id="line13" />
+         id="line13"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="100"
          x2="550"
          y2="100"
-         id="line14" />
+         id="line14"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="150"
          x2="550"
          y2="150"
-         id="line15" />
+         id="line15"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="200"
          x2="550"
          y2="200"
-         id="line16" />
+         id="line16"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="250"
          x2="550"
          y2="250"
-         id="line17" />
+         id="line17"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="300"
          x2="550"
          y2="300"
-         id="line18" />
+         id="line18"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="350"
          x2="550"
          y2="350"
-         id="line19" />
+         id="line19"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="400"
          x2="550"
          y2="400"
-         id="line20" />
+         id="line20"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="450"
          x2="550"
          y2="450"
-         id="line21" />
+         id="line21"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="500"
          x2="550"
          y2="500"
-         id="line22" />
+         id="line22"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
       <line
          x1="50"
          y1="550"
          x2="550"
          y2="550"
-         id="line23" />
+         id="line23"
+         style="fill:url(#radialGradient4);stroke-width:5;stroke-dasharray:none" />
     </g>
   </g>
   <!-- Axes -->
-  <g
-     stroke="#4A4A4A"
-     stroke-width="3"
-     marker-end="url(#arrow)"
-     id="g25">
-    <!-- Define arrowhead -->
-    <defs
-       id="defs24">
-      <marker
-         id="arrow"
-         markerWidth="10"
-         markerHeight="10"
-         refX="10"
-         refY="5"
-         orient="auto"
-         markerUnits="strokeWidth">
-        <path
-           d="M0,0 L10,5 L0,10 Z"
-           fill="#4A4A4A"
-           id="path24" />
-      </marker>
-    </defs>
-    <!-- X axis -->
-    <line
-       x1="50"
-       y1="550"
-       x2="550"
-       y2="550"
-       id="line24" />
-    <!-- Y axis -->
-    <line
-       x1="50"
-       y1="550"
-       x2="50"
-       y2="50"
-       id="line25" />
-  </g>
   <!-- Big letter C with gradient fill -->
   <text
-     x="304.51135"
-     y="500.4631"
+     x="303.74924"
+     y="524.85126"
      text-anchor="middle"
      font-family="Arial, Helvetica, sans-serif"
      font-size="592.117px"
@@ -256,13 +301,12 @@
      id="text25"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:552.38px;font-family:'DepartureMono Nerd Font Propo';-inkscape-font-specification:'DepartureMono Nerd Font Propo, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#grad);stroke-width:4.17962">C</text>
   <!-- Project name -->
-  <text
-     x="290.37439"
-     y="611.33698"
-     text-anchor="middle"
-     font-family="Arial, Helvetica, sans-serif"
-     font-size="60"
-     fill="#333333"
-     id="text26"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:74.5913px;font-family:'DepartureMono Nerd Font Propo';-inkscape-font-specification:'DepartureMono Nerd Font Propo, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.228767">concord</text>
+  <path
+     style="fill:#7f2aff;fill-rule:evenodd;stroke:#35a2a8;stroke-width:5.86752;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle)"
+     d="M 49.538453,572.35966 V 94.966049"
+     id="path4" />
+  <path
+     style="fill:#7f2aff;fill-rule:evenodd;stroke:#35a2a8;stroke-width:5.86752;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-3)"
+     d="M 51.568431,572.84139 H 528.96204"
+     id="path4-7" />
 </svg>
