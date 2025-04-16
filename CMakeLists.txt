@@ -6,13 +6,13 @@ project(concord VERSION 0.1.0 LANGUAGES CXX)
 # -----------------------------------------------------------------------------
 add_library(concord INTERFACE)
 
-# Create an alias so users can write `concord::concord`
+# Allow users to link via `concord::concord`
 add_library(concord::concord ALIAS concord)
 
 # -----------------------------------------------------------------------------
 # 2) Public include path
 # -----------------------------------------------------------------------------
-# This makes <concord/enu_converter.h> etc. available
+# This makes <concord/enu_converter.h> etc. resolve to include/concord/...
 target_include_directories(concord
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -20,25 +20,26 @@ target_include_directories(concord
 )
 
 # -----------------------------------------------------------------------------
-# 4) Installation and export
+# 3) Installation & Export for find_package()
 # -----------------------------------------------------------------------------
 include(GNUInstallDirs)
 
-# Install headers
+# 3a) Install headers
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-# Install and export the INTERFACE target
+# 3b) Install and export the INTERFACE target
 install(TARGETS concord EXPORT concordTargets)
 
-# Export file for find_package()
+# 3c) Install the export file so that `find_package(concord)` works
 install(EXPORT concordTargets
   FILE concordTargets.cmake
   NAMESPACE concord::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/concord
 )
 
-# Allow FetchContent users to import without installing
+# 3d) Also export it for in‐source FetchContent usage
 export(EXPORT concordTargets
   FILE "${CMAKE_CURRENT_BINARY_DIR}/concordTargets.cmake"
   NAMESPACE concord::
 )
+
