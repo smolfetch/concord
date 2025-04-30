@@ -71,6 +71,11 @@ namespace concord {
         double radius;
     };
 
+    struct Square {
+        Point center;
+        double side;
+    };
+
     struct Rectangle {
         Point top_left;
         Point top_right;
