@@ -1,6 +1,7 @@
 #pragma once
 
 #include "wgs_to_enu.hpp"
+#include <vector>
 
 namespace concord {
     struct ENU;
@@ -40,5 +41,34 @@ namespace concord {
             enu_to_gps(current.x, current.y, current.z, datum.lat, datum.lon, datum.alt);
         return WGS{std::get<0>(wgs), std::get<1>(wgs), std::get<2>(wgs)};
     }
+
+    struct Point {
+        ENU enu;
+        WGS wgs;
+    };
+
+    struct Line {
+        Point start;
+        Point end;
+    };
+
+    struct Path {
+        std::vector<Point> points;
+    };
+
+    struct Polygon {
+        std::vector<Point> points;
+        inline bool is_connected() {
+            if (points.size() < 3 || points.begin() == points.end()) {
+                return false;
+            }
+            return true;
+        }
+    };
+
+    struct Circle {
+        Point center;
+        double radius;
+    };
 
 } // namespace concord
