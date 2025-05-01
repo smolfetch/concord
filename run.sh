@@ -60,7 +60,7 @@ release() {
     git add -A && git commit -m "chore(release): prepare for $version"
     echo "$changelog"
     git tag -a $version -m "$version" -m "$changelog"
-    git push --follow-tags --force --set-upstream origin develop
+    git push --follow-tags --force --set-upstream origin main
     gh release create $version --notes "$changelog"
 }
 
