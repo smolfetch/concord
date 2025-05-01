@@ -1,6 +1,7 @@
 #pragma once
 
 #include "wgs_to_enu.hpp"
+#include <optional>
 #include <tuple>
 #include <variant>
 #include <vector>
@@ -118,12 +119,12 @@ namespace concord {
 
     struct Point {
         ENU enu;
-        Datum datum;
+        std::optional<Datum> datum;
 
-        Point(Datum d = {}) : datum(d) {}
-        Point(const ENU &e, Datum d = {}) : enu(e), datum(d) {}
-        Point(const WGS &w, Datum d = {}) : enu(w.toENU(d)), datum(d) {}
-        WGS get_WGS() const noexcept { return enu.toWGS(datum); }
+        Point() = default; // default construct
+        Point(const ENU &e) : enu(e) {}
+        Point(const Datum &d, WGS w) : enu(w.toENU(d)), datum(d) {}
+        WGS get_WGS() const noexcept { return enu.toWGS(datum.value_or(Datum{0.0, 0.0, 0.0})); }
         ENU get_ENU() const noexcept { return enu; }
     };
 
