@@ -12,7 +12,7 @@ namespace concord {
       public:
         using size_type = std::size_t;
 
-        // constructor: allocate and fill in one shot
+        Grid() = default;
         Grid(size_type rows, size_type cols, double inradius)
             : rows_{rows}, cols_{cols}, inradius_{inradius},
               data_{rows * cols, Point{ENU(inradius, inradius, 0.0), WGS{0.0, 0.0, 0.0}}} {}

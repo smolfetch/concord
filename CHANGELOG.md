@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.5.1] - 2025-05-01
+## [0.5.2] - 2025-05-01
 
 ### <!-- 0 -->⛰️  Features
 
@@ -21,6 +21,9 @@
 
 ### <!-- 2 -->🚜 Refactor
 
+- Improve memory safety and performance with `std::span`
+- Initialize geometric types in constructors
+- Remove redundant Point and coordinate constructors
 - Introduce and use Datum struct for coordinates
 - "Simplify CMake build and directory structure"
 

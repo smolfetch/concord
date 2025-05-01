@@ -8,6 +8,7 @@ namespace concord {
 
     class Rectangle {
       public:
+        Rectangle() = default;
         Rectangle(const Point &tl, const Point &tr, const Point &bl, const Point &br)
             : top_left(tl), top_right(tr), bottom_left(bl), bottom_right(br) {}
 
