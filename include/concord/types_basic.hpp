@@ -122,8 +122,19 @@ namespace concord {
 
         Point() = default;
         Point(const ENU &e, const WGS &w) : enu(e), wgs(w) {}
-        explicit Point(const ENU &e, Datum d = {}) : enu(e), wgs(e.toWGS(d)) {}
-        explicit Point(const WGS &w, Datum d = {}) : wgs(w), enu(w.toENU(d)) {}
+        explicit Point(const ENU &e, Datum d) : enu(e), wgs(e.toWGS(d)) {}
+        explicit Point(const WGS &w, Datum d) : wgs(w), enu(w.toENU(d)) {}
+    };
+
+    struct Pose {
+        ENU enu;
+        Euler euler;
+
+        Pose() = default;
+        Pose(const ENU &e, const Euler &eu) : enu(e), euler(eu) {}
+        Pose(const ENU &e, const Quaternion &q) : enu(e), euler(q) {}
+        Pose(const WGS &w, Datum d, const Euler &eu) : enu(w.toENU(d)), euler(eu) {}
+        Pose(const WGS &w, Datum d, const Quaternion &q) : enu(w.toENU(d)), euler(q) {}
     };
 
 } // namespace concord
