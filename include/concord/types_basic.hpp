@@ -41,6 +41,12 @@ namespace concord {
         return WGS{std::get<0>(wgs), std::get<1>(wgs), std::get<2>(wgs)};
     }
 
+    struct Size {
+        double x;
+        double y;
+        double z;
+    };
+
     // using Point = std::variant<ENU, WGS>;
     struct Point {
         ENU enu;
