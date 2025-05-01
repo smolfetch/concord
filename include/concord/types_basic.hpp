@@ -62,8 +62,9 @@ namespace concord {
         WGS wgs;
 
         Point() = default;
-        explicit Point(const ENU &e) : enu(e), wgs(e.toWGS(Datum{})) {}
-        explicit Point(const WGS &w) : wgs(w), enu(w.toENU(Datum{})) {}
+        Point(const ENU &e, const WGS &w) : enu(e), wgs(w) {}
+        explicit Point(const ENU &e, Datum d = {}) : enu(e), wgs(e.toWGS(d)) {}
+        explicit Point(const WGS &w, Datum d = {}) : wgs(w), enu(w.toENU(d)) {}
     };
 
 } // namespace concord
