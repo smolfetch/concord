@@ -1,9 +1,11 @@
 # Changelog
 
-## [0.4.0] - 2025-05-01
+## [0.5.0] - 2025-05-01
 
 ### <!-- 0 -->⛰️  Features
 
+- Add basic geometric primitives
+- Refactor datum and geometry conversions
 - Add Square type and raise recordings
 - Introduce base Rectangle type support
 - Add basic geometric shape structs

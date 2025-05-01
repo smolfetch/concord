@@ -1,56 +1,69 @@
 #pragma once
 
 #include "wgs_to_enu.hpp"
+#include <tuple>
 #include <variant>
 #include <vector>
 
 namespace concord {
-    struct ENU;
-    struct WGS;
+    struct ENU; // forward declaration
+    struct WGS; // forward declaration
 
     struct Datum {
-        double lat;
-        double lon;
-        double alt;
+        double lat = 0.0;
+        double lon = 0.0;
+        double alt = 0.0;
     };
 
     struct WGS {
-        double lat;
-        double lon;
-        double alt;
+        double lat = 0.0;
+        double lon = 0.0;
+        double alt = 0.0;
 
-        inline ENU toENU(Datum datum);
+        WGS() = default;
+        WGS(double lat_, double lon_, double alt_) : lat(lat_), lon(lon_), alt(alt_) {}
+
+        inline ENU toENU(const Datum &datum) const;
         operator Datum() const noexcept { return Datum{lat, lon, alt}; }
     };
 
     struct ENU {
-        double x;
-        double y;
-        double z;
+        double x = 0.0;
+        double y = 0.0;
+        double z = 0.0;
 
-        inline WGS toWGS(Datum datum);
+        ENU() = default;
+        ENU(double x_, double y_, double z_) : x(x_), y(y_), z(z_) {}
+
+        inline WGS toWGS(const Datum &datum) const;
     };
 
-    inline ENU WGS::toENU(Datum datum) {
-        std::tuple<double, double, double> enu = gps_to_enu(lat, lon, alt, datum.lat, datum.lon, datum.alt);
+    inline ENU WGS::toENU(const Datum &datum) const {
+        auto enu = gps_to_enu(lat, lon, alt, datum.lat, datum.lon, datum.alt);
         return ENU{std::get<0>(enu), std::get<1>(enu), std::get<2>(enu)};
     }
 
-    inline WGS ENU::toWGS(Datum datum) {
-        std::tuple<double, double, double> wgs = enu_to_gps(x, y, z, datum.lat, datum.lon, datum.alt);
+    inline WGS ENU::toWGS(const Datum &datum) const {
+        auto wgs = enu_to_gps(x, y, z, datum.lat, datum.lon, datum.alt);
         return WGS{std::get<0>(wgs), std::get<1>(wgs), std::get<2>(wgs)};
     }
 
     struct Size {
-        double x;
-        double y;
-        double z;
+        double x = 0.0;
+        double y = 0.0;
+        double z = 0.0;
+
+        Size() = default;
+        Size(double x_, double y_, double z_) : x(x_), y(y_), z(z_) {}
     };
 
-    // using Point = std::variant<ENU, WGS>;
     struct Point {
         ENU enu;
         WGS wgs;
+
+        Point() = default;
+        explicit Point(const ENU &e) : enu(e), wgs(e.toWGS(Datum{})) {}
+        explicit Point(const WGS &w) : wgs(w), enu(w.toENU(Datum{})) {}
     };
 
 } // namespace concord
