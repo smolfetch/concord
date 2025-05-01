@@ -123,6 +123,7 @@ namespace concord {
 
         Point() = default; // default construct
         Point(const ENU &e) : enu(e) {}
+        Point(const ENU &e, const Datum &d) : enu(e), datum(d) {}
         Point(const Datum &d, WGS w) : enu(w.toENU(d)), datum(d) {}
         WGS get_WGS() const noexcept { return enu.toWGS(datum.value_or(Datum{0.0, 0.0, 0.0})); }
         ENU get_ENU() const noexcept { return enu; }
