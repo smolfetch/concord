@@ -14,8 +14,7 @@ namespace concord {
 
         Grid() = default;
         Grid(size_type rows, size_type cols, double inradius)
-            : rows_{rows}, cols_{cols}, inradius_{inradius},
-              data_{rows * cols, Point{ENU(inradius, inradius, 0.0), WGS{0.0, 0.0, 0.0}}} {}
+            : rows_{rows}, cols_{cols}, inradius_{inradius}, data_{rows * cols, Point()} {}
 
         // unchecked access
         Point &operator()(size_type r, size_type c) noexcept { return data_[index(r, c)]; }
