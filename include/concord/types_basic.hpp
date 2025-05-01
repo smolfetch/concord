@@ -20,7 +20,6 @@ namespace concord {
         double lon = 0.0;
         double alt = 0.0;
 
-        WGS() = default;
         WGS(double lat_, double lon_, double alt_) : lat(lat_), lon(lon_), alt(alt_) {}
 
         inline ENU toENU(const Datum &datum) const;
@@ -32,7 +31,6 @@ namespace concord {
         double y = 0.0;
         double z = 0.0;
 
-        ENU() = default;
         ENU(double x_, double y_, double z_) : x(x_), y(y_), z(z_) {}
 
         inline WGS toWGS(const Datum &datum) const;
@@ -61,7 +59,6 @@ namespace concord {
         ENU enu;
         WGS wgs;
 
-        Point() = default;
         Point(const ENU &e, const WGS &w) : enu(e), wgs(w) {}
         explicit Point(const ENU &e, Datum d = {}) : enu(e), wgs(e.toWGS(d)) {}
         explicit Point(const WGS &w, Datum d = {}) : wgs(w), enu(w.toENU(d)) {}
