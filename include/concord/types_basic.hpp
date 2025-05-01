@@ -1,6 +1,7 @@
 #pragma once
 
 #include "wgs_to_enu.hpp"
+#include <variant>
 #include <vector>
 
 namespace concord {
@@ -19,6 +20,7 @@ namespace concord {
         double alt;
 
         inline ENU toENU(Datum datum);
+        operator Datum() const noexcept { return Datum{lat, lon, alt}; }
     };
 
     struct ENU {
@@ -39,45 +41,10 @@ namespace concord {
         return WGS{std::get<0>(wgs), std::get<1>(wgs), std::get<2>(wgs)};
     }
 
+    // using Point = std::variant<ENU, WGS>;
     struct Point {
         ENU enu;
         WGS wgs;
-    };
-
-    struct Line {
-        Point start;
-        Point end;
-    };
-
-    struct Path {
-        std::vector<Point> points;
-    };
-
-    struct Polygon {
-        std::vector<Point> points;
-        inline bool is_connected() {
-            if (points.size() < 3 || points.begin() == points.end()) {
-                return false;
-            }
-            return true;
-        }
-    };
-
-    struct Circle {
-        Point center;
-        double radius;
-    };
-
-    struct Square {
-        Point center;
-        double side;
-    };
-
-    struct Rectangle {
-        Point top_left;
-        Point top_right;
-        Point bottom_left;
-        Point bottom_right;
     };
 
 } // namespace concord
