@@ -1,7 +1,6 @@
 #pragma once
 
 #include "wgs_to_enu.hpp"
-#include <optional>
 #include <tuple>
 #include <variant>
 #include <vector>
@@ -119,25 +118,21 @@ namespace concord {
 
     struct Point {
         ENU enu;
-        std::optional<Datum> datum;
+        WGS wgs;
 
-        Point() = default; // default construct
-        Point(const ENU &e) : enu(e) {}
-        Point(const ENU &e, const Datum &d) : enu(e), datum(d) {}
-        Point(const Datum &d, WGS w) : enu(w.toENU(d)), datum(d) {}
-        WGS get_WGS() const noexcept { return enu.toWGS(datum.value_or(Datum{0.0, 0.0, 0.0})); }
-        ENU get_ENU() const noexcept { return enu; }
+        Point() = default;
+        Point(const ENU &e, const WGS &w) : enu(e), wgs(w) {}
+        explicit Point(const ENU &e, Datum d) : enu(e), wgs(e.toWGS(d)) {}
+        explicit Point(const WGS &w, Datum d) : wgs(w), enu(w.toENU(d)) {}
     };
 
     struct Pose {
-        ENU enu;
-        Euler euler;
+        Point point;
+        Euler angle;
 
         Pose() = default;
-        Pose(const ENU &e, const Euler &eu) : enu(e), euler(eu) {}
-        Pose(const ENU &e, const Quaternion &q) : enu(e), euler(q) {}
-        Pose(const WGS &w, Datum d, const Euler &eu) : enu(w.toENU(d)), euler(eu) {}
-        Pose(const WGS &w, Datum d, const Quaternion &q) : enu(w.toENU(d)), euler(q) {}
+        Pose(const Point &p, const Euler &a) : point(p), angle(a) {}
+        explicit Pose(const Point &p, const Quaternion &q) noexcept : point(p), angle(q) {}
     };
 
 } // namespace concord
