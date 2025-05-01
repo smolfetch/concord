@@ -118,12 +118,13 @@ namespace concord {
 
     struct Point {
         ENU enu;
-        WGS wgs;
+        Datum datum;
 
-        Point() = default;
-        Point(const ENU &e, const WGS &w) : enu(e), wgs(w) {}
-        explicit Point(const ENU &e, Datum d) : enu(e), wgs(e.toWGS(d)) {}
-        explicit Point(const WGS &w, Datum d) : wgs(w), enu(w.toENU(d)) {}
+        Point(Datum d = {}) : datum(d) {}
+        Point(const ENU &e, Datum d = {}) : enu(e), datum(d) {}
+        Point(const WGS &w, Datum d = {}) : enu(w.toENU(d)), datum(d) {}
+        WGS get_WGS() const noexcept { return enu.toWGS(datum); }
+        ENU get_ENU() const noexcept { return enu; }
     };
 
     struct Pose {
