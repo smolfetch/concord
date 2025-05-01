@@ -1,50 +1,58 @@
 #pragma once
+
 #include "types_basic.hpp"
-#include <cassert> // for assert()
-#include <cstddef> // for std::size_t
+#include <cassert>
+#include <cstddef>
+#include <span> // C++20
 #include <vector>
 
 namespace concord {
 
     class Grid {
       public:
-        // constructor: set size and inradius, and allocate storage
-        Grid(std::size_t rows, std::size_t cols, double inradius) : rows_{rows}, cols_{cols}, inradius_{inradius} {
-            for (std::size_t r = 0; r < rows; ++r)
-                for (std::size_t c = 0; c < cols; ++c)
-                    data_.emplace_back(Point(ENU(inradius, inradius, 0.0), WGS(0.0, 0.0, 0.0)));
-        }
+        using size_type = std::size_t;
 
-        // element access, no bounds-checking
-        Point &at(std::size_t r, std::size_t c) { return data_[index(r, c)]; }
-        const Point &at(std::size_t r, std::size_t c) const { return data_[index(r, c)]; }
+        // constructor: allocate and fill in one shot
+        Grid(size_type rows, size_type cols, double inradius)
+            : rows_{rows}, cols_{cols}, inradius_{inradius},
+              data_{rows * cols, Point{ENU(inradius, inradius, 0.0), WGS{0.0, 0.0, 0.0}}} {}
 
-        // operator() for nicer syntax
-        Point &operator()(std::size_t r, std::size_t c) { return at(r, c); }
-        const Point &operator()(std::size_t r, std::size_t c) const { return at(r, c); }
+        // unchecked access
+        Point &operator()(size_type r, size_type c) noexcept { return data_[index(r, c)]; }
+        Point const &operator()(size_type r, size_type c) const noexcept { return data_[index(r, c)]; }
 
-        // optionally, a checked access
-        Point &safe_at(std::size_t r, std::size_t c) {
-            assert(r < rows_ && c < cols_);
-            return data_[r * cols_ + c];
-        }
+        // bounds‐checking version
+        Point &at(size_type r, size_type c) { return data_.at(index_checked(r, c)); }
+        Point const &at(size_type r, size_type c) const { return data_.at(index_checked(r, c)); }
 
-        // getters
-        std::size_t rows() const { return rows_; }
-        std::size_t cols() const { return cols_; }
-        double inradius() const { return inradius_; }
+        // give me a full row as a span
+        std::span<Point> row(size_type r) noexcept { return {&data_[index(r, 0)], cols_}; }
+        std::span<Point const> row(size_type r) const noexcept { return {&data_[index(r, 0)], cols_}; }
 
-        // iteration support
-        auto begin() { return data_.begin(); }
-        auto end() { return data_.end(); }
-        auto begin() const { return data_.begin(); }
-        auto end() const { return data_.end(); }
+        // simple getters
+        constexpr size_type rows() const noexcept { return rows_; }
+        constexpr size_type cols() const noexcept { return cols_; }
+        constexpr double inradius() const noexcept { return inradius_; }
+
+        // iteration
+        auto begin() noexcept { return data_.begin(); }
+        auto end() noexcept { return data_.end(); }
+        auto begin() const noexcept { return data_.begin(); }
+        auto end() const noexcept { return data_.end(); }
 
       private:
-        std::size_t index(std::size_t r, std::size_t c) const { return r * cols_ + c; }
+        // plain index into the flat array
+        constexpr size_type index(size_type r, size_type c) const noexcept { return r * cols_ + c; }
 
-        std::size_t rows_, cols_;
+        // same, but assert in debug builds
+        size_type index_checked(size_type r, size_type c) const {
+            assert(r < rows_ && c < cols_);
+            return r * cols_ + c;
+        }
+
+        size_type rows_, cols_;
         double inradius_;
         std::vector<Point> data_;
     };
+
 } // namespace concord
