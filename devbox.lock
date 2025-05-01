@@ -1,0 +1,166 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "clang-tools@latest": {
+      "last_modified": "2025-03-11T17:52:14Z",
+      "resolved": "github:NixOS/nixpkgs/0d534853a55b5d02a4ababa1d71921ce8f0aee4c#clang-tools",
+      "source": "devbox-search",
+      "version": "19.1.7",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/w9nsgv4q992vzxz0iwcd1835fdkxv9az-clang-tools-19.1.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/w9nsgv4q992vzxz0iwcd1835fdkxv9az-clang-tools-19.1.7"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/vqcmbwh0cx2vqb1apajs67jbx53j5vhp-clang-tools-19.1.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/vqcmbwh0cx2vqb1apajs67jbx53j5vhp-clang-tools-19.1.7"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fcf94fzdv0l2g9sypm2mv6k1qi558cyn-clang-tools-19.1.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/fcf94fzdv0l2g9sypm2mv6k1qi558cyn-clang-tools-19.1.7"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/7x4jl492xdhwzqq5dhxm5alisqazmih0-clang-tools-19.1.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/7x4jl492xdhwzqq5dhxm5alisqazmih0-clang-tools-19.1.7"
+        }
+      }
+    },
+    "clang@latest": {
+      "last_modified": "2025-03-23T05:31:05Z",
+      "resolved": "github:NixOS/nixpkgs/dd613136ee91f67e5dba3f3f41ac99ae89c5406b#clang",
+      "source": "devbox-search",
+      "version": "19.1.7",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/x8j5wizxn1qwa0zj3a4rbmipigl614jv-clang-wrapper-19.1.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/x8j5wizxn1qwa0zj3a4rbmipigl614jv-clang-wrapper-19.1.7"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/jdfxhsmslm5ipvfmhc250awawwv8r2j8-clang-wrapper-19.1.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/jdfxhsmslm5ipvfmhc250awawwv8r2j8-clang-wrapper-19.1.7"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/5c7vhjf0l6hl2j9sygngj6ybrkj6iv8n-clang-wrapper-19.1.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/5c7vhjf0l6hl2j9sygngj6ybrkj6iv8n-clang-wrapper-19.1.7"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/q87df3dw0x7r1k9gagir9a5sdi3gmw4a-clang-wrapper-19.1.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/q87df3dw0x7r1k9gagir9a5sdi3gmw4a-clang-wrapper-19.1.7"
+        }
+      }
+    },
+    "cmake@latest": {
+      "last_modified": "2025-03-23T05:31:05Z",
+      "resolved": "github:NixOS/nixpkgs/dd613136ee91f67e5dba3f3f41ac99ae89c5406b#cmake",
+      "source": "devbox-search",
+      "version": "3.31.5",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/kk8pi5s49dbs5h0ald0w8cd42c4bwnqr-cmake-3.31.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/kk8pi5s49dbs5h0ald0w8cd42c4bwnqr-cmake-3.31.5"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/xn9sd8gm81ls18qkgj5qnmfsnqi1p7gm-cmake-3.31.5",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/7raphg07gdclykxp2d388bf79rqzj8f0-cmake-3.31.5-debug"
+            }
+          ],
+          "store_path": "/nix/store/xn9sd8gm81ls18qkgj5qnmfsnqi1p7gm-cmake-3.31.5"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/p9w37j80q80qid636hpgdwpknmrya75h-cmake-3.31.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/p9w37j80q80qid636hpgdwpknmrya75h-cmake-3.31.5"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ciiwq1ymzac9m5azhf4higkynmy3f8f7-cmake-3.31.5",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/wnbcfvxq19wgyan7kdr25b201hjqfvan-cmake-3.31.5-debug"
+            }
+          ],
+          "store_path": "/nix/store/ciiwq1ymzac9m5azhf4higkynmy3f8f7-cmake-3.31.5"
+        }
+      }
+    },
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2025-04-28T20:04:36Z",
+      "resolved": "github:NixOS/nixpkgs/fdb6c240562c5ad516253419cc6f26819705d3e0?lastModified=1745870676&narHash=sha256-IpldIaWrlasZZlKHPxitkrJ1ex4EVphuWYXVDdF5kf4%3D"
+    },
+    "stdenv@latest": {
+      "last_modified": "2023-02-24T09:01:09Z",
+      "resolved": "github:NixOS/nixpkgs/7d0ed7f2e5aea07ab22ccb338d27fbe347ed2f11#stdenv",
+      "source": "devbox-search"
+    }
+  }
+}
