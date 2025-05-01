@@ -1,9 +1,10 @@
 # Changelog
 
-## [0.5.0] - 2025-05-01
+## [0.5.1] - 2025-05-01
 
 ### <!-- 0 -->⛰️  Features
 
+- Add Point constructor for ENU and WGS
 - Add basic geometric primitives
 - Refactor datum and geometry conversions
 - Add Square type and raise recordings
