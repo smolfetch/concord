@@ -7,7 +7,6 @@ namespace concord {
 
     class Circle {
       public:
-        Circle() : center(), radius(0.0) {}
         Circle(const Point &center_, double radius_) : center(center_), radius(radius_) {}
 
         double area() const noexcept { return M_PI * radius * radius; }

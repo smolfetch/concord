@@ -7,7 +7,6 @@ namespace concord {
 
     class Square {
       public:
-        Square() : center(), side(0.0) {}
         Square(const Point &c, double s) : center(c), side(s) {}
 
         double area() const noexcept { return side * side; }

@@ -9,8 +9,11 @@ namespace concord {
     class Grid {
       public:
         // constructor: set size and inradius, and allocate storage
-        Grid(std::size_t rows, std::size_t cols, double inradius)
-            : rows_{rows}, cols_{cols}, inradius_{inradius}, data_(rows * cols) {}
+        Grid(std::size_t rows, std::size_t cols, double inradius) : rows_{rows}, cols_{cols}, inradius_{inradius} {
+            for (std::size_t r = 0; r < rows; ++r)
+                for (std::size_t c = 0; c < cols; ++c)
+                    data_.emplace_back(Point(ENU(inradius, inradius, 0.0), WGS(0.0, 0.0, 0.0)));
+        }
 
         // element access, no bounds-checking
         Point &at(std::size_t r, std::size_t c) { return data_[index(r, c)]; }

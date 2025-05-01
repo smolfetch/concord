@@ -7,7 +7,6 @@ namespace concord {
 
     class Line {
       public:
-        Line() : start(), end() {}
         Line(const Point &s, const Point &e) : start(s), end(e) {}
 
         double length() const noexcept {
