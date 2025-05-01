@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(concord VERSION 0.5.3 LANGUAGES CXX)
+project(concord VERSION 0.5.4 LANGUAGES CXX)
 
 # -----------------------------------------------------------------------------
 # 1) Create the header‐only INTERFACE library

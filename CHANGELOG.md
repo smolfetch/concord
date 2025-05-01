@@ -1,9 +1,13 @@
 # Changelog
 
-## [0.5.3] - 2025-05-01
+## [0.5.4] - 2025-05-01
 
 ### <!-- 0 -->⛰️  Features
 
+- Add constructor to `Point` with ENU and Datum
+- Make Datum optional in the Point struct
+- Feat: Add Datum field to Point structure
+- Refactor geometry types to include Datum
 - Add Point constructor for ENU and WGS
 - Add basic geometric primitives
 - Refactor datum and geometry conversions
@@ -21,6 +25,7 @@
 
 ### <!-- 2 -->🚜 Refactor
 
+- Refactor Point and Pose structs
 - Refactor Grid initialization with default constructors
 - Improve memory safety and performance with `std::span`
 - Initialize geometric types in constructors
