@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.5.2] - 2025-05-01
+## [0.5.3] - 2025-05-01
 
 ### <!-- 0 -->⛰️  Features
 
@@ -21,6 +21,7 @@
 
 ### <!-- 2 -->🚜 Refactor
 
+- Refactor Grid initialization with default constructors
 - Improve memory safety and performance with `std::span`
 - Initialize geometric types in constructors
 - Remove redundant Point and coordinate constructors
