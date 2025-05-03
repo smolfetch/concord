@@ -61,7 +61,7 @@ release() {
     echo "$changelog"
     git tag -a $version -m "$version" -m "$changelog"
     git push --follow-tags --force --set-upstream origin main
-    gh release create $version
+    gh release create $version --notes "$changelog"
 }
 
 

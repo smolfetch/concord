@@ -124,6 +124,9 @@ namespace concord {
         Point(const ENU &e, const WGS &w) : enu(e), wgs(w) {}
         Point(const ENU &e, Datum d) : enu(e), wgs(e.toWGS(d)) {}
         Point(const WGS &w, Datum d) : wgs(w), enu(w.toENU(d)) {}
+
+        WGS fromENU(const Datum &d) const { return enu.toWGS(d); }
+        ENU toENU(const Datum &d) const { return wgs.toENU(d); }
     };
 
     struct Pose {
