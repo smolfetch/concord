@@ -26,13 +26,15 @@ namespace concord {
       public:
         Grid() = default;
 
-        Grid(size_type rows, size_type cols, double inradius)
+        Grid(size_type rows, size_type cols, double inradius, bool centered = true)
             : rows_{rows}, cols_{cols}, inradius_{inradius}, data_(rows * cols) {
-            double diameter = 2.0 * inradius_;
+            double diameter = inradius_;
+            auto height = centered ? cols_ * diameter : 0.0;
+            auto width = centered ? rows_ * diameter : 0.0;
             for (size_type r = 0; r < rows_; ++r) {
                 for (size_type c = 0; c < cols_; ++c) {
-                    double center_x = (static_cast<double>(c) + 0.5) * diameter;
-                    double center_y = (static_cast<double>(r) + 0.5) * diameter;
+                    double center_x = ((static_cast<double>(r) + 0.5) * diameter) - (width / 2.0);
+                    double center_y = ((static_cast<double>(c) + 0.5) * diameter) - (height / 2.0);
                     size_type idx = index(r, c);
                     Point p;
                     p.enu.x = center_x;
@@ -42,13 +44,15 @@ namespace concord {
             }
         }
 
-        Grid(size_type rows, size_type cols, double inradius, concord::Datum datum)
+        Grid(size_type rows, size_type cols, double inradius, concord::Datum datum, bool centered = true)
             : rows_{rows}, cols_{cols}, inradius_{inradius}, data_(rows * cols) {
-            double diameter = 2.0 * inradius_;
+            double diameter = inradius_;
+            auto height = centered ? cols_ * diameter : 0.0;
+            auto width = centered ? rows_ * diameter : 0.0;
             for (size_type r = 0; r < rows_; ++r) {
                 for (size_type c = 0; c < cols_; ++c) {
-                    double center_x = (static_cast<double>(c) + 0.5) * diameter;
-                    double center_y = (static_cast<double>(r) + 0.5) * diameter;
+                    double center_x = ((static_cast<double>(r) + 0.5) * diameter) - (width / 2.0);
+                    double center_y = ((static_cast<double>(c) + 0.5) * diameter) - (height / 2.0);
                     size_type idx = index(r, c);
                     Point p;
                     p.enu.x = center_x;
