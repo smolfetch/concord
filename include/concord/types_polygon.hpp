@@ -66,6 +66,10 @@ namespace concord {
             return p;
         }
 
+        Polygon from_rectangle(Size size, Datum d = {}, Size inflate = Size(1.0, 1.0, 1.0)) const {
+            return from_rectangle(size.x, size.y, d, inflate);
+        }
+
         auto begin() noexcept { return points.begin(); }
         auto end() noexcept { return points.end(); }
         auto begin() const noexcept { return points.begin(); }
