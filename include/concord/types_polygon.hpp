@@ -56,12 +56,13 @@ namespace concord {
             return c;
         }
 
-        Polygon from_rectangle(const float width, const float height, Datum d = {}) const {
+        Polygon from_rectangle(const float width, const float height, Datum d = {},
+                               Size inflate = Size(1.0, 1.0, 1.0)) const {
             Polygon p;
-            p.addPoint(Point(ENU(width / 2.0, height / 2.0, 0.0), d));
-            p.addPoint(Point(ENU(-width / 2.0, height / 2.0, 0.0), d));
-            p.addPoint(Point(ENU(-width / 2.0, -height / 2.0, 0.0), d));
-            p.addPoint(Point(ENU(width / 2.0, -height / 2.0, 0.0), d));
+            p.addPoint(Point(ENU(width * inflate.x / 2.0, height * inflate.y / 2.0, 0.0), d));
+            p.addPoint(Point(ENU(width * inflate.x / 2.0, -height * inflate.y / 2.0, 0.0), d));
+            p.addPoint(Point(ENU(-width * inflate.x / 2.0, -height * inflate.y / 2.0, 0.0), d));
+            p.addPoint(Point(ENU(-width * inflate.x / 2.0, height * inflate.y / 2.0, 0.0), d));
             return p;
         }
 
