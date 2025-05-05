@@ -14,6 +14,8 @@ namespace concord {
         explicit Polygon(const std::vector<Point> &pts) : points(pts) {}
 
         void addPoint(const Point &p) { points.emplace_back(p); }
+        void addPoint(const ENU &e, Datum d) { points.emplace_back(Point(e, d)); }
+        void addPoint(const WGS &w, Datum d) { points.emplace_back(Point(w, d)); }
 
         std::size_t numVertices() const noexcept { return points.size(); }
         bool isConnected() const noexcept { return points.size() >= 3; }
@@ -52,6 +54,15 @@ namespace concord {
                     c = !c;
             }
             return c;
+        }
+
+        Polygon from_rectangle(const float width, const float height, Datum d = {}) const {
+            Polygon p;
+            p.addPoint(Point(ENU(width / 2.0, height / 2.0, 0.0), d));
+            p.addPoint(Point(ENU(-width / 2.0, height / 2.0, 0.0), d));
+            p.addPoint(Point(ENU(-width / 2.0, -height / 2.0, 0.0), d));
+            p.addPoint(Point(ENU(width / 2.0, -height / 2.0, 0.0), d));
+            return p;
         }
 
         auto begin() noexcept { return points.begin(); }
