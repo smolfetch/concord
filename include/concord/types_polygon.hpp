@@ -40,6 +40,20 @@ namespace concord {
             return std::abs(a * 0.5);
         }
 
+        bool contains(const Point &p) const noexcept {
+            if (points.size() < 3)
+                return false;
+            bool c = false;
+            for (std::size_t i = 0, j = points.size() - 1; i < points.size(); j = i++) {
+                const auto &pi = points[i].enu;
+                const auto &pj = points[j].enu;
+                if (((pi.y > p.enu.y) != (pj.y > p.enu.y)) &&
+                    (p.enu.x < (pj.x - pi.x) * (p.enu.y - pi.y) / (pj.y - pi.y) + pi.x))
+                    c = !c;
+            }
+            return c;
+        }
+
         auto begin() noexcept { return points.begin(); }
         auto end() noexcept { return points.end(); }
         auto begin() const noexcept { return points.begin(); }
