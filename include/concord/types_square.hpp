@@ -14,6 +14,10 @@ namespace concord {
         double perimeter() const noexcept { return 4 * side; }
         double diagonal() const noexcept { return side * std::sqrt(2.0); }
 
+        bool contains(const Point &p) const noexcept {
+            return std::abs(p.enu.x - center.enu.x) <= side / 2.0 && std::abs(p.enu.y - center.enu.y) <= side / 2.0;
+        }
+
         const Point &getCenter() const noexcept { return center; }
         double getSide() const noexcept { return side; }
 

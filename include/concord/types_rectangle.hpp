@@ -24,6 +24,11 @@ namespace concord {
             return 2 * (w + h);
         }
 
+        bool contains(const Point &p) const noexcept {
+            return (p.enu.x >= top_left.enu.x && p.enu.x <= top_right.enu.x && p.enu.y >= top_left.enu.y &&
+                    p.enu.y <= bottom_left.enu.y);
+        }
+
         const Point &getTopLeft() const noexcept { return top_left; }
         const Point &getTopRight() const noexcept { return top_right; }
         const Point &getBottomLeft() const noexcept { return bottom_left; }
