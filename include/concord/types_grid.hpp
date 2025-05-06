@@ -84,6 +84,25 @@ namespace concord {
         auto begin() const noexcept { return data_.begin(); }
         auto end() const noexcept { return data_.end(); }
 
+        std::vector<std::array<float, 3>> flatten_points() {
+            std::vector<std::array<float, 3>> points;
+            for (auto &[p, c] : data_) {
+                points.push_back({p.enu.x, p.enu.y, 0.0f});
+            }
+            return points;
+        }
+
+        std::vector<std::array<float, 3>> flatten_points(bool just_bool) {
+            std::vector<std::array<float, 3>> points;
+            for (std::size_t r = 0; r < rows_; ++r) {
+                for (std::size_t c = 0; c < cols_; ++c) {
+                    auto &[pt, color] = data_[index(r, c)]; // now color is an RGB& directly
+                    points.push_back({pt.enu.x, pt.enu.y, 0.0f});
+                }
+            }
+            return points;
+        }
+
       private:
         constexpr size_type index(size_type r, size_type c) const noexcept { return r * cols_ + c; }
 
