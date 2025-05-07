@@ -138,4 +138,12 @@ namespace concord {
         explicit Pose(const Point &p, const Quaternion &q) noexcept : point(p), angle(q) {}
     };
 
+    struct Bound {
+        Pose pose;
+        Size size;
+
+        Bound() = default;
+        Bound(const Pose &p, const Size &s) : pose(p), size(s) {}
+    };
+
 } // namespace concord
