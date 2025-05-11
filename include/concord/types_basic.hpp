@@ -127,6 +127,16 @@ namespace concord {
 
         WGS fromENU(const Datum &d) const { return enu.toWGS(d); }
         ENU toENU(const Datum &d) const { return wgs.toENU(d); }
+
+        Point(double x, double y, double z = 0.0, const Datum &datum = Datum()) {
+            Point p;
+            p.enu.x = x;
+            p.enu.y = y;
+            p.enu.z = z;
+            p.wgs = p.enu.toWGS(datum);
+            this->enu = p.enu;
+            this->wgs = p.wgs;
+        }
     };
 
     struct Pose {
