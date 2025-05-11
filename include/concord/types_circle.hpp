@@ -20,7 +20,7 @@ namespace concord {
             return std::sqrt(std::pow(p.enu.x - center.enu.x, 2) + std::pow(p.enu.y - center.enu.y, 2)) < radius;
         }
 
-        std::vector<Point> as_polygon(int n = 100) const noexcept {
+        std::vector<Point> as_polygon(int n = 100, Datum datm = Datum()) const {
             std::vector<Point> points;
             double theta = 2 * M_PI / n;
             for (int i = 0; i < n; i++) {
@@ -29,6 +29,7 @@ namespace concord {
                 Point p;
                 p.enu.x = x;
                 p.enu.y = y;
+                p.wgs = p.enu.toWGS(datm);
                 points.push_back(p);
             }
             return points;
