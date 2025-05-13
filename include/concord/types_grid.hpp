@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "types_basic.hpp"
@@ -26,27 +27,8 @@ namespace concord {
       public:
         Grid() = default;
 
-        Grid(size_type rows, size_type cols, double inradius, bool centered = true)
-            : rows_{rows}, cols_{cols}, inradius_{inradius}, data_(rows * cols) {
-            double diameter = inradius_;
-            auto height = centered ? cols_ * diameter : 0.0;
-            auto width = centered ? rows_ * diameter : 0.0;
-            for (size_type r = 0; r < rows_; ++r) {
-                for (size_type c = 0; c < cols_; ++c) {
-                    double center_x = ((static_cast<double>(r) + 0.5) * diameter) - (width / 2.0);
-                    double center_y = ((static_cast<double>(c) + 0.5) * diameter) - (height / 2.0);
-                    size_type idx = index(r, c);
-                    Point p;
-                    p.enu.x = center_x;
-                    p.enu.y = center_y;
-                    data_[idx] = value_type{p, T{}};
-                }
-            }
-        }
-
-        Grid(size_type rows, size_type cols, double inradius, concord::Datum datum, bool centered = true)
-            : rows_{rows}, cols_{cols}, inradius_{inradius}, data_(rows * cols) {
-            double diameter = inradius_;
+        Grid(size_type rows, size_type cols, double diameter, concord::Datum datum = Datum(), bool centered = true)
+            : rows_{rows}, cols_{cols}, inradius_{diameter}, data_(rows * cols) {
             auto height = centered ? cols_ * diameter : 0.0;
             auto width = centered ? rows_ * diameter : 0.0;
             for (size_type r = 0; r < rows_; ++r) {
@@ -64,16 +46,19 @@ namespace concord {
         }
 
         reference operator()(size_type r, size_type c) noexcept { return data_[index(r, c)]; }
-
         const_reference operator()(size_type r, size_type c) const noexcept { return data_[index(r, c)]; }
-
         reference at(size_type r, size_type c) { return data_.at(index_checked(r, c)); }
-
         const_reference at(size_type r, size_type c) const { return data_.at(index_checked(r, c)); }
-
         std::span<value_type> row(size_type r) noexcept { return {&data_[index(r, 0)], cols_}; }
-
         std::span<const value_type> row(size_type r) const noexcept { return {&data_[index(r, 0)], cols_}; }
+        constexpr size_type index(size_type r, size_type c) const noexcept { return r * cols_ + c; }
+
+        size_type index_checked(size_type r, size_type c) const {
+            if (r >= rows_ || c >= cols_) {
+                throw std::out_of_range("Grid indices out of bounds");
+            }
+            return r * cols_ + c;
+        }
 
         constexpr size_type rows() const noexcept { return rows_; }
         constexpr size_type cols() const noexcept { return cols_; }
@@ -103,14 +88,24 @@ namespace concord {
             return points;
         }
 
-      private:
-        constexpr size_type index(size_type r, size_type c) const noexcept { return r * cols_ + c; }
-
-        size_type index_checked(size_type r, size_type c) const {
-            if (r >= rows_ || c >= cols_) {
-                throw std::out_of_range("Grid indices out of bounds");
+        std::array<concord::Point, 4> corners() const {
+            if (rows_ == 0 || cols_ == 0) {
+                throw std::runtime_error("Grid is empty; cannot get corners");
             }
-            return r * cols_ + c;
+            const std::size_t r0 = 0, r1 = rows_ - 1;
+            const std::size_t c0 = 0, c1 = cols_ - 1;
+
+            auto getP = [&](std::size_t r, std::size_t c) {
+                const Point &p = (*this)(r, c).first;
+                return p;
+            };
+
+            return {
+                getP(r0, c0), // top-left
+                getP(r0, c1), // top-right
+                getP(r1, c1), // bottom-right
+                getP(r1, c0)  // bottom-left
+            };
         }
     };
 
