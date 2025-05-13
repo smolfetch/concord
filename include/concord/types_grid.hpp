@@ -88,7 +88,7 @@ namespace concord {
             return points;
         }
 
-        std::array<concord::Point, 4> corners() const {
+        std::array<concord::Point, 4> corners(concord::Datum datum = Datum()) const {
             if (rows_ == 0 || cols_ == 0) {
                 throw std::runtime_error("Grid is empty; cannot get corners");
             }
@@ -96,7 +96,8 @@ namespace concord {
             const std::size_t c0 = 0, c1 = cols_ - 1;
 
             auto getP = [&](std::size_t r, std::size_t c) {
-                const Point &p = (*this)(r, c).first;
+                Point p = (*this)(r, c).first;
+                p.wgs = p.enu.toWGS(datum);
                 return p;
             };
 
