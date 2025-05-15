@@ -2,6 +2,7 @@
 #pragma once
 
 #include "types_basic.hpp"
+#include "types_polygon.hpp"
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -120,6 +121,23 @@ namespace concord {
                 getP(r1, c1), // bottom-right
                 getP(r1, c0)  // bottom-left
             };
+        }
+
+        std::vector<size_type> indices_within(const Polygon &poly) const {
+            if (!poly.isConnected()) {
+                throw std::invalid_argument("Polygon must have at least 3 vertices");
+            }
+            std::vector<size_type> out;
+            out.reserve(rows_ * cols_);
+            for (size_type r = 0; r < rows_; ++r) {
+                for (size_type c = 0; c < cols_; ++c) {
+                    size_type idx = index(r, c);
+                    if (poly.contains(data_[idx].first)) {
+                        out.push_back(idx);
+                    }
+                }
+            }
+            return out;
         }
     };
 

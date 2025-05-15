@@ -2,6 +2,7 @@
 
 #include "types_basic.hpp"
 #include "types_line.hpp"
+#include "types_rectangle.hpp"
 #include <cmath>
 #include <cstddef>
 #include <vector>
@@ -68,6 +69,28 @@ namespace concord {
 
         Polygon from_rectangle(Size size, Datum d = {}, Size inflate = Size(1.0, 1.0, 1.0)) const {
             return from_rectangle(size.x, size.y, d, inflate);
+        }
+
+        Rectangle get_bouundary(Datum d = {}) const {
+            if (points.empty()) {
+                return Rectangle();
+            }
+            double minX = points[0].enu.x;
+            double maxX = points[0].enu.x;
+            double minY = points[0].enu.y;
+            double maxY = points[0].enu.y;
+            for (std::size_t i = 1; i < points.size(); ++i) {
+                minX = std::min(minX, points[i].enu.x);
+                maxX = std::max(maxX, points[i].enu.x);
+                minY = std::min(minY, points[i].enu.y);
+                maxY = std::max(maxY, points[i].enu.y);
+            }
+            Point p_top_left(ENU(minX, maxY, 0.0), d);
+            Point p_top_right(ENU(maxX, maxY, 0.0), d);
+            Point p_bottom_left(ENU(minX, minY, 0.0), d);
+            Point p_bottom_right(ENU(maxX, minY, 0.0), d);
+
+            return Rectangle(p_top_left, p_top_right, p_bottom_left, p_bottom_right);
         }
 
         auto begin() noexcept { return points.begin(); }
