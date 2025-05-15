@@ -67,6 +67,22 @@ namespace concord {
             return p;
         }
 
+        Polygon from_wgs(std::vector<WGS> points, Datum d = {}) const {
+            Polygon p;
+            for (auto &pt : points) {
+                Point p_pt(pt, d);
+            }
+            return p;
+        }
+
+        Polygon from_enu(std::vector<ENU> points, Datum d = {}) const {
+            Polygon p;
+            for (auto &pt : points) {
+                Point p_pt(pt, d);
+            }
+            return p;
+        }
+
         Polygon from_rectangle(Size size, Datum d = {}, Size inflate = Size(1.0, 1.0, 1.0)) const {
             return from_rectangle(size.x, size.y, d, inflate);
         }
