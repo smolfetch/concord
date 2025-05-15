@@ -146,7 +146,7 @@ namespace concord {
         Pose() = default;
         Pose(const Point &p, const Euler &a) : point(p), angle(a) {}
         Pose(float x, float y, float yaw)
-            : point(Point{ENU{x, y, 0.0f}, WGS{0.0f, 0.0f, 0.0f}}), angle(Euler{yaw, 0.0f, 0.0f}) {}
+            : point(Point{ENU{x, y, 0.0f}, WGS{0.0f, 0.0f, 0.0f}}), angle(Euler{0.0f, 0.0f, yaw}) {}
         explicit Pose(const Point &p, const Quaternion &q) noexcept : point(p), angle(q) {}
     };
 

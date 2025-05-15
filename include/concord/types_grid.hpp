@@ -27,18 +27,31 @@ namespace concord {
       public:
         Grid() = default;
 
-        Grid(size_type rows, size_type cols, double diameter, concord::Datum datum = Datum(), bool centered = true)
+        Grid(size_type rows, size_type cols, double diameter, concord::Datum datum, bool centered, concord::Pose shift)
             : rows_{rows}, cols_{cols}, inradius_{diameter}, data_(rows * cols) {
-            auto height = centered ? cols_ * diameter : 0.0;
-            auto width = centered ? rows_ * diameter : 0.0;
+            // Total span of the grid (only non-zero if centered)
+            double height = centered ? cols_ * diameter : 0.0;
+            double width = centered ? rows_ * diameter : 0.0;
+            // Precompute rotation sin/cos
+            double yaw = shift.angle.yaw;
+            double cosYaw = std::cos(yaw);
+            double sinYaw = std::sin(yaw);
             for (size_type r = 0; r < rows_; ++r) {
                 for (size_type c = 0; c < cols_; ++c) {
-                    double center_x = ((static_cast<double>(r) + 0.5) * diameter) - (width / 2.0);
-                    double center_y = ((static_cast<double>(c) + 0.5) * diameter) - (height / 2.0);
+                    // Compute each cell center in the unrotated, unshifted local frame
+                    double local_x = ((static_cast<double>(r) + 0.5) * diameter) - (width / 2.0);
+                    double local_y = ((static_cast<double>(c) + 0.5) * diameter) - (height / 2.0);
+                    // Rotate around origin by yaw
+                    double rot_x = cosYaw * local_x - sinYaw * local_y;
+                    double rot_y = sinYaw * local_x + cosYaw * local_y;
+                    // Then translate by the shift’s ENU offset
+                    double world_x = rot_x + shift.point.enu.x;
+                    double world_y = rot_y + shift.point.enu.y;
+                    // Fill in the point and convert to WGS
                     size_type idx = index(r, c);
                     Point p;
-                    p.enu.x = center_x;
-                    p.enu.y = center_y;
+                    p.enu.x = world_x;
+                    p.enu.y = world_y;
                     p.enu.toWGS(datum);
                     data_[idx] = value_type{p, T{}};
                 }
