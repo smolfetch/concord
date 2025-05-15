@@ -71,7 +71,7 @@ namespace concord {
             return from_rectangle(size.x, size.y, d, inflate);
         }
 
-        Rectangle get_bouundary(Datum d = {}) const {
+        Rectangle get_bb(Datum d = {}) const {
             if (points.empty()) {
                 return Rectangle();
             }
@@ -91,6 +91,43 @@ namespace concord {
             Point p_bottom_right(ENU(maxX, minY, 0.0), d);
 
             return Rectangle(p_top_left, p_top_right, p_bottom_left, p_bottom_right);
+        }
+
+        std::pair<Rectangle, double> get_obb(Datum d = {}) const {
+            Rectangle aabb;
+            double polygon_orientation_rad = 0.0;
+            if (points.empty()) {
+                aabb = Rectangle();
+            }
+
+            double minX = points[0].enu.x;
+            double maxX = points[0].enu.x;
+            double minY = points[0].enu.y;
+            double maxY = points[0].enu.y;
+            for (std::size_t i = 1; i < points.size(); ++i) {
+                minX = std::min(minX, points[i].enu.x);
+                maxX = std::max(maxX, points[i].enu.x);
+                minY = std::min(minY, points[i].enu.y);
+                maxY = std::max(maxY, points[i].enu.y);
+            }
+            Point p_top_left(ENU(minX, maxY, 0.0), d);
+            Point p_top_right(ENU(maxX, maxY, 0.0), d);
+            Point p_bottom_left(ENU(minX, minY, 0.0), d);
+            Point p_bottom_right(ENU(maxX, minY, 0.0), d);
+            aabb = Rectangle(p_top_left, p_top_right, p_bottom_left, p_bottom_right);
+            if (points.size() >= 1) {
+                double sumX = 0.0;
+                double sumY = 0.0;
+                for (const auto &p_pt : points) {
+                    sumX += p_pt.enu.x;
+                    sumY += p_pt.enu.y;
+                }
+                double centroidX = sumX / points.size();
+                double centroidY = sumY / points.size();
+                const Point &firstPoint = points[0];
+                polygon_orientation_rad = std::atan2(centroidY - firstPoint.enu.y, centroidX - firstPoint.enu.x);
+            }
+            return std::make_pair(aabb, polygon_orientation_rad);
         }
 
         auto begin() noexcept { return points.begin(); }
