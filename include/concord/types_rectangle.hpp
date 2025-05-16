@@ -48,7 +48,7 @@ namespace concord {
         const Point &getBottomLeft() const noexcept { return bottom_left; }
         const Point &getBottomRight() const noexcept { return bottom_right; }
 
-        std::array<Point, 4> get_corners() const noexcept { return {top_left, top_right, bottom_left, bottom_right}; }
+        std::array<Point, 4> get_corners() const noexcept { return {top_left, top_right, bottom_right, bottom_left}; }
 
         static Rectangle outer_rectangle(const std::vector<Bound> &bounds, Datum d = {}) {
             if (bounds.empty()) {
