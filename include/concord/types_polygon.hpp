@@ -86,21 +86,8 @@ namespace concord {
             if (points.empty()) {
                 return concord::Bound();
             }
-            // 1) compute AABB in ENU
-            double minX = points[0].enu.x;
-            double maxX = minX;
-            double minY = points[0].enu.y;
-            double maxY = minY;
 
-            for (std::size_t i = 1; i < points.size(); ++i) {
-                const auto &e = points[i].enu;
-                minX = std::min(minX, e.x);
-                maxX = std::max(maxX, e.x);
-                minY = std::min(minY, e.y);
-                maxY = std::max(maxY, e.y);
-            }
-
-            // 2) compute centroid-based “orientation” (same as before)
+            // --- 1) Compute centroid-based orientation (same as before) ---
             double sumX = 0.0, sumY = 0.0;
             for (const auto &p : points) {
                 sumX += p.enu.x;
@@ -108,25 +95,50 @@ namespace concord {
             }
             double centroidX = sumX / points.size();
             double centroidY = sumY / points.size();
+
             const auto &first = points[0].enu;
             double orientation_rad = std::atan2(centroidY - first.y, centroidX - first.x);
+            double cosO = std::cos(orientation_rad);
+            double sinO = std::sin(orientation_rad);
 
-            // 3) build the concord::Pose
-            double centerX = 0.5 * (minX + maxX);
-            double centerY = 0.5 * (minY + maxY);
+            // --- 2) Rotate all points into this frame and track min/max ---
+            double minRotX = std::numeric_limits<double>::infinity();
+            double maxRotX = -std::numeric_limits<double>::infinity();
+            double minRotY = std::numeric_limits<double>::infinity();
+            double maxRotY = -std::numeric_limits<double>::infinity();
+
+            for (const auto &p : points) {
+                double x = p.enu.x;
+                double y = p.enu.y;
+                // rotate (x,y) by +orientation_rad
+                double rotX = x * cosO + y * sinO;
+                double rotY = -x * sinO + y * cosO;
+
+                minRotX = std::min(minRotX, rotX);
+                maxRotX = std::max(maxRotX, rotX);
+                minRotY = std::min(minRotY, rotY);
+                maxRotY = std::max(maxRotY, rotY);
+            }
+
+            // --- 3) Compute width/height in rotated frame ---
+            double width = maxRotX - minRotX;
+            double height = maxRotY - minRotY;
+
+            // --- 4) Compute center in rotated coords, then un-rotate back ---
+            double centerRotX = 0.5 * (minRotX + maxRotX);
+            double centerRotY = 0.5 * (minRotY + maxRotY);
+
+            // inverse rotation by -orientation_rad
+            double centerX = centerRotX * cosO - centerRotY * sinO;
+            double centerY = centerRotX * sinO + centerRotY * cosO;
+
+            // --- 5) Build and return the final Bound ---
             concord::ENU center_enu(centerX, centerY, 0.0);
             concord::Point center_pt(center_enu, d);
-
-            // Euler takes (roll, pitch, yaw)
             concord::Euler euler(0.0, 0.0, orientation_rad);
             concord::Pose pose(center_pt, euler);
 
-            // 4) build concord::Size (width, height, depth)
-            double width = maxX - minX;
-            double height = maxY - minY;
             concord::Size size(width, height, 0.0);
-
-            // 5) return the Bound
             return concord::Bound(pose, size);
         }
 
