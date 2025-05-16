@@ -2,7 +2,6 @@
 
 #include "types_basic.hpp"
 #include "types_line.hpp"
-#include "types_rectangle.hpp"
 #include <cmath>
 #include <cstddef>
 #include <vector>
@@ -67,83 +66,68 @@ namespace concord {
             return p;
         }
 
-        Polygon from_wgs(std::vector<WGS> points, Datum d = {}) const {
-            Polygon p;
-            for (auto &pt : points) {
-                Point p_pt(pt, d);
+        void from_wgs(std::vector<WGS> pts, Datum d = {}) {
+            for (auto &pt : pts) {
+                addPoint(Point(pt, d));
             }
-            return p;
         }
 
-        Polygon from_enu(std::vector<ENU> points, Datum d = {}) const {
-            Polygon p;
-            for (auto &pt : points) {
-                Point p_pt(pt, d);
+        void from_enu(std::vector<ENU> pts, Datum d = {}) {
+            for (auto &pt : pts) {
+                addPoint(Point(pt, d));
             }
-            return p;
         }
 
         Polygon from_rectangle(Size size, Datum d = {}, Size inflate = Size(1.0, 1.0, 1.0)) const {
             return from_rectangle(size.x, size.y, d, inflate);
         }
 
-        Rectangle get_bb(Datum d = {}) const {
+        concord::Bound get_obb(concord::Datum d = {}) const {
             if (points.empty()) {
-                return Rectangle();
+                return concord::Bound();
             }
+            // 1) compute AABB in ENU
             double minX = points[0].enu.x;
-            double maxX = points[0].enu.x;
+            double maxX = minX;
             double minY = points[0].enu.y;
-            double maxY = points[0].enu.y;
+            double maxY = minY;
+
             for (std::size_t i = 1; i < points.size(); ++i) {
-                minX = std::min(minX, points[i].enu.x);
-                maxX = std::max(maxX, points[i].enu.x);
-                minY = std::min(minY, points[i].enu.y);
-                maxY = std::max(maxY, points[i].enu.y);
-            }
-            Point p_top_left(ENU(minX, maxY, 0.0), d);
-            Point p_top_right(ENU(maxX, maxY, 0.0), d);
-            Point p_bottom_left(ENU(minX, minY, 0.0), d);
-            Point p_bottom_right(ENU(maxX, minY, 0.0), d);
-
-            return Rectangle(p_top_left, p_top_right, p_bottom_left, p_bottom_right);
-        }
-
-        std::pair<Rectangle, double> get_obb(Datum d = {}) const {
-            Rectangle aabb;
-            double polygon_orientation_rad = 0.0;
-            if (points.empty()) {
-                aabb = Rectangle();
+                const auto &e = points[i].enu;
+                minX = std::min(minX, e.x);
+                maxX = std::max(maxX, e.x);
+                minY = std::min(minY, e.y);
+                maxY = std::max(maxY, e.y);
             }
 
-            double minX = points[0].enu.x;
-            double maxX = points[0].enu.x;
-            double minY = points[0].enu.y;
-            double maxY = points[0].enu.y;
-            for (std::size_t i = 1; i < points.size(); ++i) {
-                minX = std::min(minX, points[i].enu.x);
-                maxX = std::max(maxX, points[i].enu.x);
-                minY = std::min(minY, points[i].enu.y);
-                maxY = std::max(maxY, points[i].enu.y);
+            // 2) compute centroid-based “orientation” (same as before)
+            double sumX = 0.0, sumY = 0.0;
+            for (const auto &p : points) {
+                sumX += p.enu.x;
+                sumY += p.enu.y;
             }
-            Point p_top_left(ENU(minX, maxY, 0.0), d);
-            Point p_top_right(ENU(maxX, maxY, 0.0), d);
-            Point p_bottom_left(ENU(minX, minY, 0.0), d);
-            Point p_bottom_right(ENU(maxX, minY, 0.0), d);
-            aabb = Rectangle(p_top_left, p_top_right, p_bottom_left, p_bottom_right);
-            if (points.size() >= 1) {
-                double sumX = 0.0;
-                double sumY = 0.0;
-                for (const auto &p_pt : points) {
-                    sumX += p_pt.enu.x;
-                    sumY += p_pt.enu.y;
-                }
-                double centroidX = sumX / points.size();
-                double centroidY = sumY / points.size();
-                const Point &firstPoint = points[0];
-                polygon_orientation_rad = std::atan2(centroidY - firstPoint.enu.y, centroidX - firstPoint.enu.x);
-            }
-            return std::make_pair(aabb, polygon_orientation_rad);
+            double centroidX = sumX / points.size();
+            double centroidY = sumY / points.size();
+            const auto &first = points[0].enu;
+            double orientation_rad = std::atan2(centroidY - first.y, centroidX - first.x);
+
+            // 3) build the concord::Pose
+            double centerX = 0.5 * (minX + maxX);
+            double centerY = 0.5 * (minY + maxY);
+            concord::ENU center_enu(centerX, centerY, 0.0);
+            concord::Point center_pt(center_enu, d);
+
+            // Euler takes (roll, pitch, yaw)
+            concord::Euler euler(0.0, 0.0, orientation_rad);
+            concord::Pose pose(center_pt, euler);
+
+            // 4) build concord::Size (width, height, depth)
+            double width = maxX - minX;
+            double height = maxY - minY;
+            concord::Size size(width, height, 0.0);
+
+            // 5) return the Bound
+            return concord::Bound(pose, size);
         }
 
         auto begin() noexcept { return points.begin(); }
