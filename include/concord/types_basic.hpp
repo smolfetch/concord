@@ -15,6 +15,8 @@ namespace concord {
         double lat = 0.0;
         double lon = 0.0;
         double alt = 0.0;
+
+        bool is_set() const { return lat != 0.0 && lon != 0.0; }
     };
 
     struct WGS {
@@ -27,6 +29,7 @@ namespace concord {
         WGS() = default;
         inline ENU toENU(const Datum &datum) const;
         operator Datum() const noexcept { return Datum{lat, lon, alt}; }
+        bool is_set() const { return lat != 0.0 && lon != 0.0; }
     };
 
     struct ENU {
@@ -38,6 +41,7 @@ namespace concord {
 
         ENU() = default;
         inline WGS toWGS(const Datum &datum) const;
+        bool is_set() const { return x != 0.0 && y != 0.0; }
     };
 
     inline ENU WGS::toENU(const Datum &datum) const {
@@ -59,6 +63,7 @@ namespace concord {
         Quaternion() = default;
         Quaternion(double w_, double x_, double y_, double z_) : w(w_), x(x_), y(y_), z(z_) {}
         explicit Quaternion(const Euler &e) noexcept;
+        bool is_set() const { return w != 0.0 && x != 0.0 && y != 0.0 && z != 0.0; }
     };
 
     struct Euler {
@@ -69,6 +74,7 @@ namespace concord {
         Euler() = default;
         Euler(double roll_, double pitch_, double yaw_) : roll(roll_), pitch(pitch_), yaw(yaw_) {}
         explicit Euler(const Quaternion &q) noexcept;
+        bool is_set() const { return roll != 0.0 && pitch != 0.0 && yaw != 0.0; }
     };
 
     // — Definitions —
@@ -114,6 +120,7 @@ namespace concord {
 
         Size() = default;
         Size(double x_, double y_, double z_) : x(x_), y(y_), z(z_) {}
+        bool is_set() const { return x != 0.0 && y != 0.0 && z != 0.0; }
     };
 
     struct Point {
@@ -134,6 +141,7 @@ namespace concord {
             this->enu = p.enu;
             this->wgs = p.wgs;
         }
+        bool is_set() const { return enu.is_set() && wgs.is_set(); }
     };
 
     struct Pose {
@@ -145,6 +153,7 @@ namespace concord {
         Pose(float x, float y, float yaw)
             : point(Point{ENU{x, y, 0.0f}, WGS{0.0f, 0.0f, 0.0f}}), angle(Euler{0.0f, 0.0f, yaw}) {}
         explicit Pose(const Point &p, const Quaternion &q) noexcept : point(p), angle(q) {}
+        bool is_set() const { return point.is_set() && angle.is_set(); }
     };
 
     struct Bound {
@@ -153,6 +162,7 @@ namespace concord {
 
         Bound() = default;
         Bound(const Pose &p, const Size &s) : pose(p), size(s) {}
+        bool is_set() const { return pose.is_set() && size.is_set(); }
     };
 
 } // namespace concord
