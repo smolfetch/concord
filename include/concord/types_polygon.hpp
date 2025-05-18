@@ -66,6 +66,14 @@ namespace concord {
             return p;
         }
 
+        Polygon from_vector(std::vector<Point> pts) {
+            Polygon p;
+            for (auto &pt : pts) {
+                p.addPoint(pt);
+            }
+            return p;
+        }
+
         void from_wgs(std::vector<WGS> pts, Datum d = {}) {
             for (auto &pt : pts) {
                 addPoint(Point(pt, d));

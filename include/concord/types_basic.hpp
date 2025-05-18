@@ -1,6 +1,7 @@
 #pragma once
 
 #include "wgs_to_enu.hpp"
+#include <array>
 #include <tuple>
 #include <variant>
 #include <vector>
@@ -75,6 +76,9 @@ namespace concord {
         Euler(double roll_, double pitch_, double yaw_) : roll(roll_), pitch(pitch_), yaw(yaw_) {}
         explicit Euler(const Quaternion &q) noexcept;
         bool is_set() const { return roll != 0.0 && pitch != 0.0 && yaw != 0.0; }
+
+        double yaw_cos() const { return std::cos(yaw * 0.5); }
+        double yaw_sin() const { return std::sin(yaw * 0.5); }
     };
 
     // — Definitions —
@@ -154,6 +158,30 @@ namespace concord {
             : point(Point{ENU{x, y, 0.0f}, WGS{0.0f, 0.0f, 0.0f}}), angle(Euler{0.0f, 0.0f, yaw}) {}
         explicit Pose(const Point &p, const Quaternion &q) noexcept : point(p), angle(q) {}
         bool is_set() const { return point.is_set() && angle.is_set(); }
+
+        std::vector<Point> get_corners(Size size, Datum datum = {}) const {
+            std::vector<Point> points;
+            // precompute
+            double c = std::cos(angle.yaw);
+            double s = std::sin(angle.yaw);
+            double halfW = size.x * 0.5;
+            double halfH = size.y * 0.5;
+            double cx = point.enu.x;
+            double cy = point.enu.y;
+            // local corners (in CCW order, for example)
+            std::array<std::pair<double, double>, 4> local = {
+                {{+halfW, +halfH}, {+halfW, -halfH}, {-halfW, -halfH}, {-halfW, +halfH}}};
+            for (auto [lx, ly] : local) {
+                // rotate
+                double rx = c * lx - s * ly;
+                double ry = s * lx + c * ly;
+                // translate back into world‐ENU
+                double wx = cx + rx;
+                double wy = cy + ry;
+                points.emplace_back(Point(ENU{wx, wy, 0.0}, datum));
+            }
+            return points;
+        }
     };
 
     struct Bound {
@@ -163,6 +191,30 @@ namespace concord {
         Bound() = default;
         Bound(const Pose &p, const Size &s) : pose(p), size(s) {}
         bool is_set() const { return pose.is_set() && size.is_set(); }
+
+        std::vector<Point> get_corners(Datum datum = {}) const {
+            std::vector<Point> points;
+            // precompute
+            double c = std::cos(pose.angle.yaw);
+            double s = std::sin(pose.angle.yaw);
+            double halfW = size.x * 0.5;
+            double halfH = size.y * 0.5;
+            double cx = pose.point.enu.x;
+            double cy = pose.point.enu.y;
+            // local corners (in CCW order, for example)
+            std::array<std::pair<double, double>, 4> local = {
+                {{+halfW, +halfH}, {+halfW, -halfH}, {-halfW, -halfH}, {-halfW, +halfH}}};
+            for (auto [lx, ly] : local) {
+                // rotate
+                double rx = c * lx - s * ly;
+                double ry = s * lx + c * ly;
+                // translate back into world‐ENU
+                double wx = cx + rx;
+                double wy = cy + ry;
+                points.emplace_back(Point(ENU{wx, wy, 0.0}, datum));
+            }
+            return points;
+        }
     };
 
 } // namespace concord
