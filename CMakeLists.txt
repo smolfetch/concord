@@ -18,8 +18,8 @@ option(CONCORD_BUILD_EXAMPLES "Build examples" OFF)
 
 # --------------------------------------------------------------------------------------------------
 add_library(${project_name} INTERFACE)
-# Allow users to link via `concord::concord
-add_library(concord::concord ALIAS concord)
+# Allow users to link via `${project_name}::${project_name}`
+add_library(${project_name}::${project_name} ALIAS ${project_name})
 target_include_directories(${project_name} INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
