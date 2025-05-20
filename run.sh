@@ -3,7 +3,6 @@
 
 # @cmd build cmake
 # @alias b
-# # @flag      --arrow        Enable gui support
 buildit() {
     CURR_DIR=$(pwd)
     if [[ ! -d "$TOP_HEAD/build" ]] then
@@ -13,11 +12,7 @@ buildit() {
         mkdir "$TOP_HEAD/build"
     fi
     cd "$TOP_HEAD/build"
-    if ! [ -z "$argc_arrow" ]; then
-        cmake -Wno-dev ..
-    else
-        cmake -Wno-dev -DRERUN_DOWNLOAD_AND_BUILD_ARROW=OFF ..
-    fi
+    cmake -Wno-dev ..
     cd "$CURR_DIR"
 }
 
