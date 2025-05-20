@@ -49,14 +49,7 @@ export(EXPORT ${project_name}Targets
 
 # --------------------------------------------------------------------------------------------------
 if(BUILD_EXAMPLES)
-  install(
-    DIRECTORY include/
-    DESTINATION include
-  )
-  include_directories(include)
-
   set(external_deps
-      spdlog::spdlog
   )
   set(exe
     examples/main.cpp
