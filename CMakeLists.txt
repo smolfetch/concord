@@ -14,7 +14,7 @@ set(params
     -Wno-reorder
 )
 
-option(BUILD_EXAMPLES "Build examples" OFF)
+option(CONCORD_BUILD_EXAMPLES "Build examples" OFF)
 
 # --------------------------------------------------------------------------------------------------
 add_library(${project_name} INTERFACE)
@@ -48,8 +48,15 @@ export(EXPORT ${project_name}Targets
 
 
 # --------------------------------------------------------------------------------------------------
-if(BUILD_EXAMPLES)
+if(CONCORD_BUILD_EXAMPLES)
+  install(
+    DIRECTORY include/
+    DESTINATION include
+  )
+  include_directories(include)
+
   set(external_deps
+      spdlog::spdlog
   )
   set(exe
     examples/main.cpp
