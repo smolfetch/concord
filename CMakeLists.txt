@@ -1,12 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 
 set(project_name concord)
+project(${project_name} VERSION 0.5.5 LANGUAGES CXX)
 
-project(${project_name} VERSION 0.1.1 LANGUAGES CXX)
-
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
+add_compile_options(-Wall -Wextra -Wpedantic)
 cmake_policy(SET CMP0074 NEW)
 cmake_policy(SET CMP0135 NEW)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
@@ -20,16 +17,8 @@ set(params
 option(BUILD_EXAMPLES "Build examples" OFF)
 
 # --------------------------------------------------------------------------------------------------
-include(FetchContent)
-FetchContent_Declare(
-  spdlog
-  GIT_REPOSITORY https://github.com/gabime/spdlog.git
-  GIT_TAG        v1.15.0
-)
-FetchContent_MakeAvailable(spdlog)
-
-# --------------------------------------------------------------------------------------------------
 add_library(${project_name} INTERFACE)
+add_library(concord::concord ALIAS concord)
 target_include_directories(${project_name} INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
