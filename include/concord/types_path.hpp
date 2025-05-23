@@ -25,6 +25,8 @@ namespace concord {
         auto begin() const noexcept { return points.begin(); }
         auto end() const noexcept { return points.end(); }
 
+        const std::vector<Point> &getPoints() const noexcept { return points; }
+
       private:
         std::vector<Point> points;
     };
