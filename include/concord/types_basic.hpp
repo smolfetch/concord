@@ -7,6 +7,9 @@
 #include <vector>
 
 namespace concord {
+
+    enum class CRS { ENU, WGS };
+
     struct ENU;        // forward declaration
     struct WGS;        // forward declaration
     struct Euler;      // forward declaration
