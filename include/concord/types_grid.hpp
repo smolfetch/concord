@@ -59,6 +59,17 @@ namespace concord {
             }
         }
 
+        Grid(const Polygon &poly, double resolution, Datum datum = Datum(), bool centred = true) {
+            auto bound = poly.get_obb(datum);
+            double width = bound.size.x;
+            double height = bound.size.y;
+
+            std::size_t rows = static_cast<std::size_t>(std::ceil(width / resolution));
+            std::size_t cols = static_cast<std::size_t>(std::ceil(height / resolution));
+
+            Grid(rows, cols, resolution, datum, centred, bound.pose);
+        }
+
         reference operator()(size_type r, size_type c) noexcept { return data_[index(r, c)]; }
         const_reference operator()(size_type r, size_type c) const noexcept { return data_[index(r, c)]; }
         reference at(size_type r, size_type c) { return data_.at(index_checked(r, c)); }
