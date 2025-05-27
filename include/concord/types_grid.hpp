@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "types_basic.hpp"
@@ -58,20 +57,12 @@ namespace concord {
                 }
             }
         }
-
         Grid(const Polygon &poly, double resolution, Datum datum = Datum(), bool centered = true)
-            : Grid(
-                  // rows  = ceil(OBB width  / resolution)
-                  static_cast<size_type>(std::ceil(poly.get_obb(datum).size.x / resolution)),
-                  // cols  = ceil(OBB height / resolution)
-                  static_cast<size_type>(std::ceil(poly.get_obb(datum).size.y / resolution)),
-                  // diameter  = resolution
-                  resolution,
-                  // pass through
-                  datum, centered,
-                  // pose from the OBB
-                  poly.get_obb(datum).pose) {}
+            : Grid(static_cast<size_type>(std::ceil(poly.get_obb(datum).size.x / resolution)),
+                   static_cast<size_type>(std::ceil(poly.get_obb(datum).size.y / resolution)), resolution, datum,
+                   centered, poly.get_obb(datum).pose) {}
 
+        void set_value(size_type r, size_type c, const T &value) { at(r, c).second = value; }
         reference operator()(size_type r, size_type c) noexcept { return data_[index(r, c)]; }
         const_reference operator()(size_type r, size_type c) const noexcept { return data_[index(r, c)]; }
         reference at(size_type r, size_type c) { return data_.at(index_checked(r, c)); }
