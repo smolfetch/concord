@@ -32,7 +32,7 @@ Concord is a modern C++ library that provides a complete suite of tools for work
 FetchContent_Declare(
   concord
   GIT_REPOSITORY https://github.com/bresilla/concord.git
-  GIT_TAG        main
+  GIT_TAG        develop
 )
 FetchContent_MakeAvailable(concord)
 
