@@ -30,9 +30,6 @@
 // Spatial indexing structures
 #include "spatial/spatial_index.hpp"
 
-// Utilities and I/O operations
-#include "io/utilities.hpp"
-
 /**
  * @brief Concord - A comprehensive C++ geodetic coordinate and spatial library
  * 
@@ -43,7 +40,6 @@
  * - Bounding volumes (AABB, OBB, spheres)
  * - Spatial algorithms (intersections, distances, convex hulls)
  * - Spatial indexing (R-Trees, QuadTrees, hash grids)
- * - I/O operations (CSV, GeoJSON, KML, WKT)
  * - Utilities (random generation, statistics, validation)
  * 
  * @namespace concord
@@ -60,5 +56,4 @@ namespace concord {
     constexpr bool HAS_SPATIAL_INDEXING = true;
     constexpr bool HAS_ADVANCED_ALGORITHMS = true;
     constexpr bool HAS_MULTIPLE_DATUMS = true;
-    constexpr bool HAS_IO_OPERATIONS = true;
 }
