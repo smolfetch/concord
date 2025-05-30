@@ -11,7 +11,7 @@ compileit() {
         mkdir "$TOP_HEAD/build"
     fi
     cd "$TOP_HEAD/build"
-    cmake -Wno-dev -DCONCORD_BUILD_EXAMPLES=ON ..
+    cmake -Wno-dev -DBUILD_EXAMPLES=ON ..
     cd "$CURR_DIR"
 }
 
