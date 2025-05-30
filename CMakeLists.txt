@@ -14,7 +14,7 @@ set(params
     -Wno-reorder
 )
 
-option(BUILD_EXAMPLES "Build examples" OFF)
+option(CONCORD_BUILD_EXAMPLES "Build examples" OFF)
 include(FetchContent)
 
 # --------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ export(EXPORT ${project_name}Targets
 
 
 # --------------------------------------------------------------------------------------------------
-if(BUILD_EXAMPLES)
+if(CONCORD_BUILD_EXAMPLES)
   add_definitions(-DHAS_RERUN)
   set(RERUN_DOWNLOAD_AND_BUILD_ARROW OFF)
   FetchContent_Declare(rerun_sdk URL https://github.com/rerun-io/rerun/releases/latest/download/rerun_cpp_sdk.zip)
