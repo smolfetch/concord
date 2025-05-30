@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "types_basic.hpp" // for Datum, Point, ENU, Euler, Bound
+#include "../core/types_basic.hpp" // for Datum, Point, ENU, Euler, Bound
 #include "types_line.hpp"  // for Line
 #include <algorithm>
 #include <array>

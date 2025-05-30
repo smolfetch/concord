@@ -1,20 +1,12 @@
 #pragma once
 
+#include "constants.hpp"
 #include <cmath>
 #include <tuple>
 #include <stdexcept>
 
-// Constants used in the UTM conversion process
-constexpr double a = 6378137.0; // WGS-84 major axis
-constexpr double f = 1.0 / 298.257223563; // WGS-84 flattening
-constexpr double k0 = 0.9996; // UTM scale factor
-constexpr double e2 = f * (2 - f); // Square of eccentricity
-constexpr double e4 = e2 * e2;
-constexpr double e6 = e4 * e2;
-constexpr double ep2 = e2 / (1 - e2); // Second eccentricity squared
-
-
 namespace concord {
+    using namespace concord::constants;
 
     // Function to determine the UTM zone for a given longitude
     int inline get_utm_zone(double longitude) {

@@ -1,6 +1,54 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "arrow-cpp@latest": {
+      "last_modified": "2025-05-16T20:19:48Z",
+      "resolved": "github:NixOS/nixpkgs/12a55407652e04dcf2309436eb06fef0d3713ef3#arrow-cpp",
+      "source": "devbox-search",
+      "version": "20.0.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/6xir7vb47py6ymdi7d7j9152f5ns9140-arrow-cpp-20.0.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/6xir7vb47py6ymdi7d7j9152f5ns9140-arrow-cpp-20.0.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ik09r30f7dgk7w39xg3n02pbyazp2v3m-arrow-cpp-20.0.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ik09r30f7dgk7w39xg3n02pbyazp2v3m-arrow-cpp-20.0.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/bypf61z099mjwk9yhpzs2v71dhiqfjy6-arrow-cpp-20.0.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/bypf61z099mjwk9yhpzs2v71dhiqfjy6-arrow-cpp-20.0.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lnisdbzpmmyfs9i1svhd3sjhnlpz65d5-arrow-cpp-20.0.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lnisdbzpmmyfs9i1svhd3sjhnlpz65d5-arrow-cpp-20.0.0"
+        }
+      }
+    },
     "clang-tools@latest": {
       "last_modified": "2025-03-11T17:52:14Z",
       "resolved": "github:NixOS/nixpkgs/0d534853a55b5d02a4ababa1d71921ce8f0aee4c#clang-tools",

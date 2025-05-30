@@ -15,6 +15,15 @@ set(params
 )
 
 option(CONCORD_BUILD_EXAMPLES "Build examples" OFF)
+include(FetchContent)
+
+# --------------------------------------------------------------------------------------------------
+set(ext_deps)
+
+FetchContent_Declare(pigment GIT_REPOSITORY https://github.com/smolfetch/pigment.git GIT_TAG main)
+FetchContent_MakeAvailable(pigment)
+list(APPEND ext_deps pigment::pigment)
+
 
 # --------------------------------------------------------------------------------------------------
 add_library(${project_name} INTERFACE)
@@ -24,6 +33,12 @@ target_include_directories(${project_name} INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
+
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
+include_directories(include)
 
 # --------------------------------------------------------------------------------------------------
 include(GNUInstallDirs)
@@ -50,15 +65,12 @@ export(EXPORT ${project_name}Targets
 
 # --------------------------------------------------------------------------------------------------
 if(CONCORD_BUILD_EXAMPLES)
-  install(
-    DIRECTORY include/
-    DESTINATION include
-  )
-  include_directories(include)
+  add_definitions(-DHAS_RERUN)
+  set(RERUN_DOWNLOAD_AND_BUILD_ARROW OFF)
+  FetchContent_Declare(rerun_sdk URL https://github.com/rerun-io/rerun/releases/latest/download/rerun_cpp_sdk.zip)
+  FetchContent_MakeAvailable(rerun_sdk)
+  list(APPEND ext_deps rerun_sdk)
 
-  set(external_deps
-      spdlog::spdlog
-  )
   set(exe
     examples/main.cpp
   )
@@ -71,7 +83,7 @@ if(CONCORD_BUILD_EXAMPLES)
         target_compile_options(${exec_name} PRIVATE ${params})
         target_sources(${exec_name} PRIVATE "${lib_file}")
       endforeach()
-    target_link_libraries(${exec_name} ${external_deps})
+    target_link_libraries(${exec_name} ${ext_deps})
     install(TARGETS ${exec_name} DESTINATION bin)
     list(APPEND exec_names ${exec_name})
   endforeach()

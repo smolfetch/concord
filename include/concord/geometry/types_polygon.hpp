@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types_basic.hpp"
+#include "../core/types_basic.hpp"
 #include "types_line.hpp"
 #include <cmath>
 #include <cstddef>
@@ -90,9 +90,9 @@ namespace concord {
             return from_rectangle(size.x, size.y, d, inflate);
         }
 
-        concord::Bound get_obb(concord::Datum d = {}) const {
+        Bound get_obb(concord::Datum d = {}) const {
             if (points.empty()) {
-                return concord::Bound();
+                return Bound();
             }
 
             // --- 1) Compute centroid-based orientation (same as before) ---
