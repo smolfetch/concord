@@ -23,7 +23,7 @@ namespace concord {
         double lon = 0.0;
         double alt = 0.0;
 
-        bool is_set() const { return lat != 0.0 && lon != 0.0; }
+        inline bool is_set() const { return lat != 0.0 && lon != 0.0; }
     };
 
     struct WGS {
@@ -39,19 +39,19 @@ namespace concord {
 
         WGS() = default;
         inline ENU toENU(const Datum &datum) const;
-        operator Datum() const noexcept { return Datum{lat, lon, alt}; }
-        bool is_set() const { return lat != 0.0 && lon != 0.0; }
+        inline operator Datum() const noexcept { return Datum{lat, lon, alt}; }
+        inline bool is_set() const { return lat != 0.0 && lon != 0.0; }
         
         // Mathematical operations (for small displacements)
-        WGS operator+(const WGS& offset) const { 
+        inline WGS operator+(const WGS& offset) const { 
             return WGS{lat + offset.lat, lon + offset.lon, alt + offset.alt}; 
         }
-        WGS operator-(const WGS& offset) const { 
+        inline WGS operator-(const WGS& offset) const { 
             return WGS{lat - offset.lat, lon - offset.lon, alt - offset.alt}; 
         }
         
         // Distance calculation using haversine formula
-        double distance_to(const WGS& other) const {
+        inline double distance_to(const WGS& other) const {
             validation::validate_finite(lat, "latitude");
             validation::validate_finite(lon, "longitude");
             validation::validate_finite(other.lat, "other latitude");
@@ -68,7 +68,7 @@ namespace concord {
         }
         
         // Bearing calculation
-        double bearing_to(const WGS& other) const {
+        inline double bearing_to(const WGS& other) const {
             double dlon = (other.lon - lon) * M_PI / 180.0;
             double lat1_rad = lat * M_PI / 180.0;
             double lat2_rad = other.lat * M_PI / 180.0;
@@ -90,33 +90,33 @@ namespace concord {
 
         ENU() = default;
         inline WGS toWGS(const Datum &datum) const;
-        bool is_set() const { return x != 0.0 && y != 0.0; }
+        inline bool is_set() const { return x != 0.0 && y != 0.0; }
         
         // Mathematical operations
-        ENU operator+(const ENU& other) const { return ENU{x + other.x, y + other.y, z + other.z}; }
-        ENU operator-(const ENU& other) const { return ENU{x - other.x, y - other.y, z - other.z}; }
-        ENU operator*(double scale) const { return ENU{x * scale, y * scale, z * scale}; }
-        ENU operator/(double scale) const { return ENU{x / scale, y / scale, z / scale}; }
+        inline ENU operator+(const ENU& other) const { return ENU{x + other.x, y + other.y, z + other.z}; }
+        inline ENU operator-(const ENU& other) const { return ENU{x - other.x, y - other.y, z - other.z}; }
+        inline ENU operator*(double scale) const { return ENU{x * scale, y * scale, z * scale}; }
+        inline ENU operator/(double scale) const { return ENU{x / scale, y / scale, z / scale}; }
         
-        ENU& operator+=(const ENU& other) { x += other.x; y += other.y; z += other.z; return *this; }
-        ENU& operator-=(const ENU& other) { x -= other.x; y -= other.y; z -= other.z; return *this; }
-        ENU& operator*=(double scale) { x *= scale; y *= scale; z *= scale; return *this; }
-        ENU& operator/=(double scale) { x /= scale; y /= scale; z /= scale; return *this; }
+        inline ENU& operator+=(const ENU& other) { x += other.x; y += other.y; z += other.z; return *this; }
+        inline ENU& operator-=(const ENU& other) { x -= other.x; y -= other.y; z -= other.z; return *this; }
+        inline ENU& operator*=(double scale) { x *= scale; y *= scale; z *= scale; return *this; }
+        inline ENU& operator/=(double scale) { x /= scale; y /= scale; z /= scale; return *this; }
         
         // Distance and magnitude operations
-        double magnitude() const { return std::sqrt(x * x + y * y + z * z); }
-        double distance_to(const ENU& other) const { 
+        inline double magnitude() const { return std::sqrt(x * x + y * y + z * z); }
+        inline double distance_to(const ENU& other) const { 
             return std::sqrt((x - other.x) * (x - other.x) + 
                            (y - other.y) * (y - other.y) + 
                            (z - other.z) * (z - other.z)); 
         }
-        double distance_to_2d(const ENU& other) const {
+        inline double distance_to_2d(const ENU& other) const {
             return std::sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
         }
         
         // Conversion to Vec3d
-        Vec3d to_vec3() const { return Vec3d{x, y, z}; }
-        static ENU from_vec3(const Vec3d& v) { return ENU{v[0], v[1], v[2]}; }
+        inline Vec3d to_vec3() const { return Vec3d{x, y, z}; }
+        inline static ENU from_vec3(const Vec3d& v) { return ENU{v[0], v[1], v[2]}; }
     };
 
     inline ENU WGS::toENU(const Datum &datum) const {
@@ -138,16 +138,16 @@ namespace concord {
         Quaternion() = default;
         Quaternion(double w_, double x_, double y_, double z_) : w(w_), x(x_), y(y_), z(z_) {}
         explicit Quaternion(const Euler &e) noexcept;
-        bool is_set() const { return w != 0.0 || x != 0.0 || y != 0.0 || z != 0.0; }
+        inline bool is_set() const { return w != 0.0 || x != 0.0 || y != 0.0 || z != 0.0; }
         
         // Mathematical operations
-        Quaternion operator+(const Quaternion& other) const {
+        inline Quaternion operator+(const Quaternion& other) const {
             return Quaternion{w + other.w, x + other.x, y + other.y, z + other.z};
         }
-        Quaternion operator-(const Quaternion& other) const {
+        inline Quaternion operator-(const Quaternion& other) const {
             return Quaternion{w - other.w, x - other.x, y - other.y, z - other.z};
         }
-        Quaternion operator*(const Quaternion& other) const {
+        inline Quaternion operator*(const Quaternion& other) const {
             return Quaternion{
                 w * other.w - x * other.x - y * other.y - z * other.z,
                 w * other.x + x * other.w + y * other.z - z * other.y,
@@ -155,12 +155,12 @@ namespace concord {
                 w * other.z + x * other.y - y * other.x + z * other.w
             };
         }
-        Quaternion operator*(double scale) const {
+        inline Quaternion operator*(double scale) const {
             return Quaternion{w * scale, x * scale, y * scale, z * scale};
         }
         
         // Quaternion operations
-        double norm() const { 
+        inline double norm() const { 
             validation::validate_finite(w, "quaternion w");
             validation::validate_finite(x, "quaternion x");
             validation::validate_finite(y, "quaternion y");
@@ -168,7 +168,7 @@ namespace concord {
             return std::sqrt(w*w + x*x + y*y + z*z); 
         }
         
-        Quaternion normalized() const {
+        inline Quaternion normalized() const {
             double n = norm();
             if (n < 1e-15) {
                 throw MathematicalException("cannot normalize zero quaternion");
@@ -176,9 +176,9 @@ namespace concord {
             return (*this) * (1.0 / n);
         }
         
-        Quaternion conjugate() const { return Quaternion{w, -x, -y, -z}; }
+        inline Quaternion conjugate() const { return Quaternion{w, -x, -y, -z}; }
         
-        Quaternion inverse() const {
+        inline Quaternion inverse() const {
             double n2 = w*w + x*x + y*y + z*z;
             if (n2 < 1e-15) {
                 throw MathematicalException("cannot invert zero quaternion");
@@ -187,14 +187,14 @@ namespace concord {
         }
         
         // Rotation operations
-        Vec3d rotate(const Vec3d& v) const {
+        inline Vec3d rotate(const Vec3d& v) const {
             Quaternion qv{0, v[0], v[1], v[2]};
             Quaternion result = (*this) * qv * conjugate();
             return Vec3d{result.x, result.y, result.z};
         }
         
         // SLERP interpolation
-        static Quaternion slerp(const Quaternion& q1, const Quaternion& q2, double t) {
+        inline static Quaternion slerp(const Quaternion& q1, const Quaternion& q2, double t) {
             double dot = q1.w * q2.w + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z;
             if (dot < 0.0) {
                 return slerp(q1, Quaternion{-q2.w, -q2.x, -q2.y, -q2.z}, t);
@@ -220,24 +220,24 @@ namespace concord {
         Euler() = default;
         Euler(double roll_, double pitch_, double yaw_) : roll(roll_), pitch(pitch_), yaw(yaw_) {}
         explicit Euler(const Quaternion &q) noexcept;
-        bool is_set() const { return roll != 0.0 || pitch != 0.0 || yaw != 0.0; }
+        inline bool is_set() const { return roll != 0.0 || pitch != 0.0 || yaw != 0.0; }
 
-        double yaw_cos() const { return std::cos(yaw * 0.5); }
-        double yaw_sin() const { return std::sin(yaw * 0.5); }
+        inline double yaw_cos() const { return std::cos(yaw * 0.5); }
+        inline double yaw_sin() const { return std::sin(yaw * 0.5); }
         
         // Mathematical operations
-        Euler operator+(const Euler& other) const {
+        inline Euler operator+(const Euler& other) const {
             return Euler{roll + other.roll, pitch + other.pitch, yaw + other.yaw};
         }
-        Euler operator-(const Euler& other) const {
+        inline Euler operator-(const Euler& other) const {
             return Euler{roll - other.roll, pitch - other.pitch, yaw - other.yaw};
         }
-        Euler operator*(double scale) const {
+        inline Euler operator*(double scale) const {
             return Euler{roll * scale, pitch * scale, yaw * scale};
         }
         
         // Angle normalization
-        Euler normalized() const {
+        inline Euler normalized() const {
             auto normalize_angle = [](double angle) {
                 while (angle > M_PI) angle -= 2.0 * M_PI;
                 while (angle < -M_PI) angle += 2.0 * M_PI;
@@ -247,7 +247,7 @@ namespace concord {
         }
         
         // Convert to rotation matrix (3x3)
-        Mat3d to_rotation_matrix() const {
+        inline Mat3d to_rotation_matrix() const {
             double cr = std::cos(roll), sr = std::sin(roll);
             double cp = std::cos(pitch), sp = std::sin(pitch);
             double cy = std::cos(yaw), sy = std::sin(yaw);
@@ -266,7 +266,7 @@ namespace concord {
         }
         
         // Rotate a vector
-        Vec3d rotate(const Vec3d& v) const {
+        inline Vec3d rotate(const Vec3d& v) const {
             Mat3d R = to_rotation_matrix();
             return R * v;
         }
@@ -316,29 +316,29 @@ namespace concord {
         Size() = default;
         Size(double x_, double y_, double z_) : x(x_), y(y_), z(z_) {}
         Size(double s) : x(s), y(s), z(s) {} // Uniform scaling
-        bool is_set() const { return x != 0.0 || y != 0.0 || z != 0.0; }
+        inline bool is_set() const { return x != 0.0 || y != 0.0 || z != 0.0; }
         
         // Mathematical operations
-        Size operator+(const Size& other) const { return Size{x + other.x, y + other.y, z + other.z}; }
-        Size operator-(const Size& other) const { return Size{x - other.x, y - other.y, z - other.z}; }
-        Size operator*(double scale) const { return Size{x * scale, y * scale, z * scale}; }
-        Size operator/(double scale) const { return Size{x / scale, y / scale, z / scale}; }
-        Size operator*(const Size& other) const { return Size{x * other.x, y * other.y, z * other.z}; }
+        inline Size operator+(const Size& other) const { return Size{x + other.x, y + other.y, z + other.z}; }
+        inline Size operator-(const Size& other) const { return Size{x - other.x, y - other.y, z - other.z}; }
+        inline Size operator*(double scale) const { return Size{x * scale, y * scale, z * scale}; }
+        inline Size operator/(double scale) const { return Size{x / scale, y / scale, z / scale}; }
+        inline Size operator*(const Size& other) const { return Size{x * other.x, y * other.y, z * other.z}; }
         
         // Volume and area calculations
-        double volume() const { return x * y * z; }
-        double area_xy() const { return x * y; }
-        double area_xz() const { return x * z; }
-        double area_yz() const { return y * z; }
-        double diagonal() const { return std::sqrt(x*x + y*y + z*z); }
-        double diagonal_2d() const { return std::sqrt(x*x + y*y); }
+        inline double volume() const { return x * y * z; }
+        inline double area_xy() const { return x * y; }
+        inline double area_xz() const { return x * z; }
+        inline double area_yz() const { return y * z; }
+        inline double diagonal() const { return std::sqrt(x*x + y*y + z*z); }
+        inline double diagonal_2d() const { return std::sqrt(x*x + y*y); }
         
         // Utility functions
-        Size abs() const { return Size{std::abs(x), std::abs(y), std::abs(z)}; }
-        Size max(const Size& other) const { 
+        inline Size abs() const { return Size{std::abs(x), std::abs(y), std::abs(z)}; }
+        inline Size max(const Size& other) const { 
             return Size{std::max(x, other.x), std::max(y, other.y), std::max(z, other.z)}; 
         }
-        Size min(const Size& other) const { 
+        inline Size min(const Size& other) const { 
             return Size{std::min(x, other.x), std::min(y, other.y), std::min(z, other.z)}; 
         }
     };
@@ -355,19 +355,19 @@ namespace concord {
         Point(double x, double y, double z = 0.0, const Datum &datum = Datum()) 
             : enu(x, y, z), wgs(enu.toWGS(datum)) {}
             
-        bool is_set() const { return enu.is_set() && wgs.is_set(); }
+        inline bool is_set() const { return enu.is_set() && wgs.is_set(); }
         
         // Mathematical operations
-        Point operator+(const ENU& offset) const { 
+        inline Point operator+(const ENU& offset) const { 
             return Point{enu + offset, wgs}; 
         }
-        Point operator-(const ENU& offset) const { 
+        inline Point operator-(const ENU& offset) const { 
             return Point{enu - offset, wgs}; 
         }
-        double distance_to(const Point& other) const {
+        inline double distance_to(const Point& other) const {
             return enu.distance_to(other.enu);
         }
-        double distance_to_2d(const Point& other) const {
+        inline double distance_to_2d(const Point& other) const {
             return enu.distance_to_2d(other.enu);
         }
     };
@@ -381,17 +381,17 @@ namespace concord {
         Pose(float x, float y, float yaw)
             : point(Point{ENU{x, y, 0.0f}, WGS{0.0f, 0.0f, 0.0f}}), angle(Euler{0.0f, 0.0f, yaw}) {}
         explicit Pose(const Point &p, const Quaternion &q) noexcept : point(p), angle(q) {}
-        bool is_set() const { return point.is_set() && angle.is_set(); }
+        inline bool is_set() const { return point.is_set() && angle.is_set(); }
         
         // Transformation operations
-        Point transform_point(const Point& local_point) const {
+        inline Point transform_point(const Point& local_point) const {
             Vec3d local_vec = local_point.enu.to_vec3();
             Vec3d rotated = angle.rotate(local_vec);
             ENU transformed_enu = point.enu + ENU::from_vec3(rotated);
             return Point{transformed_enu, transformed_enu.toWGS(Datum{})};
         }
         
-        Point inverse_transform_point(const Point& world_point) const {
+        inline Point inverse_transform_point(const Point& world_point) const {
             ENU relative_enu = world_point.enu - point.enu;
             Vec3d relative_vec = relative_enu.to_vec3();
             Euler inverse_angle = angle * -1.0;
@@ -401,14 +401,14 @@ namespace concord {
         }
         
         // Pose composition
-        Pose operator*(const Pose& other) const {
+        inline Pose operator*(const Pose& other) const {
             Point transformed_point = transform_point(other.point);
             Euler combined_angle = angle + other.angle;
             return Pose{transformed_point, combined_angle.normalized()};
         }
         
         // Inverse pose
-        Pose inverse() const {
+        inline Pose inverse() const {
             Euler inv_angle = angle * -1.0;
             Vec3d neg_pos = point.enu.to_vec3() * -1.0;
             Vec3d rotated_neg_pos = inv_angle.rotate(neg_pos);
@@ -417,7 +417,7 @@ namespace concord {
             return Pose{inv_point, inv_angle};
         }
 
-        std::vector<Point> get_corners(Size size, Datum datum = {}) const {
+        inline std::vector<Point> get_corners(Size size, Datum datum = {}) const {
             std::vector<Point> points;
             // precompute
             double c = std::cos(angle.yaw);
@@ -448,15 +448,15 @@ namespace concord {
 
         Bound() = default;
         Bound(const Pose &p, const Size &s) : pose(p), size(s) {}
-        bool is_set() const { return pose.is_set() && size.is_set(); }
+        inline bool is_set() const { return pose.is_set() && size.is_set(); }
         
         // Geometric properties
-        double volume() const { return size.volume(); }
-        double area() const { return size.area_xy(); }
-        Point center() const { return pose.point; }
+        inline double volume() const { return size.volume(); }
+        inline double area() const { return size.area_xy(); }
+        inline Point center() const { return pose.point; }
         
         // Containment testing
-        bool contains(const Point& point) const {
+        inline bool contains(const Point& point) const {
             Point local_point = pose.inverse_transform_point(point);
             double half_x = size.x * 0.5;
             double half_y = size.y * 0.5;
@@ -467,7 +467,7 @@ namespace concord {
         }
         
         // Intersection testing
-        bool intersects(const Bound& other) const {
+        inline bool intersects(const Bound& other) const {
             // Simple OBB intersection test using separating axis theorem
             // This is a simplified version - full SAT would check all axes
             std::vector<Point> corners1 = get_corners();
@@ -484,7 +484,7 @@ namespace concord {
         }
         
         // Expand bound to include point
-        void expand_to_include(const Point& point) {
+        inline void expand_to_include(const Point& point) {
             if (!contains(point)) {
                 // Transform point to local coordinates
                 Point local_point = pose.inverse_transform_point(point);
@@ -506,7 +506,7 @@ namespace concord {
             }
         }
 
-        std::vector<Point> get_corners(Datum datum = {}) const {
+        inline std::vector<Point> get_corners(Datum datum = {}) const {
             return pose.get_corners(size, datum);
         }
     };

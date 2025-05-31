@@ -19,38 +19,38 @@ namespace concord {
         Rectangle(const Point &tl, const Point &tr, const Point &bl, const Point &br)
             : top_left(tl), top_right(tr), bottom_left(bl), bottom_right(br) {}
 
-        double area() const noexcept {
+        inline double area() const noexcept {
             double width = Line(top_left, top_right).length();
             double height = Line(top_left, bottom_left).length();
             return width * height;
         }
 
-        double perimeter() const noexcept {
+        inline double perimeter() const noexcept {
             double w = Line(top_left, top_right).length();
             double h = Line(top_left, bottom_left).length();
             return 2 * (w + h);
         }
 
-        bool contains(const Point &p) const noexcept {
+        inline bool contains(const Point &p) const noexcept {
             return (p.enu.x >= top_left.enu.x && p.enu.x <= top_right.enu.x && p.enu.y >= top_left.enu.y &&
                     p.enu.y <= bottom_left.enu.y);
         }
 
-        void from_pointvec(std::array<Point, 4> points) {
+        inline void from_pointvec(std::array<Point, 4> points) {
             top_left = points[0];
             top_right = points[1];
             bottom_left = points[2];
             bottom_right = points[3];
         }
 
-        const Point &getTopLeft() const noexcept { return top_left; }
-        const Point &getTopRight() const noexcept { return top_right; }
-        const Point &getBottomLeft() const noexcept { return bottom_left; }
-        const Point &getBottomRight() const noexcept { return bottom_right; }
+        inline const Point &getTopLeft() const noexcept { return top_left; }
+        inline const Point &getTopRight() const noexcept { return top_right; }
+        inline const Point &getBottomLeft() const noexcept { return bottom_left; }
+        inline const Point &getBottomRight() const noexcept { return bottom_right; }
 
-        std::array<Point, 4> get_corners() const noexcept { return {top_left, top_right, bottom_right, bottom_left}; }
+        inline std::array<Point, 4> get_corners() const noexcept { return {top_left, top_right, bottom_right, bottom_left}; }
 
-        static Rectangle outer_rectangle(const std::vector<Bound> &bounds, Datum d = {}) {
+        static inline Rectangle outer_rectangle(const std::vector<Bound> &bounds, Datum d = {}) {
             if (bounds.empty()) {
                 return Rectangle();
             }

@@ -20,10 +20,6 @@ include(FetchContent)
 # --------------------------------------------------------------------------------------------------
 set(ext_deps)
 
-FetchContent_Declare(pigment GIT_REPOSITORY https://github.com/smolfetch/pigment.git GIT_TAG main)
-FetchContent_MakeAvailable(pigment)
-list(APPEND ext_deps pigment::pigment)
-
 
 # --------------------------------------------------------------------------------------------------
 add_library(${project_name} INTERFACE)
