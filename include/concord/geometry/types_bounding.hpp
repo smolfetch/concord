@@ -34,7 +34,7 @@ namespace concord {
             return result;
         }
         
-        void expand(const Point& point) {
+        inline void expand(const Point& point) {
             min_point.enu.x = std::min(min_point.enu.x, point.enu.x);
             min_point.enu.y = std::min(min_point.enu.y, point.enu.y);
             min_point.enu.z = std::min(min_point.enu.z, point.enu.z);
@@ -44,19 +44,19 @@ namespace concord {
             max_point.enu.z = std::max(max_point.enu.z, point.enu.z);
         }
         
-        bool contains(const Point& point) const {
+        inline bool contains(const Point& point) const {
             return (point.enu.x >= min_point.enu.x && point.enu.x <= max_point.enu.x &&
                     point.enu.y >= min_point.enu.y && point.enu.y <= max_point.enu.y &&
                     point.enu.z >= min_point.enu.z && point.enu.z <= max_point.enu.z);
         }
         
-        bool intersects(const AABB& other) const {
+        inline bool intersects(const AABB& other) const {
             return (min_point.enu.x <= other.max_point.enu.x && max_point.enu.x >= other.min_point.enu.x &&
                     min_point.enu.y <= other.max_point.enu.y && max_point.enu.y >= other.min_point.enu.y &&
                     min_point.enu.z <= other.max_point.enu.z && max_point.enu.z >= other.min_point.enu.z);
         }
         
-        Point center() const {
+        inline Point center() const {
             Point center_pt;
             center_pt.enu.x = (min_point.enu.x + max_point.enu.x) * 0.5;
             center_pt.enu.y = (min_point.enu.y + max_point.enu.y) * 0.5;
@@ -64,7 +64,7 @@ namespace concord {
             return center_pt;
         }
         
-        Size size() const {
+        inline Size size() const {
             return Size{
                 max_point.enu.x - min_point.enu.x,
                 max_point.enu.y - min_point.enu.y,
@@ -72,17 +72,17 @@ namespace concord {
             };
         }
         
-        double volume() const {
+        inline double volume() const {
             auto s = size();
             return s.x * s.y * s.z;
         }
         
-        double surface_area() const {
+        inline double surface_area() const {
             auto s = size();
             return 2.0 * (s.x * s.y + s.y * s.z + s.z * s.x);
         }
         
-        std::array<Point, 8> corners() const {
+        inline std::array<Point, 8> corners() const {
             return {
                 Point(ENU{min_point.enu.x, min_point.enu.y, min_point.enu.z}, Datum{}),
                 Point(ENU{max_point.enu.x, min_point.enu.y, min_point.enu.z}, Datum{}),
@@ -123,7 +123,7 @@ namespace concord {
             };
         }
         
-        bool contains(const Point& point) const {
+        inline bool contains(const Point& point) const {
             // Transform point to OBB local space
             double dx = point.enu.x - center.enu.x;
             double dy = point.enu.y - center.enu.y;
@@ -147,7 +147,7 @@ namespace concord {
                     std::abs(local_z) <= half_extents.z);
         }
         
-        std::array<Point, 8> corners(const Datum& datum = {}) const {
+        inline std::array<Point, 8> corners(const Datum& datum = {}) const {
             std::array<Point, 8> corners;
             
             // Local corners relative to center
@@ -224,7 +224,7 @@ namespace concord {
             return BoundingSphere{centroid, max_dist};
         }
         
-        bool contains(const Point& point) const {
+        inline bool contains(const Point& point) const {
             double dx = point.enu.x - center.enu.x;
             double dy = point.enu.y - center.enu.y;
             double dz = point.enu.z - center.enu.z;
@@ -232,7 +232,7 @@ namespace concord {
             return dist_sq <= radius * radius;
         }
         
-        bool intersects(const BoundingSphere& other) const {
+        inline bool intersects(const BoundingSphere& other) const {
             double dx = other.center.enu.x - center.enu.x;
             double dy = other.center.enu.y - center.enu.y;
             double dz = other.center.enu.z - center.enu.z;
@@ -241,11 +241,11 @@ namespace concord {
             return dist_sq <= sum_radii * sum_radii;
         }
         
-        double volume() const {
+        inline double volume() const {
             return (4.0/3.0) * M_PI * radius * radius * radius;
         }
         
-        double surface_area() const {
+        inline double surface_area() const {
             return 4.0 * M_PI * radius * radius;
         }
     };

@@ -62,16 +62,16 @@ namespace concord {
                    static_cast<size_type>(std::ceil(poly.get_obb(datum).size.y / resolution)), resolution, datum,
                    centered, poly.get_obb(datum).pose) {}
 
-        void set_value(size_type r, size_type c, const T &value) { at(r, c).second = value; }
-        reference operator()(size_type r, size_type c) noexcept { return data_[index(r, c)]; }
-        const_reference operator()(size_type r, size_type c) const noexcept { return data_[index(r, c)]; }
-        reference at(size_type r, size_type c) { return data_.at(index_checked(r, c)); }
-        const_reference at(size_type r, size_type c) const { return data_.at(index_checked(r, c)); }
-        std::span<value_type> row(size_type r) noexcept { return {&data_[index(r, 0)], cols_}; }
-        std::span<const value_type> row(size_type r) const noexcept { return {&data_[index(r, 0)], cols_}; }
-        constexpr size_type index(size_type r, size_type c) const noexcept { return r * cols_ + c; }
+        inline void set_value(size_type r, size_type c, const T &value) { at(r, c).second = value; }
+        inline reference operator()(size_type r, size_type c) noexcept { return data_[index(r, c)]; }
+        inline const_reference operator()(size_type r, size_type c) const noexcept { return data_[index(r, c)]; }
+        inline reference at(size_type r, size_type c) { return data_.at(index_checked(r, c)); }
+        inline const_reference at(size_type r, size_type c) const { return data_.at(index_checked(r, c)); }
+        inline std::span<value_type> row(size_type r) noexcept { return {&data_[index(r, 0)], cols_}; }
+        inline std::span<const value_type> row(size_type r) const noexcept { return {&data_[index(r, 0)], cols_}; }
+        constexpr inline size_type index(size_type r, size_type c) const noexcept { return r * cols_ + c; }
 
-        size_type index_checked(size_type r, size_type c) const {
+        inline size_type index_checked(size_type r, size_type c) const {
             if (r >= rows_ || c >= cols_) {
                 throw std::out_of_range("Grid indices out of bounds");
             }
@@ -82,12 +82,12 @@ namespace concord {
         constexpr size_type cols() const noexcept { return cols_; }
         constexpr double inradius() const noexcept { return inradius_; }
 
-        auto begin() noexcept { return data_.begin(); }
-        auto end() noexcept { return data_.end(); }
-        auto begin() const noexcept { return data_.begin(); }
-        auto end() const noexcept { return data_.end(); }
+        inline auto begin() noexcept { return data_.begin(); }
+        inline auto end() noexcept { return data_.end(); }
+        inline auto begin() const noexcept { return data_.begin(); }
+        inline auto end() const noexcept { return data_.end(); }
 
-        std::vector<std::array<float, 3>> flatten_points() {
+        inline std::vector<std::array<float, 3>> flatten_points() {
             std::vector<std::array<float, 3>> points;
             for (auto &[p, c] : data_) {
                 points.push_back({float(p.enu.x), float(p.enu.y), 0.0f});
@@ -95,7 +95,7 @@ namespace concord {
             return points;
         }
 
-        std::vector<std::array<float, 3>> flatten_points(bool just_bool) {
+        inline std::vector<std::array<float, 3>> flatten_points(bool just_bool) {
             std::vector<std::array<float, 3>> points;
             for (std::size_t r = 0; r < rows_; ++r) {
                 for (std::size_t c = 0; c < cols_; ++c) {
@@ -106,7 +106,7 @@ namespace concord {
             return points;
         }
 
-        std::array<concord::Point, 4> corners(concord::Datum datum = Datum()) const {
+        inline std::array<concord::Point, 4> corners(concord::Datum datum = Datum()) const {
             if (rows_ == 0 || cols_ == 0) {
                 throw std::runtime_error("Grid is empty; cannot get corners");
             }
@@ -127,7 +127,7 @@ namespace concord {
             };
         }
 
-        std::vector<size_type> indices_within(const Polygon &poly) const {
+        inline std::vector<size_type> indices_within(const Polygon &poly) const {
             if (!poly.isConnected()) {
                 throw std::invalid_argument("Polygon must have at least 3 vertices");
             }

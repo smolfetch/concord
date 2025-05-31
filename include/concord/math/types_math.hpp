@@ -21,10 +21,10 @@ namespace concord {
             }
         }
         
-        T& operator[](size_t i) { return data[i]; }
-        const T& operator[](size_t i) const { return data[i]; }
+        inline T& operator[](size_t i) { return data[i]; }
+        inline const T& operator[](size_t i) const { return data[i]; }
         
-        Vector operator+(const Vector& other) const {
+        inline Vector operator+(const Vector& other) const {
             Vector result;
             for (size_t i = 0; i < N; ++i) {
                 result[i] = data[i] + other[i];
@@ -32,7 +32,7 @@ namespace concord {
             return result;
         }
         
-        Vector operator-(const Vector& other) const {
+        inline Vector operator-(const Vector& other) const {
             Vector result;
             for (size_t i = 0; i < N; ++i) {
                 result[i] = data[i] - other[i];
@@ -40,7 +40,7 @@ namespace concord {
             return result;
         }
         
-        Vector operator*(T scalar) const {
+        inline Vector operator*(T scalar) const {
             Vector result;
             for (size_t i = 0; i < N; ++i) {
                 result[i] = data[i] * scalar;
@@ -48,7 +48,7 @@ namespace concord {
             return result;
         }
         
-        T dot(const Vector& other) const {
+        inline T dot(const Vector& other) const {
             T result = T{};
             for (size_t i = 0; i < N; ++i) {
                 result += data[i] * other[i];
@@ -56,11 +56,11 @@ namespace concord {
             return result;
         }
         
-        T magnitude() const {
+        inline T magnitude() const {
             return std::sqrt(dot(*this));
         }
         
-        Vector normalized() const {
+        inline Vector normalized() const {
             T mag = magnitude();
             if (mag > 1e-10) {
                 return *this * (T(1) / mag);
@@ -76,7 +76,7 @@ namespace concord {
     
     // Cross product for 3D vectors
     template<typename T>
-    Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b) {
+    inline Vector<T, 3> cross(const Vector<T, 3>& a, const Vector<T, 3>& b) {
         return Vector<T, 3>{
             a[1] * b[2] - a[2] * b[1],
             a[2] * b[0] - a[0] * b[2],
@@ -98,11 +98,11 @@ namespace concord {
             }
         }
         
-        std::array<T, Cols>& operator[](size_t row) { return data[row]; }
-        const std::array<T, Cols>& operator[](size_t row) const { return data[row]; }
+        inline std::array<T, Cols>& operator[](size_t row) { return data[row]; }
+        inline const std::array<T, Cols>& operator[](size_t row) const { return data[row]; }
         
         template<size_t OtherCols>
-        Matrix<T, Rows, OtherCols> operator*(const Matrix<T, Cols, OtherCols>& other) const {
+        inline Matrix<T, Rows, OtherCols> operator*(const Matrix<T, Cols, OtherCols>& other) const {
             Matrix<T, Rows, OtherCols> result{};
             for (size_t i = 0; i < Rows; ++i) {
                 for (size_t j = 0; j < OtherCols; ++j) {
@@ -115,7 +115,7 @@ namespace concord {
             return result;
         }
         
-        Vector<T, Rows> operator*(const Vector<T, Cols>& vec) const {
+        inline Vector<T, Rows> operator*(const Vector<T, Cols>& vec) const {
             Vector<T, Rows> result;
             for (size_t i = 0; i < Rows; ++i) {
                 result[i] = T{};
@@ -126,7 +126,7 @@ namespace concord {
             return result;
         }
         
-        static Matrix<T, Rows, Cols> identity() {
+        inline static Matrix<T, Rows, Cols> identity() {
             static_assert(Rows == Cols, "Identity matrix must be square");
             return Matrix<T, Rows, Cols>{};
         }
@@ -139,7 +139,7 @@ namespace concord {
     
     // Transformation matrices
     template<typename T>
-    Matrix<T, 3, 3> rotationMatrix2D(T angle) {
+    inline Matrix<T, 3, 3> rotationMatrix2D(T angle) {
         T c = std::cos(angle);
         T s = std::sin(angle);
         Matrix<T, 3, 3> result{};
@@ -150,7 +150,7 @@ namespace concord {
     }
     
     template<typename T>
-    Matrix<T, 4, 4> translationMatrix(T x, T y, T z) {
+    inline Matrix<T, 4, 4> translationMatrix(T x, T y, T z) {
         Matrix<T, 4, 4> result{};
         result[0][3] = x;
         result[1][3] = y;
@@ -160,12 +160,12 @@ namespace concord {
     
     // Interpolation utilities
     template<typename T>
-    T lerp(T a, T b, T t) {
+    inline T lerp(T a, T b, T t) {
         return a + t * (b - a);
     }
     
     template<typename T>
-    T smoothstep(T edge0, T edge1, T x) {
+    inline T smoothstep(T edge0, T edge1, T x) {
         T t = std::clamp((x - edge0) / (edge1 - edge0), T(0), T(1));
         return t * t * (T(3) - T(2) * t);
     }

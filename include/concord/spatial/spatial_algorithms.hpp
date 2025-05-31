@@ -15,20 +15,20 @@ namespace concord {
     namespace spatial {
         
         // Distance calculations
-        double distance(const Point& a, const Point& b) {
+        inline double distance(const Point& a, const Point& b) {
             double dx = a.enu.x - b.enu.x;
             double dy = a.enu.y - b.enu.y;
             double dz = a.enu.z - b.enu.z;
             return std::sqrt(dx*dx + dy*dy + dz*dz);
         }
         
-        double distance2D(const Point& a, const Point& b) {
+        inline double distance2D(const Point& a, const Point& b) {
             double dx = a.enu.x - b.enu.x;
             double dy = a.enu.y - b.enu.y;
             return std::sqrt(dx*dx + dy*dy);
         }
         
-        double distanceSquared(const Point& a, const Point& b) {
+        inline double distanceSquared(const Point& a, const Point& b) {
             double dx = a.enu.x - b.enu.x;
             double dy = a.enu.y - b.enu.y;
             double dz = a.enu.z - b.enu.z;
@@ -36,7 +36,7 @@ namespace concord {
         }
         
         // Point-to-line distance
-        double distanceToLine(const Point& point, const Line& line) {
+        inline double distanceToLine(const Point& point, const Line& line) {
             const auto& p1 = line.getStart().enu;
             const auto& p2 = line.getEnd().enu;
             const auto& p = point.enu;
@@ -74,7 +74,7 @@ namespace concord {
         }
         
         // Line-line intersection
-        bool lineIntersection(const Line& line1, const Line& line2, Point& result, const Datum& datum = {}) {
+        inline bool lineIntersection(const Line& line1, const Line& line2, Point& result, const Datum& datum = {}) {
             const auto& p1 = line1.getStart().enu;
             const auto& p2 = line1.getEnd().enu;
             const auto& p3 = line2.getStart().enu;
@@ -105,7 +105,7 @@ namespace concord {
         }
         
         // Polygon operations
-        bool isClockwise(const Polygon& polygon) {
+        inline bool isClockwise(const Polygon& polygon) {
             if (polygon.numVertices() < 3) return false;
             
             double sum = 0.0;
@@ -120,14 +120,14 @@ namespace concord {
             return sum > 0.0;
         }
         
-        Polygon reverse(const Polygon& polygon) {
+        inline Polygon reverse(const Polygon& polygon) {
             auto points = polygon.getPoints();
             std::reverse(points.begin(), points.end());
             return Polygon{points};
         }
         
         // Convex hull using Graham scan
-        Polygon convexHull(std::vector<Point> points) {
+        inline Polygon convexHull(std::vector<Point> points) {
             if (points.size() < 3) {
                 return Polygon{points};
             }
@@ -181,7 +181,7 @@ namespace concord {
         }
         
         // Polygon simplification using Douglas-Peucker algorithm
-        Polygon simplify(const Polygon& polygon, double tolerance) {
+        inline Polygon simplify(const Polygon& polygon, double tolerance) {
             const auto& points = polygon.getPoints();
             if (points.size() <= 2) {
                 return polygon;
@@ -229,7 +229,7 @@ namespace concord {
         }
         
         // Buffer/offset operations
-        Polygon buffer(const Polygon& polygon, double distance, int /* segments */ = 16) {
+        inline Polygon buffer(const Polygon& polygon, double distance, int /* segments */ = 16) {
             // Simplified buffer implementation
             // In practice, you'd want a more robust implementation using CGAL or similar
             
@@ -276,7 +276,7 @@ namespace concord {
         }
         
         // Spatial clustering (simple distance-based)
-        std::vector<std::vector<Point>> cluster(const std::vector<Point>& points, double max_distance) {
+        inline std::vector<std::vector<Point>> cluster(const std::vector<Point>& points, double max_distance) {
             std::vector<std::vector<Point>> clusters;
             std::vector<bool> visited(points.size(), false);
             

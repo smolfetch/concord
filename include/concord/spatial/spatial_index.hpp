@@ -29,7 +29,7 @@ namespace concord {
             std::vector<std::unique_ptr<Node>> children;
             bool is_leaf = true;
             
-            AABB getBoundingBox() const {
+            inline AABB getBoundingBox() const {
                 if (entries.empty()) return AABB{};
                 
                 AABB result = entries[0].bbox;
@@ -49,7 +49,7 @@ namespace concord {
         
         std::unique_ptr<Node> root_;
         
-        void insert(Node* node, const Entry& entry) {
+        inline void insert(Node* node, const Entry& entry) {
             if (node->is_leaf) {
                 node->entries.push_back(entry);
                 if (node->entries.size() > MAX_ENTRIES) {
@@ -62,7 +62,7 @@ namespace concord {
             }
         }
         
-        Node* chooseBestChild(Node* node, const AABB& bbox) {
+        inline Node* chooseBestChild(Node* node, const AABB& bbox) {
             Node* best = node->children[0].get();
             double best_enlargement = calculateEnlargement(best->getBoundingBox(), bbox);
             
@@ -77,7 +77,7 @@ namespace concord {
             return best;
         }
         
-        double calculateEnlargement(const AABB& bbox, const AABB& new_bbox) {
+        inline double calculateEnlargement(const AABB& bbox, const AABB& new_bbox) {
             AABB expanded = bbox;
             expanded.expand(new_bbox.min_point);
             expanded.expand(new_bbox.max_point);
@@ -85,7 +85,7 @@ namespace concord {
             return expanded.volume() - bbox.volume();
         }
         
-        void splitNode(Node* node) {
+        inline void splitNode(Node* node) {
             // Simple split algorithm - in practice you'd want a more sophisticated approach
             if (node->entries.size() <= MAX_ENTRIES) return;
             
@@ -111,7 +111,7 @@ namespace concord {
             }
         }
         
-        void searchRecursive(Node* node, const AABB& query_bbox, std::vector<T>& results) const {
+        inline void searchRecursive(Node* node, const AABB& query_bbox, std::vector<T>& results) const {
             if (!node) return;
             
             AABB node_bbox = node->getBoundingBox();
@@ -135,23 +135,23 @@ namespace concord {
     public:
         RTree() : root_(std::make_unique<Node>()) {}
         
-        void insert(const AABB& bbox, const T& data) {
+        inline void insert(const AABB& bbox, const T& data) {
             Entry entry{bbox, data};
             insert(root_.get(), entry);
         }
         
-        std::vector<T> search(const AABB& query_bbox) const {
+        inline std::vector<T> search(const AABB& query_bbox) const {
             std::vector<T> results;
             searchRecursive(root_.get(), query_bbox, results);
             return results;
         }
         
-        std::vector<T> searchPoint(const Point& point) const {
+        inline std::vector<T> searchPoint(const Point& point) const {
             AABB point_bbox{point, point};
             return search(point_bbox);
         }
         
-        void clear() {
+        inline void clear() {
             root_ = std::make_unique<Node>();
         }
     };
@@ -169,36 +169,36 @@ namespace concord {
             
             Node(const AABB& bounds) : boundary(bounds) {}
             
-            bool isLeaf() const {
+            inline bool isLeaf() const {
                 return children[0] == nullptr;
             }
             
-            void subdivide() {
+            inline void subdivide() {
                 Point center = boundary.center();
                 
                 // Create quadrants
                 children[0] = std::make_unique<Node>(AABB{ // NW
                     boundary.min_point,
-                    Point{ENU{center.enu.x, boundary.max_point.enu.y, boundary.max_point.enu.z}, {}}
+                    Point{ENU{center.enu.x, boundary.max_point.enu.y, boundary.max_point.enu.z}, Datum{}}
                 });
                 children[1] = std::make_unique<Node>(AABB{ // NE
-                    Point{ENU{center.enu.x, center.enu.y, boundary.min_point.enu.z}, {}},
+                    Point{ENU{center.enu.x, center.enu.y, boundary.min_point.enu.z}, Datum{}},
                     boundary.max_point
                 });
                 children[2] = std::make_unique<Node>(AABB{ // SW
-                    Point{ENU{boundary.min_point.enu.x, boundary.min_point.enu.y, boundary.min_point.enu.z}, {}},
-                    Point{ENU{center.enu.x, center.enu.y, boundary.max_point.enu.z}, {}}
+                    Point{ENU{boundary.min_point.enu.x, boundary.min_point.enu.y, boundary.min_point.enu.z}, Datum{}},
+                    Point{ENU{center.enu.x, center.enu.y, boundary.max_point.enu.z}, Datum{}}
                 });
                 children[3] = std::make_unique<Node>(AABB{ // SE
-                    Point{ENU{center.enu.x, boundary.min_point.enu.y, boundary.min_point.enu.z}, {}},
-                    Point{ENU{boundary.max_point.enu.x, center.enu.y, boundary.max_point.enu.z}, {}}
+                    Point{ENU{center.enu.x, boundary.min_point.enu.y, boundary.min_point.enu.z}, Datum{}},
+                    Point{ENU{boundary.max_point.enu.x, center.enu.y, boundary.max_point.enu.z}, Datum{}}
                 });
             }
         };
         
         std::unique_ptr<Node> root_;
         
-        bool insert(Node* node, const Point& point, const T& data) {
+        inline bool insert(Node* node, const Point& point, const T& data) {
             if (!node->boundary.contains(point)) {
                 return false;
             }
@@ -241,7 +241,7 @@ namespace concord {
             return true;
         }
         
-        void query(Node* node, const AABB& range, std::vector<T>& results) const {
+        inline void query(Node* node, const AABB& range, std::vector<T>& results) const {
             if (!node || !node->boundary.intersects(range)) {
                 return;
             }
@@ -262,20 +262,20 @@ namespace concord {
     public:
         QuadTree(const AABB& boundary) : root_(std::make_unique<Node>(boundary)) {}
         
-        bool insert(const Point& point, const T& data) {
+        inline bool insert(const Point& point, const T& data) {
             return insert(root_.get(), point, data);
         }
         
-        std::vector<T> query(const AABB& range) const {
+        inline std::vector<T> query(const AABB& range) const {
             std::vector<T> results;
             query(root_.get(), range, results);
             return results;
         }
         
-        std::vector<T> queryRadius(const Point& center, double radius) const {
+        inline std::vector<T> queryRadius(const Point& center, double radius) const {
             AABB range{
-                Point{ENU{center.enu.x - radius, center.enu.y - radius, center.enu.z - radius}, {}},
-                Point{ENU{center.enu.x + radius, center.enu.y + radius, center.enu.z + radius}, {}}
+                Point{ENU{center.enu.x - radius, center.enu.y - radius, center.enu.z - radius}, Datum{}},
+                Point{ENU{center.enu.x + radius, center.enu.y + radius, center.enu.z + radius}, Datum{}}
             };
             
             auto candidates = query(range);
@@ -289,7 +289,7 @@ namespace concord {
             return results;
         }
         
-        void clear() {
+        inline void clear() {
             root_ = std::make_unique<Node>(root_->boundary);
         }
     };
@@ -305,12 +305,12 @@ namespace concord {
         double cell_size_;
         std::unordered_map<int64_t, Cell> grid_;
         
-        int64_t hash(int x, int y) const {
+        inline int64_t hash(int x, int y) const {
             // Simple hash combining x and y coordinates
             return (static_cast<int64_t>(x) << 32) | static_cast<int64_t>(y);
         }
         
-        std::pair<int, int> getGridCoords(const Point& point) const {
+        inline std::pair<int, int> getGridCoords(const Point& point) const {
             int x = static_cast<int>(std::floor(point.enu.x / cell_size_));
             int y = static_cast<int>(std::floor(point.enu.y / cell_size_));
             return {x, y};
@@ -319,13 +319,13 @@ namespace concord {
     public:
         SpatialHashGrid(double cell_size) : cell_size_(cell_size) {}
         
-        void insert(const Point& point, const T& data) {
+        inline void insert(const Point& point, const T& data) {
             auto [x, y] = getGridCoords(point);
             int64_t key = hash(x, y);
             grid_[key].items.emplace_back(point, data);
         }
         
-        std::vector<T> query(const Point& center, double radius) const {
+        inline std::vector<T> query(const Point& center, double radius) const {
             std::vector<T> results;
             
             int min_x = static_cast<int>(std::floor((center.enu.x - radius) / cell_size_));

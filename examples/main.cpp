@@ -163,7 +163,6 @@ int main() {
     std::cout << "  Spatial Indexing: " << (HAS_SPATIAL_INDEXING ? "Yes" : "No") << std::endl;
     std::cout << "  Advanced Algorithms: " << (HAS_ADVANCED_ALGORITHMS ? "Yes" : "No") << std::endl;
     std::cout << "  Multiple Datums: " << (HAS_MULTIPLE_DATUMS ? "Yes" : "No") << std::endl;
-    std::cout << "  I/O Operations: " << (HAS_IO_OPERATIONS ? "Yes" : "No") << std::endl;
     
     // Set precision for output
     std::cout << std::fixed << std::setprecision(6);

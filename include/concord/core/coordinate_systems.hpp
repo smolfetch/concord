@@ -50,17 +50,17 @@ namespace concord {
         ECEF() = default;
         ECEF(double x_, double y_, double z_) : x(x_), y(y_), z(z_) {}
         
-        WGS toWGS() const {
+        inline WGS toWGS() const {
             auto [lat, lon, alt] = ecef_to_gps(x, y, z);
             return WGS{lat, lon, alt};
         }
         
-        static ECEF fromWGS(const WGS& wgs) {
+        inline static ECEF fromWGS(const WGS& wgs) {
             auto [x, y, z] = gps_to_ecef(wgs.lat, wgs.lon, wgs.alt);
             return ECEF{x, y, z};
         }
         
-        bool is_set() const { return x != 0.0 || y != 0.0 || z != 0.0; }
+        inline bool is_set() const { return x != 0.0 || y != 0.0 || z != 0.0; }
     };
     
     // Local Tangent Plane (LTP) coordinate system
@@ -72,15 +72,15 @@ namespace concord {
         LTP() = default;
         LTP(double n, double e, double u) : north(n), east(e), up(u) {}
         
-        ENU toENU() const {
+        inline ENU toENU() const {
             return ENU{east, north, up};
         }
         
-        static LTP fromENU(const ENU& enu) {
+        inline static LTP fromENU(const ENU& enu) {
             return LTP{enu.y, enu.x, enu.z};
         }
         
-        bool is_set() const { return north != 0.0 || east != 0.0; }
+        inline bool is_set() const { return north != 0.0 || east != 0.0; }
     };
     
     // State Plane Coordinate System (US-specific)
@@ -95,7 +95,7 @@ namespace concord {
         StatePlane(double x_, double y_, double z_, int zone_, const std::string& u = "meters")
             : x(x_), y(y_), z(z_), zone(zone_), units(u) {}
         
-        bool is_set() const { return x != 0.0 || y != 0.0; }
+        inline bool is_set() const { return x != 0.0 || y != 0.0; }
         
         // Note: Full State Plane conversion would require additional libraries
         // This is a placeholder for the structure
@@ -110,9 +110,9 @@ namespace concord {
         BNG() = default;
         BNG(double e, double n, double alt = 0.0) : easting(e), northing(n), altitude(alt) {}
         
-        bool is_set() const { return easting != 0.0 || northing != 0.0; }
+        inline bool is_set() const { return easting != 0.0 || northing != 0.0; }
         
-        std::string toGridRef() const {
+        inline std::string toGridRef() const {
             // Simplified OS Grid Reference conversion
             // Full implementation would need proper OSGB36 conversion
             int e_100km = static_cast<int>(easting / 100000);
@@ -151,15 +151,15 @@ namespace concord {
         GeographicCoord(double lat, double lon, double alt = 0.0, DatumType d = DatumType::WGS84)
             : latitude(lat), longitude(lon), altitude(alt), datum(d) {}
         
-        WGS toWGS() const {
+        inline WGS toWGS() const {
             // For now, assume WGS84 or simple conversion
             // Full implementation would need datum transformation parameters
             return WGS{latitude, longitude, altitude};
         }
         
-        bool is_set() const { return latitude != 0.0 || longitude != 0.0; }
+        inline bool is_set() const { return latitude != 0.0 || longitude != 0.0; }
         
-        std::string datumString() const {
+        inline std::string datumString() const {
             switch (datum) {
                 case DatumType::WGS84: return "WGS84";
                 case DatumType::NAD83: return "NAD83";
@@ -177,7 +177,7 @@ namespace concord {
     namespace coords {
         
         // Distance calculations accounting for Earth's curvature
-        double haversineDistance(const WGS& a, const WGS& b) {
+        inline double haversineDistance(const WGS& a, const WGS& b) {
             constexpr double R = 6371000.0; // Earth's radius in meters
             
             double lat1_rad = a.lat * M_PI / 180.0;
@@ -195,7 +195,7 @@ namespace concord {
         }
         
         // Bearing calculation
-        double bearing(const WGS& from, const WGS& to) {
+        inline double bearing(const WGS& from, const WGS& to) {
             double lat1_rad = from.lat * M_PI / 180.0;
             double lat2_rad = to.lat * M_PI / 180.0;
             double dlon_rad = (to.lon - from.lon) * M_PI / 180.0;
@@ -209,7 +209,7 @@ namespace concord {
         }
         
         // Point at distance and bearing
-        WGS pointAtDistanceAndBearing(const WGS& origin, double distance, double bearing_deg) {
+        inline WGS pointAtDistanceAndBearing(const WGS& origin, double distance, double bearing_deg) {
             constexpr double R = 6371000.0; // Earth's radius in meters
             
             double lat1_rad = origin.lat * M_PI / 180.0;
@@ -227,20 +227,20 @@ namespace concord {
         }
         
         // Coordinate validation
-        bool isValidLatitude(double lat) {
+        inline bool isValidLatitude(double lat) {
             return lat >= -90.0 && lat <= 90.0;
         }
         
-        bool isValidLongitude(double lon) {
+        inline bool isValidLongitude(double lon) {
             return lon >= -180.0 && lon <= 180.0;
         }
         
-        bool isValidWGS(const WGS& coord) {
+        inline bool isValidWGS(const WGS& coord) {
             return isValidLatitude(coord.lat) && isValidLongitude(coord.lon);
         }
         
         // Coordinate formatting
-        std::string formatDMS(double decimal_degrees) {
+        inline std::string formatDMS(double decimal_degrees) {
             bool negative = decimal_degrees < 0;
             decimal_degrees = std::abs(decimal_degrees);
             

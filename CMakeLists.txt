@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 set(project_name concord)
-project(${project_name} VERSION 0.5.5 LANGUAGES CXX)
+project(${project_name} VERSION 1.0.2 LANGUAGES CXX)
 
 add_compile_options(-Wall -Wextra -Wpedantic)
 cmake_policy(SET CMP0074 NEW)
@@ -19,10 +19,6 @@ include(FetchContent)
 
 # --------------------------------------------------------------------------------------------------
 set(ext_deps)
-
-FetchContent_Declare(pigment GIT_REPOSITORY https://github.com/smolfetch/pigment.git GIT_TAG main)
-FetchContent_MakeAvailable(pigment)
-list(APPEND ext_deps pigment::pigment)
 
 
 # --------------------------------------------------------------------------------------------------

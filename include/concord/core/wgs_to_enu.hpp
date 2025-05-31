@@ -7,7 +7,7 @@
 namespace concord {
     
     // Function to convert GPS (lat, lon, alt) to ECEF coordinates
-    std::tuple<double, double, double> inline gps_to_ecef(double latitude, double longitude, double altitude) {
+    inline std::tuple<double, double, double> gps_to_ecef(double latitude, double longitude, double altitude) {
         // Convert latitude and longitude to radians
         double cosLat = std::cos(latitude * M_PI / 180.0);
         double sinLat = std::sin(latitude * M_PI / 180.0);
@@ -26,7 +26,7 @@ namespace concord {
     }
 
     // Function to convert ECEF coordinates to ENU (East, North, Up) with respect to a datum
-    std::tuple<double, double, double> inline ecef_to_enu(std::tuple<double, double, double> ecef, std::tuple<double, double, double> datum) {
+    inline std::tuple<double, double, double> ecef_to_enu(std::tuple<double, double, double> ecef, std::tuple<double, double, double> datum) {
         double x, y, z;
         std::tie(x, y, z) = ecef;
         double latRef, longRef, altRef;
@@ -60,14 +60,14 @@ namespace concord {
     }
 
     // Function to convert GPS (lat, lon, alt) to ENU (East, North, Up) with respect to a datum
-    std::tuple<double, double, double> inline gps_to_enu(double latitude, double longitude, double altitude, double latRef, double longRef, double altRef) {
+    inline std::tuple<double, double, double> gps_to_enu(double latitude, double longitude, double altitude, double latRef, double longRef, double altRef) {
         // Convert GPS coordinates to ECEF
         std::tuple<double, double, double> ecef = gps_to_ecef(latitude, longitude, altitude);
         // Return the ENU coordinates
         return ecef_to_enu(ecef, std::make_tuple(latRef, longRef, altRef));
     }
 
-    std::tuple<double, double, double> inline enu_to_ecef(std::tuple<double, double, double> enu, std::tuple<double, double, double> datum) {
+    inline std::tuple<double, double, double> enu_to_ecef(std::tuple<double, double, double> enu, std::tuple<double, double, double> datum) {
         // Extract ENU and datum coordinates
         double xEast, yNorth, zUp;
         std::tie(xEast, yNorth, zUp) = enu;
@@ -94,7 +94,7 @@ namespace concord {
         return std::make_tuple(x, y, z);
     }
 
-    std::tuple<double, double, double> inline ecef_to_gps(double x, double y, double z) {
+    inline std::tuple<double, double, double> ecef_to_gps(double x, double y, double z) {
         const double eps = 1e-12; // Convergence threshold
         double longitude = std::atan2(y, x) * 180 / M_PI;
 
@@ -116,7 +116,7 @@ namespace concord {
         return std::make_tuple(latitude * 180 / M_PI, longitude, altitude);
     }
 
-    std::tuple<double, double, double> inline enu_to_gps(double xEast, double yNorth, double zUp, double latRef, double longRef, double altRef) {
+    inline std::tuple<double, double, double> enu_to_gps(double xEast, double yNorth, double zUp, double latRef, double longRef, double altRef) {
         // Convert ENU to ECEF
         std::tuple<double, double, double> ecef = enu_to_ecef(std::make_tuple(xEast, yNorth, zUp), std::make_tuple(latRef, longRef, altRef));
         // Convert ECEF to GPS

@@ -13,14 +13,14 @@ namespace concord {
         Polygon() = default;
         explicit Polygon(const std::vector<Point> &pts) : points(pts) {}
 
-        void addPoint(const Point &p) { points.emplace_back(p); }
-        void addPoint(const ENU &e, Datum d) { points.emplace_back(Point(e, d)); }
-        void addPoint(const WGS &w, Datum d) { points.emplace_back(Point(w, d)); }
+        inline void addPoint(const Point &p) { points.emplace_back(p); }
+        inline void addPoint(const ENU &e, Datum d) { points.emplace_back(Point(e, d)); }
+        inline void addPoint(const WGS &w, Datum d) { points.emplace_back(Point(w, d)); }
 
-        std::size_t numVertices() const noexcept { return points.size(); }
-        bool isConnected() const noexcept { return points.size() >= 3; }
+        inline std::size_t numVertices() const noexcept { return points.size(); }
+        inline bool isConnected() const noexcept { return points.size() >= 3; }
 
-        double perimeter() const noexcept {
+        inline double perimeter() const noexcept {
             if (points.size() < 2)
                 return 0.0;
             double per = 0.0;
@@ -30,7 +30,7 @@ namespace concord {
             return per;
         }
 
-        double area() const noexcept {
+        inline double area() const noexcept {
             if (points.size() < 3)
                 return 0.0;
             double a = 0.0;
@@ -42,7 +42,7 @@ namespace concord {
             return std::abs(a * 0.5);
         }
 
-        bool contains(const Point &p) const noexcept {
+        inline bool contains(const Point &p) const noexcept {
             if (points.size() < 3)
                 return false;
             bool c = false;
@@ -56,7 +56,7 @@ namespace concord {
             return c;
         }
 
-        Polygon from_rectangle(const float width, const float height, Datum d = {},
+        inline Polygon from_rectangle(const float width, const float height, Datum d = {},
                                Size inflate = Size(1.0, 1.0, 1.0)) const {
             Polygon p;
             p.addPoint(Point(ENU(width * inflate.x / 2.0, height * inflate.y / 2.0, 0.0), d));
@@ -66,7 +66,7 @@ namespace concord {
             return p;
         }
 
-        Polygon from_vector(std::vector<Point> pts) {
+        inline Polygon from_vector(std::vector<Point> pts) {
             Polygon p;
             for (auto &pt : pts) {
                 p.addPoint(pt);
@@ -74,23 +74,23 @@ namespace concord {
             return p;
         }
 
-        void from_wgs(std::vector<WGS> pts, Datum d = {}) {
+        inline void from_wgs(std::vector<WGS> pts, Datum d = {}) {
             for (auto &pt : pts) {
                 addPoint(Point(pt, d));
             }
         }
 
-        void from_enu(std::vector<ENU> pts, Datum d = {}) {
+        inline void from_enu(std::vector<ENU> pts, Datum d = {}) {
             for (auto &pt : pts) {
                 addPoint(Point(pt, d));
             }
         }
 
-        Polygon from_rectangle(Size size, Datum d = {}, Size inflate = Size(1.0, 1.0, 1.0)) const {
+        inline Polygon from_rectangle(Size size, Datum d = {}, Size inflate = Size(1.0, 1.0, 1.0)) const {
             return from_rectangle(size.x, size.y, d, inflate);
         }
 
-        Bound get_obb(concord::Datum d = {}) const {
+        inline Bound get_obb(concord::Datum d = {}) const {
             if (points.empty()) {
                 return Bound();
             }
@@ -150,12 +150,12 @@ namespace concord {
             return concord::Bound(pose, size);
         }
 
-        auto begin() noexcept { return points.begin(); }
-        auto end() noexcept { return points.end(); }
-        auto begin() const noexcept { return points.begin(); }
-        auto end() const noexcept { return points.end(); }
+        inline auto begin() noexcept { return points.begin(); }
+        inline auto end() noexcept { return points.end(); }
+        inline auto begin() const noexcept { return points.begin(); }
+        inline auto end() const noexcept { return points.end(); }
 
-        const std::vector<Point> &getPoints() const noexcept { return points; }
+        inline const std::vector<Point> &getPoints() const noexcept { return points; }
 
       private:
         std::vector<Point> points;

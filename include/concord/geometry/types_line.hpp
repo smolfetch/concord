@@ -10,7 +10,7 @@ namespace concord {
         Line() = default;
         Line(const Point &s, const Point &e) : start(s), end(e) {}
 
-        double length() const noexcept {
+        inline double length() const noexcept {
             const auto &a = start.enu;
             const auto &b = end.enu;
             double dx = b.x - a.x;
@@ -19,11 +19,11 @@ namespace concord {
             return std::sqrt(dx * dx + dy * dy + dz * dz);
         }
 
-        const Point &getStart() const noexcept { return start; }
-        const Point &getEnd() const noexcept { return end; }
+        inline const Point &getStart() const noexcept { return start; }
+        inline const Point &getEnd() const noexcept { return end; }
 
-        void setStart(const Point &s) noexcept { start = s; }
-        void setEnd(const Point &e) noexcept { end = e; }
+        inline void setStart(const Point &s) noexcept { start = s; }
+        inline void setEnd(const Point &e) noexcept { end = e; }
 
       private:
         Point start;

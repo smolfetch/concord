@@ -9,17 +9,17 @@ namespace concord {
     using namespace concord::constants;
 
     // Function to determine the UTM zone for a given longitude
-    int inline get_utm_zone(double longitude) {
+    inline int get_utm_zone(double longitude) {
         return static_cast<int>(std::floor((longitude + 180.0) / 6.0) + 1);
     }
 
     // Function to determine if a given latitude is in the northern hemisphere
-    bool inline is_northern_hemisphere(double latitude) {
+    inline bool is_northern_hemisphere(double latitude) {
         return latitude >= 0.0;
     }
 
     // Function to convert latitude/longitude (WGS-84) to UTM coordinates
-    std::tuple<double, double, int, bool> inline wgs_to_utm(double latitude, double longitude) {
+    inline std::tuple<double, double, int, bool> wgs_to_utm(double latitude, double longitude) {
         // Check latitude bounds
         if (latitude < -80.0 || latitude > 84.0) {
             throw std::out_of_range("Latitude out of UTM bounds (-80 to 84 degrees).");
@@ -72,7 +72,7 @@ namespace concord {
 
 
     // Function to convert UTM to WGS-84 (latitude, longitude)
-    std::tuple<double, double> inline utm_to_wgs(double easting, double northing, int zone, bool is_northern_hemisphere) {
+    inline std::tuple<double, double> utm_to_wgs(double easting, double northing, int zone, bool is_northern_hemisphere) {
         // Adjust for the southern hemisphere
         if (!is_northern_hemisphere) {
             northing -= 10000000.0;
