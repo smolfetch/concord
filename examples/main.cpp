@@ -155,6 +155,118 @@ void test_interpolation() {
     std::cout << "Smoothstep interpolation at t=0.5: " << smooth << std::endl;
 }
 
+void test_polygon_partition() {
+    std::cout << "\n=== Testing Polygon Partition (All Methods) ===" << std::endl;
+    
+    try {
+        TPPLPartition partition;
+        
+        // Test 1: Simple square polygon (convex)
+        std::cout << "\nTest 1: Square polygon (convex)" << std::endl;
+        std::vector<Point> squarePoints = {
+            Point(0.0, 0.0, 0.0),
+            Point(10.0, 0.0, 0.0),
+            Point(10.0, 10.0, 0.0),
+            Point(0.0, 10.0, 0.0)
+        };
+        Polygon square(squarePoints);
+        std::cout << "Created square with " << square.numVertices() << " vertices" << std::endl;
+        
+        // Test 2: More complex concave polygon
+        std::cout << "\nTest 2: Concave L-shaped polygon" << std::endl;
+        std::vector<Point> lShapePoints = {
+            Point(0.0, 0.0, 0.0),
+            Point(20.0, 0.0, 0.0),
+            Point(20.0, 10.0, 0.0),
+            Point(10.0, 10.0, 0.0),
+            Point(10.0, 20.0, 0.0),
+            Point(0.0, 20.0, 0.0)
+        };
+        Polygon lShape(lShapePoints);
+        std::cout << "Created L-shape with " << lShape.numVertices() << " vertices" << std::endl;
+        
+        // Method 1: Triangulate_EC (Ear Clipping) - Multiple polygons
+        std::cout << "\n--- Method 1: Triangulate_EC (Ear Clipping) ---" << std::endl;
+        std::cout << "Time/Space complexity: O(n^2)/O(n), Supports holes: Yes" << std::endl;
+        PolygonList inputPolygons;
+        inputPolygons.push_back(square);
+        inputPolygons.push_back(lShape);
+        
+        PolygonList ecTriangles;
+        int result = partition.Triangulate_EC(&inputPolygons, &ecTriangles);
+        if (result) {
+            std::cout << "✓ EC Triangulation successful! Generated " << ecTriangles.size() << " triangles" << std::endl;
+        } else {
+            std::cout << "✗ EC Triangulation failed" << std::endl;
+        }
+        
+        // Method 2: Triangulate_OPT (Optimal Dynamic Programming) - Single polygon
+        std::cout << "\n--- Method 2: Triangulate_OPT (Optimal DP) ---" << std::endl;
+        std::cout << "Time/Space complexity: O(n^3)/O(n^2), Supports holes: No" << std::endl;
+        PolygonList optTriangles;
+        result = partition.Triangulate_OPT(&lShape, &optTriangles);
+        if (result) {
+            std::cout << "✓ OPT Triangulation successful! Generated " << optTriangles.size() << " triangles" << std::endl;
+        } else {
+            std::cout << "✗ OPT Triangulation failed" << std::endl;
+        }
+        
+        // Method 3: Triangulate_MONO (Monotone Polygon)
+        std::cout << "\n--- Method 3: Triangulate_MONO (Monotone) ---" << std::endl;
+        std::cout << "Time/Space complexity: O(n*log(n))/O(n), Supports holes: Yes" << std::endl;
+        PolygonList monoTriangles;
+        result = partition.Triangulate_MONO(&square, &monoTriangles);
+        if (result) {
+            std::cout << "✓ MONO Triangulation successful! Generated " << monoTriangles.size() << " triangles" << std::endl;
+        } else {
+            std::cout << "✗ MONO Triangulation failed" << std::endl;
+        }
+        
+        // Method 4: ConvexPartition_HM (Hertel-Mehlhorn) - Multiple polygons
+        std::cout << "\n--- Method 4: ConvexPartition_HM (Hertel-Mehlhorn) ---" << std::endl;
+        std::cout << "Time/Space complexity: O(n^2)/O(n), Supports holes: Yes" << std::endl;
+        PolygonList hmParts;
+        result = partition.ConvexPartition_HM(&inputPolygons, &hmParts);
+        if (result) {
+            std::cout << "✓ HM Convex partition successful! Generated " << hmParts.size() << " parts" << std::endl;
+        } else {
+            std::cout << "✗ HM Convex partition failed" << std::endl;
+        }
+        
+        // Method 5: ConvexPartition_OPT (Optimal Keil-Snoeyink) - Single polygon
+        std::cout << "\n--- Method 5: ConvexPartition_OPT (Keil-Snoeyink) ---" << std::endl;
+        std::cout << "Time/Space complexity: O(n^3)/O(n^3), Supports holes: No" << std::endl;
+        PolygonList optParts;
+        result = partition.ConvexPartition_OPT(&lShape, &optParts);
+        if (result) {
+            std::cout << "✓ OPT Convex partition successful! Generated " << optParts.size() << " parts" << std::endl;
+        } else {
+            std::cout << "✗ OPT Convex partition failed" << std::endl;
+        }
+        
+        // Method 6: RemoveHoles utility
+        std::cout << "\n--- Method 6: RemoveHoles (Utility) ---" << std::endl;
+        PolygonList outputPolygons;
+        result = partition.RemoveHoles(&inputPolygons, &outputPolygons);
+        if (result) {
+            std::cout << "✓ RemoveHoles successful! Processed " << outputPolygons.size() << " polygons" << std::endl;
+        } else {
+            std::cout << "✗ RemoveHoles failed" << std::endl;
+        }
+        
+        // Performance comparison summary
+        std::cout << "\n--- Performance Summary ---" << std::endl;
+        std::cout << "EC Triangulation: " << ecTriangles.size() << " triangles (general purpose)" << std::endl;
+        std::cout << "OPT Triangulation: " << optTriangles.size() << " triangles (optimal edge length)" << std::endl;
+        std::cout << "MONO Triangulation: " << monoTriangles.size() << " triangles (fast but poor quality)" << std::endl;
+        std::cout << "HM Convex Partition: " << hmParts.size() << " parts (practical, ~4x optimal)" << std::endl;
+        std::cout << "OPT Convex Partition: " << optParts.size() << " parts (minimum convex parts)" << std::endl;
+        
+    } catch (const std::exception& e) {
+        std::cout << "Error in polygon partition test: " << e.what() << std::endl;
+    }
+}
+
 int main() {
     std::cout << "=== Concord Library Comprehensive Test ===" << std::endl;
     std::cout << "Version: " << VERSION_STRING << std::endl;
@@ -176,6 +288,7 @@ int main() {
     test_spatial_indexing();
     test_utilities();
     test_interpolation();
+    test_polygon_partition();
     
     std::cout << "\n=== All Tests Completed ===" << std::endl;
     return 0;

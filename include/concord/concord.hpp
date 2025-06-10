@@ -19,6 +19,9 @@
 // Advanced spatial types
 #include "geometry/types_bounding.hpp"
 
+// Polygon algorithms
+#include "geometry/polygon/partition.hpp"
+
 // Coordinate system conversions
 #include "core/wgs_to_enu.hpp"
 #include "core/wgs_to_utm.hpp" 
