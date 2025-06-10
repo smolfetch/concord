@@ -2,7 +2,7 @@
 
 #include "../core/types/types.hpp"
 #include "../geometry/types_line.hpp"
-#include "../geometry/types_polygon.hpp"
+#include "../geometry/polygon/polygon.hpp"
 #include "../geometry/types_bounding.hpp"
 #include <vector>
 #include <optional>

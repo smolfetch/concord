@@ -12,15 +12,16 @@
 #include "geometry/types_line.hpp"
 #include "geometry/types_rectangle.hpp"
 #include "geometry/types_square.hpp"
-#include "geometry/types_polygon.hpp"
 #include "geometry/types_path.hpp"
-#include "geometry/types_grid.hpp"
+// Polygon and polygon algorithms
+#include "geometry/polygon/polygon.hpp"
+#include "geometry/polygon/partition.hpp"
+// Grid and grid operations
+#include "geometry/grid/grid.hpp"
 
 // Advanced spatial types
 #include "geometry/types_bounding.hpp"
 
-// Polygon algorithms
-#include "geometry/polygon/partition.hpp"
 
 // Coordinate system conversions
 #include "core/wgs_to_enu.hpp"

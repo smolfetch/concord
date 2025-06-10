@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../core/types/types.hpp"
-#include "../types_polygon.hpp"
+#include "polygon.hpp"
 #include <algorithm>
 #include <list>
 #include <cmath>

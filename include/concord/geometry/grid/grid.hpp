@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../core/types/types.hpp"
-#include "types_polygon.hpp"
+#include "../../core/types/types.hpp"
+#include "../polygon/polygon.hpp"
 #include <cassert>
 #include <cmath>
 #include <cstddef>
