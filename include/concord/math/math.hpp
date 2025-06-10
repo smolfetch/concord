@@ -235,9 +235,9 @@ namespace concord {
     constexpr T PI = T(3.14159265358979323846);
     
     template<typename T>
-    constexpr T DEG_TO_RAD = PI<T> / T(180);
+    constexpr T DEG_TO_RAD = concord::PI<T> / T(180);
     
     template<typename T>
-    constexpr T RAD_TO_DEG = T(180) / PI<T>;
+    constexpr T RAD_TO_DEG = T(180) / concord::PI<T>;
 
 } // namespace concord

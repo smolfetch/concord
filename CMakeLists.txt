@@ -15,6 +15,7 @@ set(params
 )
 
 option(CONCORD_BUILD_EXAMPLES "Build examples" OFF)
+option(CONCORD_ENABLE_TESTS "Enable tests" OFF)
 include(FetchContent)
 
 # --------------------------------------------------------------------------------------------------
@@ -96,4 +97,36 @@ if(CONCORD_BUILD_EXAMPLES)
     ${exec_names}
     DESTINATION lib/${PROJECT_NAME}
   )
+endif()
+
+
+# --------------------------------------------------------------------------------------------------
+if(CONCORD_ENABLE_TESTS)
+  enable_testing()
+  add_definitions(-DENABLE_DOCTEST_IN_LIBRARY)
+  include(FetchContent)
+  FetchContent_Declare(
+    DocTest
+    GIT_REPOSITORY "https://github.com/onqtam/doctest"
+  )
+  FetchContent_MakeAvailable(DocTest)
+
+  set(test_src
+    test/test_concord.cpp
+    test/test_math.cpp
+    test/test_geometry.cpp
+    test/test_coordinates.cpp
+    test/test_spatial.cpp
+  )
+
+  foreach(src_file IN LISTS test_src)
+    get_filename_component(test_name "${src_file}" NAME_WE)
+    add_executable(${test_name} "${src_file}")
+      foreach(lib_file IN LISTS internal_deps)
+        target_compile_options(${test_name} PRIVATE ${params})
+        target_sources(${test_name} PRIVATE "${lib_file}")
+      endforeach()
+    target_link_libraries(${test_name} ${ext_deps} doctest_with_main)
+    add_test(NAME ${test_name} COMMAND ${test_name})
+  endforeach()
 endif()

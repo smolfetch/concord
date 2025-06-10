@@ -2,7 +2,7 @@
 
 # @cmd compile project
 # @alias c
-compileit() {
+compile() {
     CURR_DIR=$(pwd)
     if [[ ! -d "$TOP_HEAD/build" ]] then
         mkdir "$TOP_HEAD/build";
@@ -11,14 +11,14 @@ compileit() {
         mkdir "$TOP_HEAD/build"
     fi
     cd "$TOP_HEAD/build"
-    cmake -Wno-dev -DCONCORD_BUILD_EXAMPLES=ON ..
+    cmake -Wno-dev -DCONCORD_BUILD_EXAMPLES=ON -DCONCORD_ENABLE_TESTS=ON ..
     cd "$CURR_DIR"
 }
 
 
 # @cmd build project
 # @alias b
-buildit() {
+build() {
     CURR_DIR=$(pwd)
     cd "$TOP_HEAD/build"
     make
@@ -28,9 +28,18 @@ buildit() {
 
 # @cmd run project
 # @alias r
-runit() {
+run() {
     CURR_DIR=$(pwd)
     $TOP_HEAD/build/./main
+    cd "$CURR_DIR"
+}
+
+# @cmd run tests
+# @alias t
+test() {
+    CURR_DIR=$(pwd)
+    cd "$TOP_HEAD/build"
+    ctest --verbose --output-on-failure || true
     cd "$CURR_DIR"
 }
 

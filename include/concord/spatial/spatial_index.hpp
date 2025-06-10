@@ -17,6 +17,7 @@ namespace concord {
             AABB bbox;
             T data;
             
+            Entry() = default;
             Entry(const AABB& b, const T& d) : bbox(b), data(d) {}
         };
         
