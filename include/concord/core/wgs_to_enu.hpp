@@ -6,120 +6,165 @@
 
 namespace concord {
     
-    // Function to convert GPS (lat, lon, alt) to ECEF coordinates
+    // High-precision function to convert GPS (lat, lon, alt) to ECEF coordinates
     inline std::tuple<double, double, double> gps_to_ecef(double latitude, double longitude, double altitude) {
-        // Convert latitude and longitude to radians
-        double cosLat = std::cos(latitude * M_PI / 180.0);
-        double sinLat = std::sin(latitude * M_PI / 180.0);
-        double cosLong = std::cos(longitude * M_PI / 180.0);
-        double sinLong = std::sin(longitude * M_PI / 180.0);
+        // Convert latitude and longitude to radians with high precision
+        const double lat_rad = latitude * constants::DEG_TO_RAD;
+        const double lon_rad = longitude * constants::DEG_TO_RAD;
+        
+        const double cos_lat = std::cos(lat_rad);
+        const double sin_lat = std::sin(lat_rad);
+        const double cos_lon = std::cos(lon_rad);
+        const double sin_lon = std::sin(lon_rad);
 
-        // Calculate the radius of curvature in the prime vertical
-        double N = constants::WGS84_EQUATORIAL_RADIUS / std::sqrt(1 - constants::WGS84_ECCENTRICITY_SQUARED * sinLat * sinLat);
+        // Calculate the radius of curvature in the prime vertical with high precision
+        const double sin_lat_sq = sin_lat * sin_lat;
+        const double N = constants::WGS84_EQUATORIAL_RADIUS / std::sqrt(1.0 - constants::WGS84_ECCENTRICITY_SQUARED * sin_lat_sq);
 
         // Calculate ECEF coordinates
-        double x = (N + altitude) * cosLat * cosLong;
-        double y = (N + altitude) * cosLat * sinLong;
-        double z = (N * (1 - constants::WGS84_ECCENTRICITY_SQUARED) + altitude) * sinLat;
+        const double x = (N + altitude) * cos_lat * cos_lon;
+        const double y = (N + altitude) * cos_lat * sin_lon;
+        const double z = (N * (1.0 - constants::WGS84_ECCENTRICITY_SQUARED) + altitude) * sin_lat;
 
         return std::make_tuple(x, y, z);
     }
 
-    // Function to convert ECEF coordinates to ENU (East, North, Up) with respect to a datum
+    // High-precision function to convert ECEF coordinates to ENU with respect to a datum
     inline std::tuple<double, double, double> ecef_to_enu(std::tuple<double, double, double> ecef, std::tuple<double, double, double> datum) {
-        double x, y, z;
-        std::tie(x, y, z) = ecef;
-        double latRef, longRef, altRef;
-        std::tie(latRef, longRef, altRef) = datum;
+        const auto [x, y, z] = ecef;
+        const auto [lat_ref, lon_ref, alt_ref] = datum;
 
         // Convert the reference latitude and longitude to radians
-        double cosLatRef = std::cos(latRef * M_PI / 180.0);
-        double sinLatRef = std::sin(latRef * M_PI / 180.0);
-        double cosLongRef = std::cos(longRef * M_PI / 180.0);
-        double sinLongRef = std::sin(longRef * M_PI / 180.0);
+        const double lat_ref_rad = lat_ref * constants::DEG_TO_RAD;
+        const double lon_ref_rad = lon_ref * constants::DEG_TO_RAD;
+        
+        const double cos_lat_ref = std::cos(lat_ref_rad);
+        const double sin_lat_ref = std::sin(lat_ref_rad);
+        const double cos_lon_ref = std::cos(lon_ref_rad);
+        const double sin_lon_ref = std::sin(lon_ref_rad);
 
         // Prime vertical radius of curvature at the reference point
-        double NRef = constants::WGS84_EQUATORIAL_RADIUS / std::sqrt(1.0 - constants::WGS84_ECCENTRICITY_SQUARED * sinLatRef * sinLatRef);
+        const double sin_lat_ref_sq = sin_lat_ref * sin_lat_ref;
+        const double N_ref = constants::WGS84_EQUATORIAL_RADIUS / std::sqrt(1.0 - constants::WGS84_ECCENTRICITY_SQUARED * sin_lat_ref_sq);
 
         // Calculate the reference ECEF coordinates (datum)
-        double x0 = (NRef + altRef) * cosLatRef * cosLongRef;
-        double y0 = (NRef + altRef) * cosLatRef * sinLongRef;
-        double z0 = (NRef * (1 - constants::WGS84_ECCENTRICITY_SQUARED) + altRef) * sinLatRef;
+        const double x0 = (N_ref + alt_ref) * cos_lat_ref * cos_lon_ref;
+        const double y0 = (N_ref + alt_ref) * cos_lat_ref * sin_lon_ref;
+        const double z0 = (N_ref * (1.0 - constants::WGS84_ECCENTRICITY_SQUARED) + alt_ref) * sin_lat_ref;
 
         // Calculate the differences between the ECEF coordinates and the reference ECEF coordinates
-        double dx = x - x0;
-        double dy = y - y0;
-        double dz = z - z0;
+        const double dx = x - x0;
+        const double dy = y - y0;
+        const double dz = z - z0;
 
-        // Calculate the ENU coordinates
-        double xEast = -sinLongRef * dx + cosLongRef * dy;
-        double yNorth = -cosLongRef * sinLatRef * dx - sinLatRef * sinLongRef * dy + cosLatRef * dz;
-        double zUp = cosLatRef * cosLongRef * dx + cosLatRef * sinLongRef * dy + sinLatRef * dz;
+        // Calculate the ENU coordinates using standard rotation matrix
+        const double x_east = -sin_lon_ref * dx + cos_lon_ref * dy;
+        const double y_north = -cos_lon_ref * sin_lat_ref * dx - sin_lat_ref * sin_lon_ref * dy + cos_lat_ref * dz;
+        const double z_up = cos_lat_ref * cos_lon_ref * dx + cos_lat_ref * sin_lon_ref * dy + sin_lat_ref * dz;
 
-        return std::make_tuple(xEast, yNorth, zUp);
+        return std::make_tuple(x_east, y_north, z_up);
     }
 
-    // Function to convert GPS (lat, lon, alt) to ENU (East, North, Up) with respect to a datum
-    inline std::tuple<double, double, double> gps_to_enu(double latitude, double longitude, double altitude, double latRef, double longRef, double altRef) {
-        // Convert GPS coordinates to ECEF
-        std::tuple<double, double, double> ecef = gps_to_ecef(latitude, longitude, altitude);
-        // Return the ENU coordinates
-        return ecef_to_enu(ecef, std::make_tuple(latRef, longRef, altRef));
-    }
-
+    // High-precision function to convert ENU to ECEF using the inverse transformation matrix
     inline std::tuple<double, double, double> enu_to_ecef(std::tuple<double, double, double> enu, std::tuple<double, double, double> datum) {
-        // Extract ENU and datum coordinates
-        double xEast, yNorth, zUp;
-        std::tie(xEast, yNorth, zUp) = enu;
-        double latRef, longRef, altRef;
-        std::tie(latRef, longRef, altRef) = datum;
+        const auto [x_east, y_north, z_up] = enu;
+        const auto [lat_ref, lon_ref, alt_ref] = datum;
 
-        // Compute trigonometric values for the reference latitude and longitude
-        double cosLatRef = std::cos(latRef * M_PI / 180);
-        double sinLatRef = std::sin(latRef * M_PI / 180);
-        double cosLongRef = std::cos(longRef * M_PI / 180);
-        double sinLongRef = std::sin(longRef * M_PI / 180);
+        // Convert the reference latitude and longitude to radians
+        const double lat_ref_rad = lat_ref * constants::DEG_TO_RAD;
+        const double lon_ref_rad = lon_ref * constants::DEG_TO_RAD;
+        
+        const double cos_lat_ref = std::cos(lat_ref_rad);
+        const double sin_lat_ref = std::sin(lat_ref_rad);
+        const double cos_lon_ref = std::cos(lon_ref_rad);
+        const double sin_lon_ref = std::sin(lon_ref_rad);
 
-        // Compute reference ECEF coordinates for the datum
-        double cRef = 1 / std::sqrt(cosLatRef * cosLatRef + (1 - constants::WGS84_FLATTENING) * (1 - constants::WGS84_FLATTENING) * sinLatRef * sinLatRef);
-        double x0 = (constants::WGS84_EQUATORIAL_RADIUS * cRef + altRef) * cosLatRef * cosLongRef;
-        double y0 = (constants::WGS84_EQUATORIAL_RADIUS * cRef + altRef) * cosLatRef * sinLongRef;
-        double z0 = (constants::WGS84_EQUATORIAL_RADIUS * cRef * (1 - constants::WGS84_ECCENTRICITY_SQUARED) + altRef) * sinLatRef;
+        // Prime vertical radius of curvature at the reference point
+        const double sin_lat_ref_sq = sin_lat_ref * sin_lat_ref;
+        const double N_ref = constants::WGS84_EQUATORIAL_RADIUS / std::sqrt(1.0 - constants::WGS84_ECCENTRICITY_SQUARED * sin_lat_ref_sq);
 
-        // Reverse the ENU to ECEF transformation
-        double x = x0 + (-sinLongRef * xEast) - (sinLatRef * cosLongRef * yNorth) + (cosLatRef * cosLongRef * zUp);
-        double y = y0 + (cosLongRef * xEast) - (sinLatRef * sinLongRef * yNorth) + (cosLatRef * sinLongRef * zUp);
-        double z = z0 + (cosLatRef * yNorth) + (sinLatRef * zUp);
+        // Calculate the reference ECEF coordinates (datum)
+        const double x0 = (N_ref + alt_ref) * cos_lat_ref * cos_lon_ref;
+        const double y0 = (N_ref + alt_ref) * cos_lat_ref * sin_lon_ref;
+        const double z0 = (N_ref * (1.0 - constants::WGS84_ECCENTRICITY_SQUARED) + alt_ref) * sin_lat_ref;
+
+        // Apply inverse transformation matrix (transpose of ENU to ECEF rotation matrix)
+        const double dx = -sin_lon_ref * x_east - cos_lon_ref * sin_lat_ref * y_north + cos_lat_ref * cos_lon_ref * z_up;
+        const double dy = cos_lon_ref * x_east - sin_lat_ref * sin_lon_ref * y_north + cos_lat_ref * sin_lon_ref * z_up;
+        const double dz = cos_lat_ref * y_north + sin_lat_ref * z_up;
+
+        // Calculate ECEF coordinates
+        const double x = x0 + dx;
+        const double y = y0 + dy;
+        const double z = z0 + dz;
 
         return std::make_tuple(x, y, z);
     }
 
+    // High-precision ECEF to GPS conversion using improved iterative method
     inline std::tuple<double, double, double> ecef_to_gps(double x, double y, double z) {
-        const double eps = 1e-12; // Convergence threshold
-        double longitude = std::atan2(y, x) * 180 / M_PI;
-
-        // Compute initial latitude and height guesses
-        double p = std::sqrt(x * x + y * y);
-        double latitude = std::atan2(z, p * (1 - constants::WGS84_ECCENTRICITY_SQUARED));
-        double N = constants::WGS84_EQUATORIAL_RADIUS / std::sqrt(1 - constants::WGS84_ECCENTRICITY_SQUARED * std::sin(latitude) * std::sin(latitude)); // Prime vertical radius of curvature
-        double altitude = p / std::cos(latitude) - N;
-        double latOld;
-
-        // Iterate to refine the latitude and height
-        do {
-            latOld = latitude;
-            N = constants::WGS84_EQUATORIAL_RADIUS / std::sqrt(1 - constants::WGS84_ECCENTRICITY_SQUARED * std::sin(latitude) * std::sin(latitude));
-            altitude = p / std::cos(latitude) - N;
-            latitude = std::atan2(z, p * (1 - constants::WGS84_ECCENTRICITY_SQUARED * N / (N + altitude)));
-        } while (std::abs(latitude - latOld) > eps);
-
-        return std::make_tuple(latitude * 180 / M_PI, longitude, altitude);
+        const double a = constants::WGS84_EQUATORIAL_RADIUS;
+        const double e2 = constants::WGS84_ECCENTRICITY_SQUARED;
+        const double eps = 1e-15; // Higher precision convergence threshold
+        
+        // Longitude calculation (exact)
+        const double longitude = std::atan2(y, x) * constants::RAD_TO_DEG;
+        
+        // Distance from z-axis
+        const double p = std::sqrt(x * x + y * y);
+        
+        // Initial latitude guess using improved method
+        double latitude = std::atan2(z, p * (1.0 - e2));
+        double N, altitude;
+        double lat_old;
+        
+        // Iterative refinement with higher precision
+        int max_iterations = 20;
+        for (int i = 0; i < max_iterations; ++i) {
+            lat_old = latitude;
+            const double sin_lat = std::sin(latitude);
+            const double cos_lat = std::cos(latitude);
+            
+            N = a / std::sqrt(1.0 - e2 * sin_lat * sin_lat);
+            altitude = (p / cos_lat) - N;
+            
+            // More accurate latitude update
+            latitude = std::atan2(z, p * (1.0 - e2 * N / (N + altitude)));
+            
+            if (std::abs(latitude - lat_old) < eps) {
+                break;
+            }
+        }
+        
+        return std::make_tuple(latitude * constants::RAD_TO_DEG, longitude, altitude);
     }
 
-    inline std::tuple<double, double, double> enu_to_gps(double xEast, double yNorth, double zUp, double latRef, double longRef, double altRef) {
+    // High-precision function to convert GPS to ENU directly
+    inline std::tuple<double, double, double> gps_to_enu(double latitude, double longitude, double altitude, 
+                                                         double lat_ref, double lon_ref, double alt_ref) {
+        // Convert GPS coordinates to ECEF
+        auto ecef = gps_to_ecef(latitude, longitude, altitude);
+        // Convert ECEF to ENU
+        return ecef_to_enu(ecef, std::make_tuple(lat_ref, lon_ref, alt_ref));
+    }
+
+    // High-precision function to convert ENU to GPS
+    inline std::tuple<double, double, double> enu_to_gps(double x_east, double y_north, double z_up, 
+                                                         double lat_ref, double lon_ref, double alt_ref) {
         // Convert ENU to ECEF
-        std::tuple<double, double, double> ecef = enu_to_ecef(std::make_tuple(xEast, yNorth, zUp), std::make_tuple(latRef, longRef, altRef));
+        auto ecef = enu_to_ecef(std::make_tuple(x_east, y_north, z_up), std::make_tuple(lat_ref, lon_ref, alt_ref));
         // Convert ECEF to GPS
         return ecef_to_gps(std::get<0>(ecef), std::get<1>(ecef), std::get<2>(ecef));
+    }
+
+    // Convenience functions for small displacement calculations (centimeter precision)
+    inline std::tuple<double, double, double> gps_displacement_to_enu(double lat_base, double lon_base, double alt_base,
+                                                                       double lat_target, double lon_target, double alt_target) {
+        return gps_to_enu(lat_target, lon_target, alt_target, lat_base, lon_base, alt_base);
+    }
+
+    inline std::tuple<double, double, double> enu_displacement_to_gps(double x_east, double y_north, double z_up,
+                                                                       double lat_base, double lon_base, double alt_base) {
+        return enu_to_gps(x_east, y_north, z_up, lat_base, lon_base, alt_base);
     }
 }

@@ -69,6 +69,7 @@ if(CONCORD_BUILD_EXAMPLES)
 
   set(exe
     examples/main.cpp
+    examples/test_precision.cpp
   )
   # ----------------------------------------------
   set(exec_names)
