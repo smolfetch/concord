@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types_basic.hpp"
+#include "types/types.hpp"
 #include "wgs_to_utm.hpp"
 #include "wgs_to_enu.hpp"
 #include <tuple>

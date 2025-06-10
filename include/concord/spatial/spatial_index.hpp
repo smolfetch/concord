@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/types_basic.hpp"
+#include "../core/types/types.hpp"
 #include "../geometry/types_bounding.hpp"
 #include <vector>
 #include <memory>

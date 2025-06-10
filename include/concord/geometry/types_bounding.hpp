@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/types_basic.hpp"
+#include "../core/types/types.hpp"
 #include "../math/types_math.hpp"
 #include <array>
 #include <limits>

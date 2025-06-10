@@ -7,7 +7,7 @@
 #include "math/types_math.hpp"
 
 // Basic coordinate and geometric types
-#include "core/types_basic.hpp"
+#include "core/types/types.hpp"
 #include "geometry/types_circle.hpp"
 #include "geometry/types_line.hpp"
 #include "geometry/types_rectangle.hpp"
