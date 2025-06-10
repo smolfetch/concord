@@ -7,7 +7,7 @@
 #include "enu.hpp"
 #include "wgs.hpp"
 #include "datum.hpp"
-#include "../../math/types_math.hpp"
+#include "../../math/math.hpp"
 #include <vector>
 #include <array>
 #include <cmath>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../math/types_math.hpp"
+#include "../../math/math.hpp"
 #include <cmath>
 
 namespace concord {

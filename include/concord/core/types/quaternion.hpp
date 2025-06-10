@@ -1,7 +1,7 @@
 #pragma once
 
 #include "euler.hpp"
-#include "../../math/types_math.hpp"
+#include "../../math/math.hpp"
 #include "../../errors/error_handling.hpp"
 #include <cmath>
 

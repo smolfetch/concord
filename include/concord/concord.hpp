@@ -4,15 +4,15 @@
 #include "errors/error_handling.hpp"
 
 // Core mathematical types and operations
-#include "math/types_math.hpp"
+#include "math/math.hpp"
 
 // Basic coordinate and geometric types
 #include "core/types/types.hpp"
-#include "geometry/types_circle.hpp"
-#include "geometry/types_line.hpp"
-#include "geometry/types_rectangle.hpp"
-#include "geometry/types_square.hpp"
-#include "geometry/types_path.hpp"
+#include "geometry/circle.hpp"
+#include "geometry/line.hpp"
+#include "geometry/rectangle.hpp"
+#include "geometry/square.hpp"
+#include "geometry/path.hpp"
 // Polygon and polygon algorithms
 #include "geometry/polygon/polygon.hpp"
 #include "geometry/polygon/partition.hpp"
@@ -20,7 +20,7 @@
 #include "geometry/grid/grid.hpp"
 
 // Advanced spatial types
-#include "geometry/types_bounding.hpp"
+#include "geometry/bounding.hpp"
 
 
 // Coordinate system conversions

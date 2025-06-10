@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../core/types/types.hpp"
-#include "../types_line.hpp"
+#include "../line.hpp"
 #include <cmath>
 #include <cstddef>
 #include <vector>

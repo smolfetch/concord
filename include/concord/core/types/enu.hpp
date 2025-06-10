@@ -3,7 +3,7 @@
 #include "datum.hpp"
 #include "wgs.hpp"
 #include "../wgs_to_enu.hpp"
-#include "../../math/types_math.hpp"
+#include "../../math/math.hpp"
 #include <cmath>
 #include <tuple>
 

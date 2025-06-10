@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../core/types/types.hpp" // for Datum, Point, ENU, Euler, Bound
-#include "types_line.hpp"  // for Line
+#include "line.hpp"  // for Line
 #include <algorithm>
 #include <array>
 #include <cmath>

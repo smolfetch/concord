@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../core/types/types.hpp"
-#include "../geometry/types_line.hpp"
+#include "../geometry/line.hpp"
 #include "../geometry/polygon/polygon.hpp"
-#include "../geometry/types_bounding.hpp"
+#include "../geometry/bounding.hpp"
 #include <vector>
 #include <optional>
 #include <algorithm>

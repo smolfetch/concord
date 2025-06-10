@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../core/types/types.hpp"
-#include "../geometry/types_bounding.hpp"
+#include "../geometry/bounding.hpp"
 #include <vector>
 #include <memory>
 #include <algorithm>

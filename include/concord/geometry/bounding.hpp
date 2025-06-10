@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../core/types/types.hpp"
-#include "../math/types_math.hpp"
+#include "../math/math.hpp"
 #include <array>
 #include <limits>
 #include <algorithm>
