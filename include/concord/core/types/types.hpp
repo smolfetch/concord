@@ -7,6 +7,9 @@
 #include "datum.hpp"
 #include "wgs.hpp"
 #include "enu.hpp"
+#include "utm.hpp"
+#include "ecef.hpp"
+#include "ltp.hpp"
 
 // Rotation types
 #include "euler.hpp"

@@ -25,7 +25,7 @@
 // Coordinate system conversions
 #include "core/wgs_to_enu.hpp"
 #include "core/wgs_to_utm.hpp" 
-#include "core/coordinate_systems.hpp"
+#include "core/coordinate_utils.hpp"
 
 // Spatial algorithms and operations
 #include "spatial/spatial_algorithms.hpp"
