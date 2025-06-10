@@ -95,7 +95,7 @@ namespace concord {
             return points;
         }
 
-        inline std::vector<std::array<float, 3>> flatten_points(bool just_bool) {
+        inline std::vector<std::array<float, 3>> flatten_points() const {
             std::vector<std::array<float, 3>> points;
             for (std::size_t r = 0; r < rows_; ++r) {
                 for (std::size_t c = 0; c < cols_; ++c) {
