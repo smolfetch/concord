@@ -14,8 +14,9 @@ set(params
     -Wno-reorder
 )
 
-option(CONCORD_BUILD_EXAMPLES "Build examples" OFF)
-option(CONCORD_ENABLE_TESTS "Enable tests" OFF)
+string(TOUPPER ${project_name} project_name_upper)
+option(${project_name_upper}_BUILD_EXAMPLES "Build examples" OFF)
+option(${project_name_upper}_ENABLE_TESTS "Enable tests" OFF)
 include(FetchContent)
 
 # --------------------------------------------------------------------------------------------------
@@ -61,17 +62,14 @@ export(EXPORT ${project_name}Targets
 
 
 # --------------------------------------------------------------------------------------------------
-if(CONCORD_BUILD_EXAMPLES)
+if(${project_name_upper}_BUILD_EXAMPLES)
   add_definitions(-DHAS_RERUN)
   set(RERUN_DOWNLOAD_AND_BUILD_ARROW OFF)
   FetchContent_Declare(rerun_sdk URL https://github.com/rerun-io/rerun/releases/latest/download/rerun_cpp_sdk.zip)
   FetchContent_MakeAvailable(rerun_sdk)
   list(APPEND ext_deps rerun_sdk)
 
-  set(exe
-    examples/main.cpp
-    examples/test_precision.cpp
-  )
+  file(GLOB exe examples/*.cpp)
   # ----------------------------------------------
   set(exec_names)
   foreach(src_file IN LISTS exe)
@@ -101,7 +99,7 @@ endif()
 
 
 # --------------------------------------------------------------------------------------------------
-if(CONCORD_ENABLE_TESTS)
+if(${project_name_upper}_ENABLE_TESTS)
   enable_testing()
   add_definitions(-DENABLE_DOCTEST_IN_LIBRARY)
   include(FetchContent)
@@ -111,13 +109,7 @@ if(CONCORD_ENABLE_TESTS)
   )
   FetchContent_MakeAvailable(DocTest)
 
-  set(test_src
-    test/test_concord.cpp
-    test/test_math.cpp
-    test/test_geometry.cpp
-    test/test_coordinates.cpp
-    test/test_spatial.cpp
-  )
+  file(GLOB test_src test/*.cpp)
 
   foreach(src_file IN LISTS test_src)
     get_filename_component(test_name "${src_file}" NAME_WE)
