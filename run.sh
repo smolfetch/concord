@@ -1,5 +1,15 @@
 #!/bin/bash
 
+project_name=$(grep -Po 'set\s*\(\s*project_name\s+\K[^)]+' CMakeLists.txt)
+project_cap=$(echo "$project_name" | tr '[:lower:]' '[:upper:]')
+
+if [[ -z "$project_name" ]]; then
+    echo "Error: project_name not found in CMakeLists.txt"
+    exit 1
+fi
+
+echo "Project name: $project_name"
+
 # @cmd compile project
 # @alias c
 compile() {
@@ -11,7 +21,8 @@ compile() {
         mkdir "$TOP_HEAD/build"
     fi
     cd "$TOP_HEAD/build"
-    cmake -Wno-dev -DCONCORD_BUILD_EXAMPLES=ON -DCONCORD_ENABLE_TESTS=ON ..
+    echo "cmake -Wno-dev -D${project_cap}_BUILD_EXAMPLES=ON -D${project_cap}_ENABLE_TESTS=ON .."
+    cmake -Wno-dev -D${project_cap}_BUILD_EXAMPLES=ON -D${project_cap}_ENABLE_TESTS=ON ..
     cd "$CURR_DIR"
 }
 
@@ -21,7 +32,7 @@ compile() {
 build() {
     CURR_DIR=$(pwd)
     cd "$TOP_HEAD/build"
-    make
+    make -j$(nproc) || true
     cd "$CURR_DIR"
 }
 
