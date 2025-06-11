@@ -16,7 +16,7 @@ $(info ------------------------------------------)
 
 
 build:
-	@cd $(BUILD_DIR) && make -j$(shell nproc) || true
+	@cd $(BUILD_DIR) && make -j$(shell nproc) 2>&1 | tee >(grep "^$(TOP_HEAD)" | grep -E "error:" > "$(TOP_HEAD)/.quickfix") || true
 
 b: build
 
