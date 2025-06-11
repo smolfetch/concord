@@ -12,7 +12,26 @@ $(info ------------------------------------------)
 $(info Project: $(PROJECT_NAME))
 $(info ------------------------------------------)
 
-.PHONY: compile c build b run r test t docs d release
+.PHONY: prompt build b compile c run r test t docs d release
+
+prompt:
+	@echo
+	@echo "Usage: make [target]"
+	@echo
+	@echo "Available targets:"
+	@echo "  build        Build project"
+	@echo "  compile      Configure and generate build files"
+	@echo "  run          Run the main executable"
+	@echo "  test         Run tests"
+	@echo "  docs         Build documentation (TYPE=mdbook|doxygen)"
+	@echo "  release      Create a new release (TYPE=patch|minor|major)"
+	@echo
+
+
+build:
+	@cd $(BUILD_DIR) && make -j$(shell nproc) || true
+
+b: build
 
 compile:
 	@rm -rf $(BUILD_DIR)
@@ -21,11 +40,6 @@ compile:
 	@cd $(BUILD_DIR) && cmake -Wno-dev -D$(PROJECT_CAP)_BUILD_EXAMPLES=ON -D$(PROJECT_CAP)_ENABLE_TESTS=ON ..
 
 c: compile
-
-build:
-	@cd $(BUILD_DIR) && make -j$(shell nproc) || true
-
-b: build
 
 run:
 	@./build/main
