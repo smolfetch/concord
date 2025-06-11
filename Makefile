@@ -12,20 +12,7 @@ $(info ------------------------------------------)
 $(info Project: $(PROJECT_NAME))
 $(info ------------------------------------------)
 
-.PHONY: prompt build b compile c run r test t docs d release
-
-prompt:
-	@echo
-	@echo "Usage: make [target]"
-	@echo
-	@echo "Available targets:"
-	@echo "  build        Build project"
-	@echo "  compile      Configure and generate build files"
-	@echo "  run          Run the main executable"
-	@echo "  test         Run tests"
-	@echo "  docs         Build documentation (TYPE=mdbook|doxygen)"
-	@echo "  release      Create a new release (TYPE=patch|minor|major)"
-	@echo
+.PHONY: build b compile c run r test t help h clean docs release
 
 
 build:
@@ -51,6 +38,26 @@ test:
 
 t: test
 
+help:
+	@echo
+	@echo "Usage: make [target]"
+	@echo
+	@echo "Available targets:"
+	@echo "  build        Build project"
+	@echo "  compile      Configure and generate build files"
+	@echo "  run          Run the main executable"
+	@echo "  test         Run tests"
+	@echo "  docs         Build documentation (TYPE=mdbook|doxygen)"
+	@echo "  release      Create a new release (TYPE=patch|minor|major)"
+	@echo
+
+h : help
+
+clean:
+	@echo "Cleaning build directory..."
+	@rm -rf $(BUILD_DIR)
+	@echo "Build directory cleaned."
+
 docs:
 ifeq ($(TYPE),mdbook)
 	@command -v mdbook >/dev/null 2>&1 || { echo "mdbook is not installed. Please install it first."; exit 1; }
@@ -62,7 +69,6 @@ else
 	$(error Invalid documentation type. Use 'make docs TYPE=mdbook' or 'make docs TYPE=doxygen')
 endif
 
-d: docs
 
 release:
 	@if [ -z "$(TYPE)" ]; then \
