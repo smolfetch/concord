@@ -8,7 +8,11 @@ if [[ -z "$project_name" ]]; then
     exit 1
 fi
 
-echo "Project name: $project_name"
+echo -e "------------------------------------------"
+echo -e "Project: $project_name"
+echo -e "------------------------------------------\n"
+echo -e "make $1\n"
+
 
 # @cmd compile project
 # @alias c
