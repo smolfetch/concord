@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.1] - 2025-06-11
+
+### <!-- 5 -->🎨 Styling
+
+- Improve C++ code style and organization
+
+### <!-- 6 -->🧪 Testing
+
+- Refactor CMake build process and testing
+- Refactor and add unit testing infrastructure
+
+### Build
+
+- Replace `run.sh` with `make`
+- Update project name handling in build scripts
+
 ## [1.3.0] - 2025-06-10
 
 ### <!-- 0 -->⛰️  Features

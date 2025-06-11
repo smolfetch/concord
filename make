@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Makefile for concord project
+# $0 compile  / c      Compile the project
+# $0 build    / b      Build the project
+# $0 run      / r      Run the project
+# $0 test     / t      Run tests
+# $0 docs     / d      Compile mdbook documentation
+# $0 release [type]    Mark as releaser and create a new release
+
 project_name=$(grep -Po 'set\s*\(\s*project_name\s+\K[^)]+' CMakeLists.txt)
 project_cap=$(echo "$project_name" | tr '[:lower:]' '[:upper:]')
 
@@ -11,7 +19,6 @@ fi
 echo -e "------------------------------------------"
 echo -e "Project: $project_name"
 echo -e "------------------------------------------\n"
-echo -e "make $1\n"
 
 
 # @cmd compile project
@@ -58,7 +65,33 @@ test() {
     cd "$CURR_DIR"
 }
 
-# @cmd mark as releaser
+# @cmd compile mdbook
+# @arg type![mdbook|doxygen] Documentation type
+docs() {
+    case $argc_type in
+        mdbook)
+            if ! command -v mdbook &> /dev/null; then
+                echo "mdbook is not installed. Please install it first."
+                exit 1
+            else
+                mdbook build $TOP_HEAD/book --dest-dir $TOP_HEAD/docs
+                git add --all && git commit -m "docs: building website/mdbook"
+            fi
+            ;;
+        doxygen)
+            if ! command -v doxygen &> /dev/null; then
+                echo "doxygen is not installed. Please install it first."
+                exit 1
+            fi
+            ;;
+        *)
+            echo "Invalid documentation type. Use 'mdbook' or 'doxygen'."
+            exit 1
+            ;;
+    esac
+}
+
+# @cmd release project
 # @arg type![patch|minor|major] Release type
 release() {
     CURRENT_VERSION=$(grep -E '^project\(.*VERSION [0-9]+\.[0-9]+\.[0-9]+' CMakeLists.txt \
@@ -97,13 +130,6 @@ release() {
     gh release create $version --notes "$changelog"
 }
 
-
-# @cmd compile mdbook
-# @option    --dest_dir <dir>    Destination directory
-mdbook() {
-    mdbook build $TOP_HEAD/book --dest-dir $TOP_HEAD/docs
-    git add --all && git commit -m "docs: building website/mdbook"
-}
 
 
 eval "$(argc --argc-eval "$0" "$@")"
