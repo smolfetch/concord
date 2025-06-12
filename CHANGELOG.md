@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.3] - 2025-06-12
+
+### <!-- 0 -->⛰️  Features
+
+- Add intelligent polygon partitioning
+
+### Build
+
+- Log build server errors in quickfix
+- Add makefile targets for help and clean
+
 ## [1.3.1] - 2025-06-11
 
 ### <!-- 5 -->🎨 Styling
