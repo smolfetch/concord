@@ -18,6 +18,7 @@ Concord is a modern C++ library that provides a complete suite of tools for work
 - **🧮 Mathematical Primitives**: Vectors, matrices, quaternions, transformations
 - **📐 Geometric Types**: Points, lines, circles, polygons, paths, grids, bounding volumes
 - **🗂️ Spatial Algorithms**: Distance calculations, intersections, convex hulls, clustering
+- **✂️ Polygon Partitioning**: Intelligent division of complex polygons based on area, convexity, and shape features
 - **🚀 Spatial Indexing**: R-Trees, QuadTrees, hash grids for efficient spatial queries
 - **🔧 Utilities**: Random generation, statistics, validation, unit conversions
 - **🎯 High Performance**: Optimized algorithms with modern C++ practices
@@ -217,6 +218,25 @@ double area = polygon.area();
 double perimeter = polygon.perimeter();
 bool is_convex = polygon.isConvex();
 bool point_inside = polygon.contains(point);
+```
+
+#### Polygon Partitioning
+```cpp
+// Intelligently partition large polygons
+Partitioner partitioner(polygon);
+
+// Split by area (500 square units maximum)
+std::vector<Polygon> partitioned = partitioner.partition(500.0);
+
+// Custom partitioning criteria
+Partitioner::PartitionCriteria criteria;
+criteria.max_area = 1000.0;            // Maximum area per polygon
+criteria.min_convexity = 0.8;          // Minimum convexity ratio
+criteria.max_aspect_ratio = 3.0;       // Maximum length/width ratio
+criteria.enable_bridge_detection = true; // Detect and split narrow bridges
+criteria.enable_tooth_detection = true;  // Detect and split extensions
+
+auto custom_partitioned = partitioner.partition(1000.0, criteria);
 ```
 
 #### Paths and Grids
