@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/types/types.hpp"
+#include "../core/types.hpp"
 #include <cmath>
 
 namespace concord {
@@ -11,8 +11,8 @@ namespace concord {
         Line(const Point &s, const Point &e) : start(s), end(e) {}
 
         inline double length() const noexcept {
-            const auto &a = start.enu;
-            const auto &b = end.enu;
+            const auto &a = start;
+            const auto &b = end;
             double dx = b.x - a.x;
             double dy = b.y - a.y;
             double dz = b.z - a.z;

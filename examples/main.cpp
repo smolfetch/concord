@@ -122,8 +122,8 @@ void test_geometric_types() {
     Point p1(5, 5, 5);
     Point p2(10, 10, 10);
 
-    std::cout << "Point 1: (" << p1.enu.x << ", " << p1.enu.y << ", " << p1.enu.z << ")" << std::endl;
-    std::cout << "Point 2: (" << p2.enu.x << ", " << p2.enu.y << ", " << p2.enu.z << ")" << std::endl;
+    std::cout << "Point 1: (" << p1.x << ", " << p1.y << ", " << p1.z << ")" << std::endl;
+    std::cout << "Point 2: (" << p2.x << ", " << p2.y << ", " << p2.z << ")" << std::endl;
 
     double distance = p1.distance_to(p2);
     std::cout << "Distance between points: " << distance << std::endl;
@@ -281,7 +281,6 @@ void test_polygon_partition() {
 
 int main() {
     std::cout << "=== Concord Library Comprehensive Test ===" << std::endl;
-    std::cout << "Version: " << VERSION_STRING << std::endl;
     std::cout << "Capabilities:" << std::endl;
     std::cout << "  Mathematical Types: " << (HAS_MATHEMATICAL_TYPES ? "Yes" : "No") << std::endl;
     std::cout << "  Spatial Indexing: " << (HAS_SPATIAL_INDEXING ? "Yes" : "No") << std::endl;

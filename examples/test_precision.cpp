@@ -1,6 +1,6 @@
 #include <cassert>
 #include <cmath>
-#include <concord/core/wgs_to_enu.hpp>
+#include <concord/geographic/wgs_to_enu.hpp>
 #include <iomanip>
 #include <iostream>
 #include <vector>

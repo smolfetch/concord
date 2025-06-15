@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../core/types/types.hpp"
+#include "../../core/types.hpp"
 #include "../../spatial/spatial_algorithms.hpp"
 #include "partition.hpp"
 #include "polygon.hpp"
@@ -34,7 +34,6 @@ namespace concord {
 
       private:
         Polygon border_;
-        Datum datum_;
         PartitionCriteria criteria_;
 
       public:
@@ -42,7 +41,7 @@ namespace concord {
 
         Partitioner() = default;
 
-        Partitioner(const Polygon &poly, const Datum &datum = Datum{}) : border_(poly), datum_(datum) {}
+        Partitioner(const Polygon &poly) : border_(poly) {}
 
         // Main partitioning function with intelligent multi-criteria splitting
         std::vector<Polygon> partition(double area_threshold, const PartitionCriteria &criteria = PartitionCriteria{}) {
@@ -222,7 +221,7 @@ namespace concord {
         // Calculate aspect ratio (length / width) from oriented bounding box
         double calculate_aspect_ratio(const Polygon &poly) const {
             // Use OBB to get aspect ratio
-            Bound obb = poly.get_obb(datum_);
+            Bound obb = poly.get_obb();
 
             double width = obb.size.x;
             double height = obb.size.y;
@@ -239,7 +238,7 @@ namespace concord {
                 return {poly}; // No need to split
             }
 
-            Bound obb = poly.get_obb(datum_);
+            Bound obb = poly.get_obb();
 
             double width = obb.size.x;
             double height = obb.size.y;
@@ -319,18 +318,18 @@ namespace concord {
             double max_y = std::numeric_limits<double>::lowest();
 
             for (const auto &p : points) {
-                min_x = std::min(min_x, p.enu.x);
-                max_x = std::max(max_x, p.enu.x);
-                min_y = std::min(min_y, p.enu.y);
-                max_y = std::max(max_y, p.enu.y);
+                min_x = std::min(min_x, p.x);
+                max_x = std::max(max_x, p.x);
+                min_y = std::min(min_y, p.y);
+                max_y = std::max(max_y, p.y);
             }
 
             double mid_x = (min_x + max_x) / 2.0;
 
             // Create cutting line with large but valid values (avoiding validation errors)
             double buffer = 1e6; // 1000 km buffer (large but still valid)
-            Point p1(ENU{mid_x, min_y - buffer, 0}, datum_);
-            Point p2(ENU{mid_x, max_y + buffer, 0}, datum_);
+            Point p1{mid_x, min_y - buffer, 0};
+            Point p2{mid_x, max_y + buffer, 0};
             Line cutting_line(p1, p2);
 
             return split_polygon_with_line(poly, cutting_line);
@@ -350,18 +349,18 @@ namespace concord {
             double max_y = std::numeric_limits<double>::lowest();
 
             for (const auto &p : points) {
-                min_x = std::min(min_x, p.enu.x);
-                max_x = std::max(max_x, p.enu.x);
-                min_y = std::min(min_y, p.enu.y);
-                max_y = std::max(max_y, p.enu.y);
+                min_x = std::min(min_x, p.x);
+                max_x = std::max(max_x, p.x);
+                min_y = std::min(min_y, p.y);
+                max_y = std::max(max_y, p.y);
             }
 
             double mid_y = (min_y + max_y) / 2.0;
 
             // Create cutting line with large but valid values (avoiding validation errors)
             double buffer = 1e6; // 1000 km buffer (large but still valid)
-            Point p1(ENU{min_x - buffer, mid_y, 0}, datum_);
-            Point p2(ENU{max_x + buffer, mid_y, 0}, datum_);
+            Point p1{min_x - buffer, mid_y, 0};
+            Point p2{max_x + buffer, mid_y, 0};
             Line cutting_line(p1, p2);
 
             return split_polygon_with_line(poly, cutting_line);
@@ -427,10 +426,10 @@ namespace concord {
 
             for (int i = 0; i <= num_samples; i++) {
                 double t = static_cast<double>(i) / num_samples;
-                double x = p1.enu.x + t * (p2.enu.x - p1.enu.x);
-                double y = p1.enu.y + t * (p2.enu.y - p1.enu.y);
+                double x = p1.x + t * (p2.x - p1.x);
+                double y = p1.y + t * (p2.y - p1.y);
 
-                Point sample_point(ENU{x, y, 0.0}, datum_);
+                Point sample_point{x, y, 0.0};
 
                 if (poly.contains(sample_point)) {
                     inside_count++;
@@ -512,10 +511,10 @@ namespace concord {
 
             for (int i = 1; i < num_samples; i++) { // Skip endpoints which are always on the boundary
                 double t = static_cast<double>(i) / num_samples;
-                double x = p1.enu.x + t * (p2.enu.x - p1.enu.x);
-                double y = p1.enu.y + t * (p2.enu.y - p1.enu.y);
+                double x = p1.x + t * (p2.x - p1.x);
+                double y = p1.y + t * (p2.y - p1.y);
 
-                Point sample_point(ENU{x, y, 0.0}, datum_);
+                Point sample_point{x, y, 0.0};
 
                 if (poly.contains(sample_point)) {
                     inside_count++;
@@ -544,7 +543,7 @@ namespace concord {
 
         // Split elongated polygons by aspect ratio
         std::vector<Polygon> split_by_aspect_ratio(const Polygon &poly) const {
-            Bound obb = poly.get_obb(datum_);
+            Bound obb = poly.get_obb();
 
             double width = obb.size.x;
             double height = obb.size.y;
@@ -600,10 +599,10 @@ namespace concord {
             double max_y = std::numeric_limits<double>::lowest();
 
             for (const auto &p : points) {
-                min_x = std::min(min_x, p.enu.x);
-                max_x = std::max(max_x, p.enu.x);
-                min_y = std::min(min_y, p.enu.y);
-                max_y = std::max(max_y, p.enu.y);
+                min_x = std::min(min_x, p.x);
+                max_x = std::max(max_x, p.x);
+                min_y = std::min(min_y, p.y);
+                max_y = std::max(max_y, p.y);
             }
 
             // Make sure we have enough divisions to get under the area threshold
@@ -626,8 +625,8 @@ namespace concord {
                 for (const auto &current_poly : result) {
                     // Create cutting line
                     double buffer = 1e6; // Large but valid buffer
-                    Point p1(ENU{min_x - buffer, cut_y, 0}, datum_);
-                    Point p2(ENU{max_x + buffer, cut_y, 0}, datum_);
+                    Point p1{min_x - buffer, cut_y, 0};
+                    Point p2{max_x + buffer, cut_y, 0};
                     Line cutting_line(p1, p2);
 
                     // Split this polygon
@@ -650,8 +649,8 @@ namespace concord {
                 for (const auto &current_poly : result) {
                     // Create cutting line
                     double buffer = 1e6; // Large but valid buffer
-                    Point p1(ENU{cut_x, min_y - buffer, 0}, datum_);
-                    Point p2(ENU{cut_x, max_y + buffer, 0}, datum_);
+                    Point p1{cut_x, min_y - buffer, 0};
+                    Point p2{cut_x, max_y + buffer, 0};
                     Line cutting_line(p1, p2);
 
                     // Split this polygon

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../core/types/types.hpp"
+#include "../../core/types.hpp"
 #include "../line.hpp"
 #include <cmath>
 #include <cstddef>
@@ -14,8 +14,6 @@ namespace concord {
         explicit Polygon(const std::vector<Point> &pts) : points(pts) {}
 
         inline void addPoint(const Point &p) { points.emplace_back(p); }
-        inline void addPoint(const ENU &e, Datum d) { points.emplace_back(Point(e, d)); }
-        inline void addPoint(const WGS &w, Datum d) { points.emplace_back(Point(w, d)); }
 
         inline std::size_t numVertices() const noexcept { return points.size(); }
         inline bool isConnected() const noexcept { return points.size() >= 3; }
@@ -35,8 +33,8 @@ namespace concord {
                 return 0.0;
             double a = 0.0;
             for (std::size_t i = 0, j = points.size() - 1; i < points.size(); j = i++) {
-                const auto &pi = points[i].enu;
-                const auto &pj = points[j].enu;
+                const auto &pi = points[i];
+                const auto &pj = points[j];
                 a += (pj.x + pi.x) * (pj.y - pi.y);
             }
             return std::abs(a * 0.5);
@@ -47,22 +45,20 @@ namespace concord {
                 return false;
             bool c = false;
             for (std::size_t i = 0, j = points.size() - 1; i < points.size(); j = i++) {
-                const auto &pi = points[i].enu;
-                const auto &pj = points[j].enu;
-                if (((pi.y > p.enu.y) != (pj.y > p.enu.y)) &&
-                    (p.enu.x < (pj.x - pi.x) * (p.enu.y - pi.y) / (pj.y - pi.y) + pi.x))
+                const auto &pi = points[i];
+                const auto &pj = points[j];
+                if (((pi.y > p.y) != (pj.y > p.y)) && (p.x < (pj.x - pi.x) * (p.y - pi.y) / (pj.y - pi.y) + pi.x))
                     c = !c;
             }
             return c;
         }
 
-        inline Polygon from_rectangle(const float width, const float height, Datum d = {},
-                               Size inflate = Size(1.0, 1.0, 1.0)) const {
+        inline Polygon from_rectangle(const float width, const float height, Size inflate = Size(1.0, 1.0, 1.0)) const {
             Polygon p;
-            p.addPoint(Point(ENU(width * inflate.x / 2.0, height * inflate.y / 2.0, 0.0), d));
-            p.addPoint(Point(ENU(width * inflate.x / 2.0, -height * inflate.y / 2.0, 0.0), d));
-            p.addPoint(Point(ENU(-width * inflate.x / 2.0, -height * inflate.y / 2.0, 0.0), d));
-            p.addPoint(Point(ENU(-width * inflate.x / 2.0, height * inflate.y / 2.0, 0.0), d));
+            p.addPoint(Point{width * inflate.x / 2.0, height * inflate.y / 2.0, 0.0});
+            p.addPoint(Point{width * inflate.x / 2.0, -height * inflate.y / 2.0, 0.0});
+            p.addPoint(Point{-width * inflate.x / 2.0, -height * inflate.y / 2.0, 0.0});
+            p.addPoint(Point{-width * inflate.x / 2.0, height * inflate.y / 2.0, 0.0});
             return p;
         }
 
@@ -74,23 +70,11 @@ namespace concord {
             return p;
         }
 
-        inline void from_wgs(std::vector<WGS> pts, Datum d = {}) {
-            for (auto &pt : pts) {
-                addPoint(Point(pt, d));
-            }
+        inline Polygon from_rectangle(Size size, Size inflate = Size(1.0, 1.0, 1.0)) const {
+            return from_rectangle(size.x, size.y, inflate);
         }
 
-        inline void from_enu(std::vector<ENU> pts, Datum d = {}) {
-            for (auto &pt : pts) {
-                addPoint(Point(pt, d));
-            }
-        }
-
-        inline Polygon from_rectangle(Size size, Datum d = {}, Size inflate = Size(1.0, 1.0, 1.0)) const {
-            return from_rectangle(size.x, size.y, d, inflate);
-        }
-
-        inline Bound get_obb(concord::Datum d = {}) const {
+        inline Bound get_obb() const {
             if (points.empty()) {
                 return Bound();
             }
@@ -98,13 +82,13 @@ namespace concord {
             // --- 1) Compute centroid-based orientation (same as before) ---
             double sumX = 0.0, sumY = 0.0;
             for (const auto &p : points) {
-                sumX += p.enu.x;
-                sumY += p.enu.y;
+                sumX += p.x;
+                sumY += p.y;
             }
             double centroidX = sumX / points.size();
             double centroidY = sumY / points.size();
 
-            const auto &first = points[0].enu;
+            const auto &first = points[0];
             double orientation_rad = std::atan2(centroidY - first.y, centroidX - first.x);
             double cosO = std::cos(orientation_rad);
             double sinO = std::sin(orientation_rad);
@@ -116,8 +100,8 @@ namespace concord {
             double maxRotY = -std::numeric_limits<double>::infinity();
 
             for (const auto &p : points) {
-                double x = p.enu.x;
-                double y = p.enu.y;
+                double x = p.x;
+                double y = p.y;
                 // rotate (x,y) by +orientation_rad
                 double rotX = x * cosO + y * sinO;
                 double rotY = -x * sinO + y * cosO;
@@ -141,8 +125,7 @@ namespace concord {
             double centerY = centerRotX * sinO + centerRotY * cosO;
 
             // --- 5) Build and return the final Bound ---
-            concord::ENU center_enu(centerX, centerY, 0.0);
-            concord::Point center_pt(center_enu, d);
+            concord::Point center_pt(centerX, centerY, 0.0);
             concord::Euler euler(0.0, 0.0, orientation_rad);
             concord::Pose pose(center_pt, euler);
 

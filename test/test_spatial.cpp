@@ -10,44 +10,44 @@ TEST_CASE("Spatial algorithms") {
         std::vector<Point> square_points;
         Point p;
 
-        p.enu.x = 0.0;
-        p.enu.y = 0.0;
-        p.enu.z = 0.0;
+        p.x = 0.0;
+        p.y = 0.0;
+        p.z = 0.0;
         square_points.push_back(p);
-        p.enu.x = 10.0;
-        p.enu.y = 0.0;
-        p.enu.z = 0.0;
+        p.x = 10.0;
+        p.y = 0.0;
+        p.z = 0.0;
         square_points.push_back(p);
-        p.enu.x = 10.0;
-        p.enu.y = 10.0;
-        p.enu.z = 0.0;
+        p.x = 10.0;
+        p.y = 10.0;
+        p.z = 0.0;
         square_points.push_back(p);
-        p.enu.x = 0.0;
-        p.enu.y = 10.0;
-        p.enu.z = 0.0;
+        p.x = 0.0;
+        p.y = 10.0;
+        p.z = 0.0;
         square_points.push_back(p);
 
         Polygon square(square_points);
 
         // Test point inside
         Point inside;
-        inside.enu.x = 5.0;
-        inside.enu.y = 5.0;
-        inside.enu.z = 0.0;
+        inside.x = 5.0;
+        inside.y = 5.0;
+        inside.z = 0.0;
         CHECK(square.contains(inside) == true);
 
         // Test point outside
         Point outside;
-        outside.enu.x = 15.0;
-        outside.enu.y = 5.0;
-        outside.enu.z = 0.0;
+        outside.x = 15.0;
+        outside.y = 5.0;
+        outside.z = 0.0;
         CHECK(square.contains(outside) == false);
 
         // Test point on edge
         Point on_edge;
-        on_edge.enu.x = 0.0;
-        on_edge.enu.y = 5.0;
-        on_edge.enu.z = 0.0;
+        on_edge.x = 0.0;
+        on_edge.y = 5.0;
+        on_edge.z = 0.0;
         CHECK(square.contains(on_edge) == true);
     }
 
@@ -55,19 +55,19 @@ TEST_CASE("Spatial algorithms") {
         // Create two intersecting lines
         Point line1_start, line1_end, line2_start, line2_end;
 
-        line1_start.enu.x = 0.0;
-        line1_start.enu.y = 0.0;
-        line1_start.enu.z = 0.0;
-        line1_end.enu.x = 10.0;
-        line1_end.enu.y = 10.0;
-        line1_end.enu.z = 0.0;
+        line1_start.x = 0.0;
+        line1_start.y = 0.0;
+        line1_start.z = 0.0;
+        line1_end.x = 10.0;
+        line1_end.y = 10.0;
+        line1_end.z = 0.0;
 
-        line2_start.enu.x = 0.0;
-        line2_start.enu.y = 10.0;
-        line2_start.enu.z = 0.0;
-        line2_end.enu.x = 10.0;
-        line2_end.enu.y = 0.0;
-        line2_end.enu.z = 0.0;
+        line2_start.x = 0.0;
+        line2_start.y = 10.0;
+        line2_start.z = 0.0;
+        line2_end.x = 10.0;
+        line2_end.y = 0.0;
+        line2_end.z = 0.0;
 
         Line line1(line1_start, line1_end);
         Line line2(line2_start, line2_end);
@@ -77,8 +77,8 @@ TEST_CASE("Spatial algorithms") {
 
         CHECK(intersects == true);
         // Lines should intersect at (5, 5)
-        CHECK(intersection.enu.x == doctest::Approx(5.0));
-        CHECK(intersection.enu.y == doctest::Approx(5.0));
+        CHECK(intersection.x == doctest::Approx(5.0));
+        CHECK(intersection.y == doctest::Approx(5.0));
     }
 
     SUBCASE("Convex hull") {
@@ -87,25 +87,25 @@ TEST_CASE("Spatial algorithms") {
         Point p;
 
         // Add points that form a square with some interior points
-        p.enu.x = 0.0;
-        p.enu.y = 0.0;
-        p.enu.z = 0.0;
+        p.x = 0.0;
+        p.y = 0.0;
+        p.z = 0.0;
         points.push_back(p);
-        p.enu.x = 10.0;
-        p.enu.y = 0.0;
-        p.enu.z = 0.0;
+        p.x = 10.0;
+        p.y = 0.0;
+        p.z = 0.0;
         points.push_back(p);
-        p.enu.x = 10.0;
-        p.enu.y = 10.0;
-        p.enu.z = 0.0;
+        p.x = 10.0;
+        p.y = 10.0;
+        p.z = 0.0;
         points.push_back(p);
-        p.enu.x = 0.0;
-        p.enu.y = 10.0;
-        p.enu.z = 0.0;
+        p.x = 0.0;
+        p.y = 10.0;
+        p.z = 0.0;
         points.push_back(p);
-        p.enu.x = 5.0;
-        p.enu.y = 5.0;
-        p.enu.z = 0.0;
+        p.x = 5.0;
+        p.y = 5.0;
+        p.z = 0.0;
         points.push_back(p); // Interior point
 
         auto hull = spatial::convexHull(points);
@@ -121,15 +121,15 @@ TEST_CASE("Spatial indexing") {
 
         // Insert some points with their AABB
         Point p1, p2, p3;
-        p1.enu.x = 1.0;
-        p1.enu.y = 1.0;
-        p1.enu.z = 0.0;
-        p2.enu.x = 5.0;
-        p2.enu.y = 5.0;
-        p2.enu.z = 0.0;
-        p3.enu.x = 10.0;
-        p3.enu.y = 10.0;
-        p3.enu.z = 0.0;
+        p1.x = 1.0;
+        p1.y = 1.0;
+        p1.z = 0.0;
+        p2.x = 5.0;
+        p2.y = 5.0;
+        p2.z = 0.0;
+        p3.x = 10.0;
+        p3.y = 10.0;
+        p3.z = 0.0;
 
         // Create small bounding boxes around each point
         AABB bbox1(p1, p1);
@@ -142,12 +142,12 @@ TEST_CASE("Spatial indexing") {
 
         // Query for points near (2, 2)
         Point query_min, query_max;
-        query_min.enu.x = 0.0;
-        query_min.enu.y = 0.0;
-        query_min.enu.z = 0.0;
-        query_max.enu.x = 3.0;
-        query_max.enu.y = 3.0;
-        query_max.enu.z = 1.0;
+        query_min.x = 0.0;
+        query_min.y = 0.0;
+        query_min.z = 0.0;
+        query_max.x = 3.0;
+        query_max.y = 3.0;
+        query_max.z = 1.0;
         AABB query_box(query_min, query_max);
 
         auto results = rtree.search(query_box);
@@ -158,27 +158,27 @@ TEST_CASE("Spatial indexing") {
 
     SUBCASE("QuadTree operations") {
         Point boundary_min, boundary_max;
-        boundary_min.enu.x = 0.0;
-        boundary_min.enu.y = 0.0;
-        boundary_min.enu.z = 0.0;
-        boundary_max.enu.x = 100.0;
-        boundary_max.enu.y = 100.0;
-        boundary_max.enu.z = 1.0;
+        boundary_min.x = 0.0;
+        boundary_min.y = 0.0;
+        boundary_min.z = 0.0;
+        boundary_max.x = 100.0;
+        boundary_max.y = 100.0;
+        boundary_max.z = 1.0;
         AABB boundary(boundary_min, boundary_max);
 
         QuadTree<Point> qtree(boundary);
 
         // Insert points
         Point p1, p2, p3;
-        p1.enu.x = 25.0;
-        p1.enu.y = 25.0;
-        p1.enu.z = 0.0;
-        p2.enu.x = 75.0;
-        p2.enu.y = 25.0;
-        p2.enu.z = 0.0;
-        p3.enu.x = 25.0;
-        p3.enu.y = 75.0;
-        p3.enu.z = 0.0;
+        p1.x = 25.0;
+        p1.y = 25.0;
+        p1.z = 0.0;
+        p2.x = 75.0;
+        p2.y = 25.0;
+        p2.z = 0.0;
+        p3.x = 25.0;
+        p3.y = 75.0;
+        p3.z = 0.0;
 
         qtree.insert(p1, p1);
         qtree.insert(p2, p2);
@@ -186,12 +186,12 @@ TEST_CASE("Spatial indexing") {
 
         // Query a region
         Point query_min, query_max;
-        query_min.enu.x = 0.0;
-        query_min.enu.y = 0.0;
-        query_min.enu.z = 0.0;
-        query_max.enu.x = 50.0;
-        query_max.enu.y = 50.0;
-        query_max.enu.z = 1.0;
+        query_min.x = 0.0;
+        query_min.y = 0.0;
+        query_min.z = 0.0;
+        query_max.x = 50.0;
+        query_max.y = 50.0;
+        query_max.z = 1.0;
         AABB query_region(query_min, query_max);
 
         auto results = qtree.query(query_region);

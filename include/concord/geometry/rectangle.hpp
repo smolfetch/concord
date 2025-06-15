@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include "../core/types/types.hpp" // for Datum, Point, ENU, Euler, Bound
-#include "line.hpp"  // for Line
+#include "../core/types.hpp" // for Datum, Point, ENU, Euler, Bound
+#include "line.hpp"          // for Line
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -32,8 +32,7 @@ namespace concord {
         }
 
         inline bool contains(const Point &p) const noexcept {
-            return (p.enu.x >= top_left.enu.x && p.enu.x <= top_right.enu.x && p.enu.y >= top_left.enu.y &&
-                    p.enu.y <= bottom_left.enu.y);
+            return (p.x >= top_left.x && p.x <= top_right.x && p.y >= top_left.y && p.y <= bottom_left.y);
         }
 
         inline void from_pointvec(std::array<Point, 4> points) {
@@ -48,9 +47,11 @@ namespace concord {
         inline const Point &getBottomLeft() const noexcept { return bottom_left; }
         inline const Point &getBottomRight() const noexcept { return bottom_right; }
 
-        inline std::array<Point, 4> get_corners() const noexcept { return {top_left, top_right, bottom_right, bottom_left}; }
+        inline std::array<Point, 4> get_corners() const noexcept {
+            return {top_left, top_right, bottom_right, bottom_left};
+        }
 
-        static inline Rectangle outer_rectangle(const std::vector<Bound> &bounds, Datum d = {}) {
+        static inline Rectangle outer_rectangle(const std::vector<Bound> &bounds) {
             if (bounds.empty()) {
                 return Rectangle();
             }
@@ -131,8 +132,8 @@ namespace concord {
             std::vector<P2> pts;
             pts.reserve(bounds.size() * 4);
             for (auto const &b : bounds) {
-                double cx = b.pose.point.enu.x;
-                double cy = b.pose.point.enu.y;
+                double cx = b.pose.point.x;
+                double cy = b.pose.point.y;
                 double ang = b.pose.angle.yaw;
                 double c = std::cos(ang);
                 double s = std::sin(ang);
@@ -154,7 +155,7 @@ namespace concord {
             auto mkPt = [&](double lx, double ly) {
                 double x = rx + lx * cc - ly * ss;
                 double y = ry + lx * ss + ly * cc;
-                return Point{ENU{x, y, 0.0}, d};
+                return Point{x, y, 0.0};
             };
 
             Point tl = mkPt(-hw, +hh);

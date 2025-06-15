@@ -33,35 +33,35 @@ TEST_CASE("Basic Vector operations") {
 TEST_CASE("Circle geometry tests") {
     SUBCASE("Circle creation and basic properties") {
         Point center;
-        center.enu.x = 0.0;
-        center.enu.y = 0.0;
-        center.enu.z = 0.0;
+        center.x = 0.0;
+        center.y = 0.0;
+        center.z = 0.0;
 
         Circle circle(center, 5.0);
 
-        CHECK(circle.getCenter().enu.x == 0.0);
-        CHECK(circle.getCenter().enu.y == 0.0);
+        CHECK(circle.getCenter().x == 0.0);
+        CHECK(circle.getCenter().y == 0.0);
         CHECK(doctest::Approx(circle.area()) == M_PI * 25.0);
         CHECK(doctest::Approx(circle.circumference()) == 2 * M_PI * 5.0);
     }
 
     SUBCASE("Point containment") {
         Point center;
-        center.enu.x = 0.0;
-        center.enu.y = 0.0;
-        center.enu.z = 0.0;
+        center.x = 0.0;
+        center.y = 0.0;
+        center.z = 0.0;
 
         Circle circle(center, 5.0);
 
         Point inside;
-        inside.enu.x = 2.0;
-        inside.enu.y = 2.0;
-        inside.enu.z = 0.0;
+        inside.x = 2.0;
+        inside.y = 2.0;
+        inside.z = 0.0;
 
         Point outside;
-        outside.enu.x = 10.0;
-        outside.enu.y = 10.0;
-        outside.enu.z = 0.0;
+        outside.x = 10.0;
+        outside.y = 10.0;
+        outside.z = 0.0;
 
         CHECK(circle.contains(inside) == true);
         CHECK(circle.contains(outside) == false);

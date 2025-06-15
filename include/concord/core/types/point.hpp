@@ -1,62 +1,72 @@
 #pragma once
 
-#include "enu.hpp"
-#include "wgs.hpp"
-#include "datum.hpp"
+#include "../../geographic/crs/datum.hpp"
+#include "../../math/math.hpp"
+#include <cmath>
+#include <tuple>
 
 namespace concord {
 
+    struct WGS; // forward declaration
+
     struct Point {
-        ENU enu;
-        WGS wgs;
+        double x = 0.0;
+        double y = 0.0;
+        double z = 0.0;
+
+        Point(double x_, double y_, double z_) : x(x_), y(y_), z(z_) {}
 
         Point() = default;
-        Point(const ENU &e, const WGS &w) : enu(e), wgs(w) {}
-        Point(const ENU &e, Datum d) : enu(e), wgs(e.toWGS(d)) {}
-        Point(const WGS &w, Datum d) : enu(w.toENU(d)), wgs(w) {}
 
-        Point(double x, double y, double z = 0.0, const Datum &datum = Datum()) 
-            : enu(x, y, z), wgs(enu.toWGS(datum)) {}
-            
-        inline bool is_set() const { return enu.is_set() && wgs.is_set(); }
-        
+        // Forward declaration for conversion method - implementation in crs.hpp
+        inline WGS toWGS(const Datum &datum) const;
+
+        inline bool is_set() const { return x != 0.0 && y != 0.0; }
+
         // Mathematical operations
-        inline Point operator+(const Point& other) const {
-            return Point{enu + other.enu, wgs};
+        inline Point operator+(const Point &other) const { return Point{x + other.x, y + other.y, z + other.z}; }
+        inline Point operator-(const Point &other) const { return Point{x - other.x, y - other.y, z - other.z}; }
+        inline Point operator*(double scale) const { return Point{x * scale, y * scale, z * scale}; }
+        inline Point operator/(double scale) const { return Point{x / scale, y / scale, z / scale}; }
+
+        inline Point &operator+=(const Point &other) {
+            x += other.x;
+            y += other.y;
+            z += other.z;
+            return *this;
         }
-        inline Point operator-(const Point& other) const {
-            return Point{enu - other.enu, wgs};
+        inline Point &operator-=(const Point &other) {
+            x -= other.x;
+            y -= other.y;
+            z -= other.z;
+            return *this;
         }
-        inline Point operator*(double scale) const {
-            return Point{enu * scale, wgs};
+        inline Point &operator*=(double scale) {
+            x *= scale;
+            y *= scale;
+            z *= scale;
+            return *this;
         }
-        inline Point operator/(double scale) const {
-            return Point{enu / scale, wgs};
+        inline Point &operator/=(double scale) {
+            x /= scale;
+            y /= scale;
+            z /= scale;
+            return *this;
         }
-        inline Point operator+(const ENU& offset) const { 
-            return Point{enu + offset, wgs}; 
+
+        // Distance and magnitude operations
+        inline double magnitude() const { return std::sqrt(x * x + y * y + z * z); }
+        inline double distance_to(const Point &other) const {
+            return std::sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y) +
+                             (z - other.z) * (z - other.z));
         }
-        inline Point operator-(const ENU& offset) const { 
-            return Point{enu - offset, wgs}; 
+        inline double distance_to_2d(const Point &other) const {
+            return std::sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
         }
-        
-        // Comparison operators
-        inline bool operator==(const Point& other) const {
-            return (enu.x == other.enu.x && enu.y == other.enu.y && enu.z == other.enu.z);
-        }
-        inline bool operator!=(const Point& other) const {
-            return (enu.x != other.enu.x || enu.y != other.enu.y || enu.z != other.enu.z);
-        }
-        
-        inline double distance_to(const Point& other) const {
-            return enu.distance_to(other.enu);
-        }
-        inline double distance_to_2d(const Point& other) const {
-            return enu.distance_to_2d(other.enu);
-        }
-        
-        // Add an id field for compatibility with partition algorithms
-        long id = -1;
+
+        // Conversion to Vec3d
+        inline Vec3d to_vec3() const { return Vec3d{x, y, z}; }
+        inline static Point from_vec3(const Vec3d &v) { return Point{v[0], v[1], v[2]}; }
     };
 
 } // namespace concord

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../core/types/types.hpp"
+#include "../../core/types.hpp"
 #include "../polygon/polygon.hpp"
 #include <cassert>
 #include <cmath>
@@ -27,7 +27,8 @@ namespace concord {
       public:
         Grid() = default;
 
-        Grid(size_type rows, size_type cols, double diameter, concord::Datum datum, bool centered, concord::Pose shift)
+        Grid(size_type rows, size_type cols, double diameter, concord::Datum /* datum */, bool centered,
+             concord::Pose shift)
             : rows_{rows}, cols_{cols}, inradius_{diameter}, data_(rows * cols) {
             // Total span of the grid (only non-zero if centered)
             double height = centered ? cols_ * diameter : 0.0;
@@ -45,22 +46,19 @@ namespace concord {
                     double rot_x = cosYaw * local_x - sinYaw * local_y;
                     double rot_y = sinYaw * local_x + cosYaw * local_y;
                     // Then translate by the shift’s ENU offset
-                    double world_x = rot_x + shift.point.enu.x;
-                    double world_y = rot_y + shift.point.enu.y;
+                    double world_x = rot_x + shift.point.x;
+                    double world_y = rot_y + shift.point.y;
                     // Fill in the point and convert to WGS
                     size_type idx = index(r, c);
-                    Point p;
-                    p.enu.x = world_x;
-                    p.enu.y = world_y;
-                    p.enu.toWGS(datum);
+                    Point p{world_x, world_y, 0.0};
                     data_[idx] = value_type{p, T{}};
                 }
             }
         }
-        Grid(const Polygon &poly, double resolution, Datum datum = Datum(), bool centered = true)
-            : Grid(static_cast<size_type>(std::ceil(poly.get_obb(datum).size.x / resolution)),
-                   static_cast<size_type>(std::ceil(poly.get_obb(datum).size.y / resolution)), resolution, datum,
-                   centered, poly.get_obb(datum).pose) {}
+        Grid(const Polygon &poly, double resolution, Datum /* datum */ = Datum(), bool centered = true)
+            : Grid(static_cast<size_type>(std::ceil(poly.get_obb().size.x / resolution)),
+                   static_cast<size_type>(std::ceil(poly.get_obb().size.y / resolution)), resolution, Datum{}, centered,
+                   poly.get_obb().pose) {}
 
         inline void set_value(size_type r, size_type c, const T &value) { at(r, c).second = value; }
         inline reference operator()(size_type r, size_type c) noexcept { return data_[index(r, c)]; }
@@ -90,7 +88,7 @@ namespace concord {
         inline std::vector<std::array<float, 3>> flatten_points() {
             std::vector<std::array<float, 3>> points;
             for (auto &[p, c] : data_) {
-                points.push_back({float(p.enu.x), float(p.enu.y), 0.0f});
+                points.push_back({float(p.x), float(p.y), 0.0f});
             }
             return points;
         }
@@ -100,13 +98,13 @@ namespace concord {
             for (std::size_t r = 0; r < rows_; ++r) {
                 for (std::size_t c = 0; c < cols_; ++c) {
                     auto &[pt, color] = data_[index(r, c)]; // now color is an RGB& directly
-                    points.push_back({float(pt.enu.x), float(pt.enu.y), 0.0f});
+                    points.push_back({float(pt.x), float(pt.y), 0.0f});
                 }
             }
             return points;
         }
 
-        inline std::array<concord::Point, 4> corners(concord::Datum datum = Datum()) const {
+        inline std::array<concord::Point, 4> corners() const {
             if (rows_ == 0 || cols_ == 0) {
                 throw std::runtime_error("Grid is empty; cannot get corners");
             }
@@ -115,7 +113,6 @@ namespace concord {
 
             auto getP = [&](std::size_t r, std::size_t c) {
                 Point p = (*this)(r, c).first;
-                p.wgs = p.enu.toWGS(datum);
                 return p;
             };
 

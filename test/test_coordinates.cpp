@@ -1,6 +1,6 @@
-#include <concord/core/coordinate_utils.hpp>
-#include <concord/core/wgs_to_enu.hpp>
-#include <concord/core/wgs_to_utm.hpp>
+#include <concord/geographic/coordinate_utils.hpp>
+#include <concord/geographic/wgs_to_enu.hpp>
+#include <concord/geographic/wgs_to_utm.hpp>
 #include <doctest/doctest.h>
 
 using namespace concord;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/types/types.hpp"
+#include "../core/types.hpp"
 #include <cmath>
 
 namespace concord {
@@ -17,19 +17,16 @@ namespace concord {
         inline void setCenter(const Point &c) noexcept { center = c; }
 
         inline bool contains(const Point &p) const noexcept {
-            return std::sqrt(std::pow(p.enu.x - center.enu.x, 2) + std::pow(p.enu.y - center.enu.y, 2)) < radius;
+            return std::sqrt(std::pow(p.x - center.x, 2) + std::pow(p.y - center.y, 2)) < radius;
         }
 
-        inline std::vector<Point> as_polygon(int n = 100, Datum datm = Datum()) const {
+        inline std::vector<Point> as_polygon(int n = 100) const {
             std::vector<Point> points;
             double theta = 2 * M_PI / n;
             for (int i = 0; i < n; i++) {
-                double x = center.enu.x + radius * std::cos(theta * i);
-                double y = center.enu.y + radius * std::sin(theta * i);
-                Point p;
-                p.enu.x = x;
-                p.enu.y = y;
-                p.wgs = p.enu.toWGS(datm);
+                double x = center.x + radius * std::cos(theta * i);
+                double y = center.y + radius * std::sin(theta * i);
+                Point p{x, y, 0.0};
                 points.push_back(p);
             }
             return points;

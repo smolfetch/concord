@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/types/types.hpp"
+#include "../core/types.hpp"
 #include <cmath>
 
 namespace concord {
@@ -15,7 +15,7 @@ namespace concord {
         inline double diagonal() const noexcept { return side * std::sqrt(2.0); }
 
         inline bool contains(const Point &p) const noexcept {
-            return std::abs(p.enu.x - center.enu.x) <= side / 2.0 && std::abs(p.enu.y - center.enu.y) <= side / 2.0;
+            return std::abs(p.x - center.x) <= side / 2.0 && std::abs(p.y - center.y) <= side / 2.0;
         }
 
         inline const Point &getCenter() const noexcept { return center; }
