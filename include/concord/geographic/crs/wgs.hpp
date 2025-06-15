@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../errors/error_handling.hpp"
+#include "../../core/errors/error_handling.hpp"
 #include "../wgs_to_enu.hpp"
 #include "datum.hpp"
 #include <cmath>

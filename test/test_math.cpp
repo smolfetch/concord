@@ -1,4 +1,4 @@
-#include <concord/math/math.hpp>
+#include <concord/core/math/math.hpp>
 #include <doctest/doctest.h>
 
 using namespace concord;

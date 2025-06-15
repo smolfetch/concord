@@ -1,5 +1,5 @@
-#include <concord/spatial/spatial_algorithms.hpp>
-#include <concord/spatial/spatial_index.hpp>
+#include <concord/algorithms/spatial_algorithms.hpp>
+#include <concord/indexing/hash_grid/spatial_hash_grid.hpp>
 #include <doctest/doctest.h>
 
 using namespace concord;

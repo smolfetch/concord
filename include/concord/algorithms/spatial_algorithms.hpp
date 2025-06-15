@@ -2,8 +2,8 @@
 
 #include "../core/types.hpp"
 #include "../geometry/bounding.hpp"
-#include "../geometry/line.hpp"
 #include "../geometry/polygon/polygon.hpp"
+#include "../geometry/primitives/line.hpp"
 #include <algorithm>
 #include <cmath>
 #include <functional>

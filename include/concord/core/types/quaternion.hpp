@@ -1,8 +1,8 @@
 #pragma once
 
+#include "../errors/error_handling.hpp"
+#include "../math/math.hpp"
 #include "euler.hpp"
-#include "../../math/math.hpp"
-#include "../../errors/error_handling.hpp"
 #include <cmath>
 
 namespace concord {
@@ -17,35 +17,33 @@ namespace concord {
         Quaternion(double w_, double x_, double y_, double z_) : w(w_), x(x_), y(y_), z(z_) {}
         explicit Quaternion(const Euler &e) noexcept;
         inline bool is_set() const { return w != 0.0 || x != 0.0 || y != 0.0 || z != 0.0; }
-        
+
         // Mathematical operations
-        inline Quaternion operator+(const Quaternion& other) const {
+        inline Quaternion operator+(const Quaternion &other) const {
             return Quaternion{w + other.w, x + other.x, y + other.y, z + other.z};
         }
-        inline Quaternion operator-(const Quaternion& other) const {
+        inline Quaternion operator-(const Quaternion &other) const {
             return Quaternion{w - other.w, x - other.x, y - other.y, z - other.z};
         }
-        inline Quaternion operator*(const Quaternion& other) const {
-            return Quaternion{
-                w * other.w - x * other.x - y * other.y - z * other.z,
-                w * other.x + x * other.w + y * other.z - z * other.y,
-                w * other.y - x * other.z + y * other.w + z * other.x,
-                w * other.z + x * other.y - y * other.x + z * other.w
-            };
+        inline Quaternion operator*(const Quaternion &other) const {
+            return Quaternion{w * other.w - x * other.x - y * other.y - z * other.z,
+                              w * other.x + x * other.w + y * other.z - z * other.y,
+                              w * other.y - x * other.z + y * other.w + z * other.x,
+                              w * other.z + x * other.y - y * other.x + z * other.w};
         }
         inline Quaternion operator*(double scale) const {
             return Quaternion{w * scale, x * scale, y * scale, z * scale};
         }
-        
+
         // Quaternion operations
-        inline double norm() const { 
+        inline double norm() const {
             validation::validate_finite(w, "quaternion w");
             validation::validate_finite(x, "quaternion x");
             validation::validate_finite(y, "quaternion y");
             validation::validate_finite(z, "quaternion z");
-            return std::sqrt(w*w + x*x + y*y + z*z); 
+            return std::sqrt(w * w + x * x + y * y + z * z);
         }
-        
+
         inline Quaternion normalized() const {
             double n = norm();
             if (n < 1e-15) {
@@ -53,26 +51,26 @@ namespace concord {
             }
             return (*this) * (1.0 / n);
         }
-        
+
         inline Quaternion conjugate() const { return Quaternion{w, -x, -y, -z}; }
-        
+
         inline Quaternion inverse() const {
-            double n2 = w*w + x*x + y*y + z*z;
+            double n2 = w * w + x * x + y * y + z * z;
             if (n2 < 1e-15) {
                 throw MathematicalException("cannot invert zero quaternion");
             }
             return conjugate() * (1.0 / n2);
         }
-        
+
         // Rotation operations
-        inline Vec3d rotate(const Vec3d& v) const {
+        inline Vec3d rotate(const Vec3d &v) const {
             Quaternion qv{0, v[0], v[1], v[2]};
             Quaternion result = (*this) * qv * conjugate();
             return Vec3d{result.x, result.y, result.z};
         }
-        
+
         // SLERP interpolation
-        inline static Quaternion slerp(const Quaternion& q1, const Quaternion& q2, double t) {
+        inline static Quaternion slerp(const Quaternion &q1, const Quaternion &q2, double t) {
             double dot = q1.w * q2.w + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z;
             if (dot < 0.0) {
                 return slerp(q1, Quaternion{-q2.w, -q2.x, -q2.y, -q2.z}, t);

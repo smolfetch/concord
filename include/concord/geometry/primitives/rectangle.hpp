@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include "../core/types.hpp" // for Datum, Point, ENU, Euler, Bound
-#include "line.hpp"          // for Line
+#include "../../core/types.hpp" // for Datum, Point, ENU, Euler, Bound
+#include "line.hpp"             // for Line
 #include <algorithm>
 #include <array>
 #include <cmath>

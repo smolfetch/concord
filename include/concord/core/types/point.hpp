@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../geographic/crs/datum.hpp"
-#include "../../math/math.hpp"
+#include "../math/math.hpp"
 #include <cmath>
 #include <tuple>
 
@@ -67,6 +67,11 @@ namespace concord {
         // Conversion to Vec3d
         inline Vec3d to_vec3() const { return Vec3d{x, y, z}; }
         inline static Point from_vec3(const Vec3d &v) { return Point{v[0], v[1], v[2]}; }
+
+        // Builder pattern support - returns a coordinate builder
+        template <typename TargetType> inline auto as(const Datum &datum = Datum()) const;
+
+        template <typename TargetType> inline auto to(const Datum &datum = Datum(), int utm_zone = 0) const;
     };
 
 } // namespace concord

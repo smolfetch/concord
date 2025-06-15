@@ -1,6 +1,6 @@
-#include <concord/geometry/circle.hpp>
-#include <concord/geometry/line.hpp>
-#include <concord/geometry/rectangle.hpp>
+#include <concord/geometry/primitives/circle.hpp>
+#include <concord/geometry/primitives/line.hpp>
+#include <concord/geometry/primitives/rectangle.hpp>
 #include <doctest/doctest.h>
 
 using namespace concord;

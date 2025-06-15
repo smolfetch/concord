@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../math/math.hpp"
+#include "../math/math.hpp"
 #include "euler.hpp"
 #include "point.hpp"
 #include "quaternion.hpp"

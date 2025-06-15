@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../math/math.hpp"
+#include "../math/math.hpp"
 #include <cmath>
 
 namespace concord {
@@ -19,34 +19,34 @@ namespace concord {
 
         inline double yaw_cos() const { return std::cos(yaw * 0.5); }
         inline double yaw_sin() const { return std::sin(yaw * 0.5); }
-        
+
         // Mathematical operations
-        inline Euler operator+(const Euler& other) const {
+        inline Euler operator+(const Euler &other) const {
             return Euler{roll + other.roll, pitch + other.pitch, yaw + other.yaw};
         }
-        inline Euler operator-(const Euler& other) const {
+        inline Euler operator-(const Euler &other) const {
             return Euler{roll - other.roll, pitch - other.pitch, yaw - other.yaw};
         }
-        inline Euler operator*(double scale) const {
-            return Euler{roll * scale, pitch * scale, yaw * scale};
-        }
-        
+        inline Euler operator*(double scale) const { return Euler{roll * scale, pitch * scale, yaw * scale}; }
+
         // Angle normalization
         inline Euler normalized() const {
             auto normalize_angle = [](double angle) {
-                while (angle > M_PI) angle -= 2.0 * M_PI;
-                while (angle < -M_PI) angle += 2.0 * M_PI;
+                while (angle > M_PI)
+                    angle -= 2.0 * M_PI;
+                while (angle < -M_PI)
+                    angle += 2.0 * M_PI;
                 return angle;
             };
             return Euler{normalize_angle(roll), normalize_angle(pitch), normalize_angle(yaw)};
         }
-        
+
         // Convert to rotation matrix (3x3)
         inline Mat3d to_rotation_matrix() const {
             double cr = std::cos(roll), sr = std::sin(roll);
             double cp = std::cos(pitch), sp = std::sin(pitch);
             double cy = std::cos(yaw), sy = std::sin(yaw);
-            
+
             Mat3d R;
             R[0][0] = cy * cp;
             R[0][1] = cy * sp * sr - sy * cr;
@@ -59,9 +59,9 @@ namespace concord {
             R[2][2] = cp * cr;
             return R;
         }
-        
+
         // Rotate a vector
-        inline Vec3d rotate(const Vec3d& v) const {
+        inline Vec3d rotate(const Vec3d &v) const {
             Mat3d R = to_rotation_matrix();
             return R * v;
         }

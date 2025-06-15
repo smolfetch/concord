@@ -1,7 +1,7 @@
 #pragma once
 
+#include "../core/math/math.hpp"
 #include "../core/types.hpp"
-#include "../math/math.hpp"
 #include <algorithm>
 #include <array>
 #include <limits>
@@ -74,6 +74,30 @@ namespace concord {
         inline double surface_area() const {
             auto s = size();
             return 2.0 * (s.x * s.y + s.y * s.z + s.z * s.x);
+        }
+
+        // Union with another AABB - returns a new AABB that contains both
+        inline AABB union_with(const AABB &other) const {
+            AABB result;
+            result.min_point.x = std::min(min_point.x, other.min_point.x);
+            result.min_point.y = std::min(min_point.y, other.min_point.y);
+            result.min_point.z = std::min(min_point.z, other.min_point.z);
+            result.max_point.x = std::max(max_point.x, other.max_point.x);
+            result.max_point.y = std::max(max_point.y, other.max_point.y);
+            result.max_point.z = std::max(max_point.z, other.max_point.z);
+            return result;
+        }
+
+        // Area for 2D or volume for 3D
+        inline double area() const { return volume(); }
+
+        // Distance from AABB to a point
+        inline double distance_to_point(const Point &point) const {
+            Point closest_point;
+            closest_point.x = std::max(min_point.x, std::min(point.x, max_point.x));
+            closest_point.y = std::max(min_point.y, std::min(point.y, max_point.y));
+            closest_point.z = std::max(min_point.z, std::min(point.z, max_point.z));
+            return point.distance_to(closest_point);
         }
 
         inline std::array<Point, 8> corners() const {

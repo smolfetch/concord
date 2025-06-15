@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../core/types.hpp"
-#include "../geometry/bounding.hpp"
+#include "../../core/types.hpp"
+#include "../../geometry/bounding.hpp"
 #include <algorithm>
 #include <functional>
 #include <memory>

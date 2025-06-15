@@ -1,18 +1,44 @@
 #pragma once
 
-// Error handling and validation
-#include "errors/error_handling.hpp"
-
-// Core mathematical types and operations
-#include "math/math.hpp"
-
-// Basic coordinate and geometric types
+// Core functionality
+#include "core/errors/error_handling.hpp"
+#include "core/math/math.hpp"
 #include "core/types.hpp"
-#include "geometry/circle.hpp"
-#include "geometry/line.hpp"
+
+// Builder pattern for fluent coordinate transformations
+#include "builders/coordinate_builder.hpp"
+#include "builders/geometry_builder.hpp"
+#include "builders/spatial_builder.hpp"
+
+// Basic geometric primitives and shapes
+#include "geometry/bounding.hpp"
+#include "geometry/grid/grid.hpp"
 #include "geometry/path.hpp"
-#include "geometry/rectangle.hpp"
-#include "geometry/square.hpp"
+#include "geometry/polygon/polygon.hpp"
+#include "geometry/primitives/primitives.hpp"
+
+// Advanced spatial types
+#include "geographic/coordinate_utils.hpp"
+#include "geographic/crs/crs.hpp"
+#include "geographic/projections/projections.hpp"
+#include "geographic/transformations/transformations.hpp"
+#include "geographic/wgs_to_enu.hpp"
+#include "geographic/wgs_to_utm.hpp"
+
+// Spatial algorithms
+#include "algorithms/convex_hull/convex_hull.hpp"
+#include "algorithms/distance/distance.hpp"
+#include "algorithms/intersection/intersection.hpp"
+#include "algorithms/spatial_algorithms.hpp"
+#include "algorithms/triangulation/triangulation.hpp"
+
+// Spatial indexing structures
+#include "geometry/path.hpp"
+#include "geometry/primitives/circle.hpp"
+#include "geometry/primitives/line.hpp"
+#include "geometry/primitives/rectangle.hpp"
+#include "geometry/primitives/square.hpp"
+#include "indexing/indexing.hpp"
 // Polygon and polygon algorithms
 #include "geometry/polygon/partition.hpp"
 #include "geometry/polygon/polygon.hpp"
@@ -28,10 +54,10 @@
 #include "geographic/wgs_to_utm.hpp"
 
 // Spatial algorithms and operations
-#include "spatial/spatial_algorithms.hpp"
+#include "algorithms/spatial_algorithms.hpp"
 
 // Spatial indexing structures
-#include "spatial/spatial_index.hpp"
+#include "indexing/hash_grid/spatial_hash_grid.hpp"
 
 namespace concord {
     // Library capabilities

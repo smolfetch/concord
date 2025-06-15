@@ -2,26 +2,60 @@
 
 # Concord
 
-A comprehensive C++ library for geodetic coordinate systems, spatial algorithms, and geometric operations.
+A comprehensive C++ library for geodetic coordinate systems, spatial algorithms, and geometric operations with modern architecture.
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/bresilla/concord)
+[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/bresilla/concord)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![C++](https://img.shields.io/badge/C%2B%2B-17-orange.svg)](https://isocpp.org/)
+[![C++](https://img.shields.io/badge/C%2B%2B-20-orange.svg)](https://isocpp.org/)
 
 ## Overview
 
-Concord is a modern C++ library that provides a complete suite of tools for working with geodetic coordinates, spatial data structures, and geometric algorithms. It's designed for applications in GIS, robotics, surveying, navigation, and any domain requiring precise spatial computations.
+Concord is a modern C++20 library providing a complete suite of tools for geodetic coordinates, spatial data structures, and geometric algorithms. Designed for GIS, robotics, surveying, navigation, and any domain requiring precise spatial computations.
 
-### Key Features
+### 🏗️ Modern Architecture
 
-- **🌍 Multiple Coordinate Systems**: WGS84, UTM, ENU, ECEF, LTP, State Plane, British National Grid
-- **🧮 Mathematical Primitives**: Vectors, matrices, quaternions, transformations
-- **📐 Geometric Types**: Points, lines, circles, polygons, paths, grids, bounding volumes
-- **🗂️ Spatial Algorithms**: Distance calculations, intersections, convex hulls, clustering
-- **✂️ Polygon Partitioning**: Intelligent division of complex polygons based on area, convexity, and shape features
-- **🚀 Spatial Indexing**: R-Trees, QuadTrees, hash grids for efficient spatial queries
-- **🔧 Utilities**: Random generation, statistics, validation, unit conversions
-- **🎯 High Performance**: Optimized algorithms with modern C++ practices
+Concord features a clean, modular architecture organized into logical components:
+
+```
+concord/
+├── core/                    # Foundation components
+│   ├── types/               # Basic types (Point, Size, etc.)
+│   ├── math/                # Mathematical operations  
+│   ├── errors/              # Error handling
+│   └── precision/           # Precision handling
+├── algorithms/              # Spatial algorithms
+│   ├── distance/            # Distance calculations
+│   ├── intersection/        # Intersection algorithms
+│   ├── convex_hull/         # Convex hull algorithms
+│   └── triangulation/       # Triangulation algorithms
+├── geometry/                # Geometric shapes
+│   ├── primitives/          # Basic shapes (Circle, Line, etc.)
+│   ├── polygon/             # Polygon operations
+│   └── grid/                # Grid structures
+├── geographic/              # Geographic systems
+│   ├── crs/                 # Coordinate reference systems
+│   ├── transformations/     # Coordinate transformations
+│   └── projections/         # Map projections
+├── indexing/                # Spatial indexing
+│   ├── rtree/               # R-tree implementation
+│   ├── quadtree/            # QuadTree implementation
+│   └── hash_grid/           # Spatial hash grid
+└── builders/                # Fluent APIs
+    ├── coordinate_builder.hpp
+    ├── geometry_builder.hpp
+    └── spatial_builder.hpp
+```
+
+### ✨ Key Features
+
+- **🌍 Coordinate Systems**: WGS84, UTM, ENU, ECEF, LTP with fluent transformations
+- **🧮 Mathematical Core**: Vectors, matrices, quaternions, transformations  
+- **📐 Rich Geometry**: Points, lines, circles, polygons, paths, grids, bounding volumes
+- **� Spatial Algorithms**: Distance, intersections, convex hulls, triangulation
+- **✂️ Polygon Processing**: Intelligent partitioning based on area, convexity, shape
+- **🚀 Spatial Indexing**: R-Trees, QuadTrees, hash grids for efficient queries
+- **🎯 Builder Pattern**: Fluent APIs for coordinate transformations
+- **⚡ High Performance**: Optimized algorithms with modern C++20 practices
 
 ---
 
@@ -54,13 +88,41 @@ make -j$(nproc)
 
 ## Quick Start
 
-### Basic Coordinate Conversion
+### Fluent Coordinate Transformations (New!)
 
 ```cpp
 #include <concord/concord.hpp>
 using namespace concord;
 
-// Create WGS84 coordinates (latitude, longitude, altitude)
+// Create a reference datum
+Datum seattle_datum(47.6062, -122.3321, 56.0);
+
+// Fluent coordinate transformations using builder pattern
+Point local_point(100.0, 200.0, 50.0);
+
+// Point -> ENU -> WGS transformation
+auto wgs_result = convert(local_point)
+    .withDatum(seattle_datum)
+    .asENU()
+    .toWGS();
+
+std::cout << "WGS coordinates: " << wgs_result.lat << ", " 
+          << wgs_result.lon << ", " << wgs_result.alt << std::endl;
+
+// WGS -> ENU transformation
+WGS portland(45.5152, -122.6784, 15.0);
+auto enu_result = convert(portland)
+    .withDatum(seattle_datum)
+    .asENU();
+
+std::cout << "ENU coordinates: " << enu_result.x << ", " 
+          << enu_result.y << ", " << enu_result.z << std::endl;
+```
+
+### Traditional Coordinate Conversion
+
+```cpp
+// WGS84 coordinates (latitude, longitude, altitude)
 WGS seattle(47.6062, -122.3321, 56.0);
 WGS portland(45.5152, -122.6784, 15.0);
 
@@ -68,24 +130,90 @@ WGS portland(45.5152, -122.6784, 15.0);
 double distance = seattle.distance_to(portland);
 std::cout << "Distance: " << distance << " meters" << std::endl;
 
-// Calculate bearing
-double bearing = seattle.bearing_to(portland);
-std::cout << "Bearing: " << bearing << " degrees" << std::endl;
+// WGS84 to ENU conversion
+Datum origin_datum(47.6062, -122.3321, 56.0);
+ENU enu_point = seattle.toENU(origin_datum);
+std::cout << "ENU: " << enu_point.x << ", " << enu_point.y << ", " << enu_point.z << std::endl;
 ```
 
-### Coordinate System Conversions
+### Spatial Indexing & Queries
 
 ```cpp
-// WGS84 to ENU conversion
-WGS origin(37.422000, -122.084000, 0.0);
-WGS target(37.422100, -122.083900, 100.0);
+// Create spatial hash grid for efficient queries
+SpatialHashGrid<int> grid(10.0); // 10 unit cell size
 
-auto [x, y, z] = wgs_to_enu(target.lat, target.lon, target.alt, 
-                            origin.lat, origin.lon, origin.alt);
-ENU enu_point(x, y, z);
+// Insert points with associated data
+Point p1(15, 25, 0);
+Point p2(18, 22, 0);
+grid.insert(p1, 100);
+grid.insert(p2, 200);
 
-// ENU back to WGS84
-auto [lat, lon, alt] = enu_to_wgs(x, y, z, origin.lat, origin.lon, origin.alt);
+// Query nearby points
+auto nearby = grid.query(Point(16, 24, 0), 5.0);
+for (const auto& result : nearby) {
+    std::cout << "Found data: " << result << std::endl;
+}
+```
+
+---
+
+## Architecture & Components
+
+### 🏗️ Modular Design
+
+Concord's architecture is built around specialized modules:
+
+#### Core Foundation
+- **Types**: `Point`, `Size`, `Bound` - fundamental geometric types
+- **Math**: `Vec3d`, `Mat3d`, `Quaternion` - mathematical primitives
+- **Errors**: Comprehensive error handling and validation
+- **Precision**: High-precision arithmetic operations
+
+#### Geometric Primitives
+```cpp
+#include <concord/geometry/primitives/primitives.hpp>
+
+Circle circle(center, radius);
+Line line(start_point, end_point);
+Rectangle rect(top_left, bottom_right);
+Square square(center, side_length);
+```
+
+#### Advanced Algorithms
+```cpp
+#include <concord/algorithms/distance/distance.hpp>
+#include <concord/algorithms/intersection/intersection.hpp>
+#include <concord/algorithms/convex_hull/convex_hull.hpp>
+#include <concord/algorithms/triangulation/triangulation.hpp>
+
+// Distance calculations
+double dist = algorithms::distance::euclidean(p1, p2);
+double manhattan_dist = algorithms::distance::manhattan(p1, p2);
+
+// Intersection algorithms
+auto intersection = algorithms::intersection::line_line(line1, line2);
+
+// Convex hull generation
+auto hull = algorithms::convex_hull::graham_scan(points);
+
+// Triangulation
+auto triangles = algorithms::triangulation::delaunay(points);
+```
+
+#### Spatial Indexing
+```cpp
+#include <concord/indexing/indexing.hpp>
+
+// R-tree for complex spatial queries
+indexing::RTree<MyData> rtree;
+rtree.insert(bounding_box, data);
+auto results = rtree.search(query_bounds);
+
+// QuadTree for 2D spatial partitioning
+indexing::QuadTree<MyData> quadtree;
+
+// Hash grid for fast proximity queries  
+indexing::SpatialHashGrid<MyData> hash_grid(cell_size);
 ```
 
 ---
@@ -624,7 +752,38 @@ If you use Concord in your research, please cite:
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
+### Version 2.1.0 (Latest) - Major Architecture Restructure
+
+🏗️ **Complete Architecture Overhaul**
+- **NEW**: Modular directory structure with logical component separation
+- **NEW**: Builder pattern for fluent coordinate transformations
+- **NEW**: Enhanced spatial indexing with R-Tree, QuadTree, and Hash Grid
+- **MOVED**: `math/` and `errors/` into `core/` for better organization
+- **RESTRUCTURED**: `spatial/` → `algorithms/` with specialized subdirectories
+- **ORGANIZED**: Geometry primitives into dedicated `primitives/` folder
+- **ADDED**: Geographic transformations and projections framework
+- **ENHANCED**: Comprehensive spatial algorithms suite
+
+🚀 **Performance & Features**
+- **NEW**: Fluent API: `convert(point).withDatum(datum).asENU().toWGS()`
+- **NEW**: Advanced polygon partitioning algorithms
+- **NEW**: Multiple triangulation algorithms (Delaunay, Ear Clipping)
+- **NEW**: Convex hull algorithms (Graham Scan, QuickHull, Gift Wrapping)
+- **IMPROVED**: Distance calculation algorithms with specialized methods
+- **OPTIMIZED**: Spatial indexing for faster queries
+
+🔧 **Developer Experience**
+- **CLEAN**: All include paths updated for new structure
+- **CONSISTENT**: Unified namespace organization
+- **COMPREHENSIVE**: Complete test coverage for all components
+- **MODERN**: C++20 features and best practices
+
+### Previous Versions
+
+- **2.0.0**: Initial release with coordinate systems and basic spatial operations
+- **1.x.x**: Legacy versions (deprecated)
+
+---
 
 ## Support
 

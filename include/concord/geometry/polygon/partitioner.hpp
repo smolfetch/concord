@@ -1,7 +1,7 @@
 #pragma once
 
+#include "../../algorithms/spatial_algorithms.hpp"
 #include "../../core/types.hpp"
-#include "../../spatial/spatial_algorithms.hpp"
 #include "partition.hpp"
 #include "polygon.hpp"
 #include <algorithm>
