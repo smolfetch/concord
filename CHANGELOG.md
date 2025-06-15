@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0] - 2025-06-15
+
+### <!-- 0 -->⛰️  Features
+
+- Implement new template coordinate conversion builder
+- Implement R-tree spatial index and update core structure
+
+### <!-- 2 -->🚜 Refactor
+
+- Refactor geographic coordinate system types
+
 ## [1.3.3] - 2025-06-12
 
 ### <!-- 0 -->⛰️  Features
