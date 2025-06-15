@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.1] - 2025-06-15
+
+### <!-- 0 -->⛰️  Features
+
+- Add Point constructor for 2D coordinates
+
 ## [2.0.0] - 2025-06-15
 
 ### <!-- 0 -->⛰️  Features
