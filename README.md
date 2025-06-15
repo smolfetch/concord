@@ -48,7 +48,7 @@ concord/
 
 ### ✨ Key Features
 
-- **🌍 Coordinate Systems**: WGS84, UTM, ENU, ECEF, LTP with fluent transformations
+- **🌍 Coordinate Systems**: WGS, UTM, ENU, ECEF, LTP with fluent transformations
 - **🧮 Mathematical Core**: Vectors, matrices, quaternions, transformations  
 - **📐 Rich Geometry**: Points, lines, circles, polygons, paths, grids, bounding volumes
 - **� Spatial Algorithms**: Distance, intersections, convex hulls, triangulation
@@ -97,26 +97,37 @@ using namespace concord;
 // Create a reference datum
 Datum seattle_datum(47.6062, -122.3321, 56.0);
 
-// Fluent coordinate transformations using builder pattern
+// Template-based fluent coordinate transformations
 Point local_point(100.0, 200.0, 50.0);
 
-// Point -> ENU -> WGS transformation
+// Point -> ENU -> WGS using template syntax
 auto wgs_result = convert(local_point)
     .withDatum(seattle_datum)
-    .asENU()
-    .toWGS();
+    .as<ENU>()
+    .to<WGS>()
+    .build();
 
 std::cout << "WGS coordinates: " << wgs_result.lat << ", " 
           << wgs_result.lon << ", " << wgs_result.alt << std::endl;
+
+// Direct conversion with templates
+auto enu_direct = convert(local_point)
+    .withDatum(seattle_datum)
+    .as<ENU>();
 
 // WGS -> ENU transformation
 WGS portland(45.5152, -122.6784, 15.0);
 auto enu_result = convert(portland)
     .withDatum(seattle_datum)
-    .asENU();
+    .to<ENU>();
 
-std::cout << "ENU coordinates: " << enu_result.x << ", " 
-          << enu_result.y << ", " << enu_result.z << std::endl;
+// Multiple transformation chains
+auto final_point = convert(local_point)
+    .withDatum(seattle_datum)
+    .as<ENU>()
+    .to<WGS>()
+    .to<ENU>()
+    .as<Point>();
 ```
 
 ### Traditional Coordinate Conversion
