@@ -15,6 +15,7 @@ namespace concord {
         double z = 0.0;
 
         Point(double x_, double y_, double z_) : x(x_), y(y_), z(z_) {}
+        Point(double x_, double y_) : x(x_), y(y_), z(0.0) {}
 
         Point() = default;
 
