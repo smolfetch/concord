@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.2] - 2025-06-16
+
+### <!-- 0 -->⛰️  Features
+
+- Add CRS enum and WGS conversions
+
 ## [2.0.1] - 2025-06-15
 
 ### <!-- 0 -->⛰️  Features
