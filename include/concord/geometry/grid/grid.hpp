@@ -27,8 +27,7 @@ namespace concord {
       public:
         Grid() = default;
 
-        Grid(size_type rows, size_type cols, double diameter, concord::Datum /* datum */, bool centered,
-             concord::Pose shift)
+        Grid(size_type rows, size_type cols, double diameter, bool centered, concord::Pose shift)
             : rows_{rows}, cols_{cols}, inradius_{diameter}, data_(rows * cols) {
             // Total span of the grid (only non-zero if centered)
             double height = centered ? cols_ * diameter : 0.0;
@@ -55,9 +54,9 @@ namespace concord {
                 }
             }
         }
-        Grid(const Polygon &poly, double resolution, Datum /* datum */ = Datum(), bool centered = true)
+        Grid(const Polygon &poly, double resolution, bool centered = true)
             : Grid(static_cast<size_type>(std::ceil(poly.get_obb().size.x / resolution)),
-                   static_cast<size_type>(std::ceil(poly.get_obb().size.y / resolution)), resolution, Datum{}, centered,
+                   static_cast<size_type>(std::ceil(poly.get_obb().size.y / resolution)), resolution, centered,
                    poly.get_obb().pose) {}
 
         inline void set_value(size_type r, size_type c, const T &value) { at(r, c).second = value; }
