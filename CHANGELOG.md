@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.3] - 2025-06-17
+
+### <!-- 2 -->🚜 Refactor
+
+- Refactor grid constructors datum argument usage
+
 ## [2.0.2] - 2025-06-16
 
 ### <!-- 0 -->⛰️  Features
